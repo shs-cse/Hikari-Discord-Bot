@@ -2,8 +2,10 @@ import json
 
 # decoder for json files with comments
 class JSONCDecoder(json.JSONDecoder):
-    # preserves empty lines and comments by wrapping with the key "__comment_LineNum__"
-    # encoder assumes data will remain sorted according to insertion order
+    """
+    Preserves empty lines and comments by wrapping the with the key "__comment_LineNum__".
+    The encoder assumes that data will remain sorted according to insertion order.
+    """
     def decode(self, json_str: str):
         json_str = '\n'.join(line if line.lstrip() and not line.lstrip().startswith('//')
                              else f'"__comment_{n+1:03d}__": {json.dumps(line)},'
@@ -20,8 +22,11 @@ def read_json(file):
 
 # encoder for json files with comments
 class JSONCEncoder(json.JSONEncoder):
-    # convert value with "__comment_LineNum__" key to actual comment
-    # assumes data will remain sorted according to insertion order
+    """
+    Convert values with "__comment_LineNum__" key to actual comments in the jsonc file.
+    This encoder assumes that data will remain sorted according to insertion order,
+    the default behaviour of json package.
+    """
     def encode(self, obj):
         json_str = super().encode(obj)
         json_str = '\n'.join(line if not line.lstrip().startswith('"__comment_') 
