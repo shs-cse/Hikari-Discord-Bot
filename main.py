@@ -24,13 +24,12 @@ class JSON5Encoder(json.JSONEncoder):
                              for line in json_str.split('\n'))
         return json_str
         
-        
-
 
 # read and write to json file
 def read_json(file):
     with open(file) as f:
-        return JSON5Decoder().decode(f.read())
+        data = f.read()
+        return JSON5Decoder().decode(data)
 
 def update_json(data, file):
     with open(file, 'w') as f:
