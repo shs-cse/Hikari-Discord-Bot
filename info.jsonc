@@ -5,14 +5,19 @@
     "semester": "<semester> <yyyy>",
     "n_sections": 0,
     "missing_sections": [],
-    "marks_groups": [],
     
     // Tokens and IDs
     "routine_sheet_id": "",
     "guild_id": 0,
     "bot_token": "",
-
     
+    
+    // The remaining parts are managed by the bot.
+    // Please do not change anything unless you know what you are doing.
+    
+    // [Auto-generated] Mark sheets are grouped by theory faculties
+    "marks_groups": [],
+
     // [Auto-generated] Links
     "invite": "",
     "enrolment": "",
