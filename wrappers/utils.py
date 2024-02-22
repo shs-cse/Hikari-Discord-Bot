@@ -1,4 +1,4 @@
-class Color:
+class Formatting:
     MAGENTA = '\033[95m'
     OK_BLUE = '\033[94m'
     OK_CYAN = '\033[96m'
@@ -10,10 +10,10 @@ class Color:
     UNDERLINE = '\033[4m'
 
 def format_success_msg(text):
-    return f"\n{Color.OK_GREEN}✔ {text}{Color.RESET}"
+    return f"\n{Formatting.OK_GREEN}✔ {text}{Formatting.RESET}"
 
 def format_warning_msg(text):
-    return f"\n{Color.WARNING}{Color.BOLD}‼️ {text}{Color.RESET}"
+    return f"\n{Formatting.WARNING}{Formatting.BOLD}‼️ {text}{Formatting.RESET}"
 
 def format_error_msg(text):
-    return f"\n{Color.FAIL}{Color.BOLD}✘ {text}{Color.RESET}"
+    return f"\n{Formatting.FAIL}{Formatting.BOLD}✘ {text}{Formatting.RESET}"

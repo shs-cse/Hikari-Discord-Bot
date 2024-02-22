@@ -3,11 +3,13 @@ class FileName:
     INFO_JSON = 'info.jsonc'
     PASSED_JSON = 'passed.jsonc'
     
+
 class TemplateLinks:
     GUILD = "https://discord.new/RVh3qBrGcsxA"
     ENROLMENT_SHEET = "1HzCwb68D3L2sC4WFEBYajz4co5sQvtgSpp2fIf8aMqc"
     MARKS_SHEET = "1wfamZfPPXvYxHegBEngxonPtBmJBiFT5D0WAvwLchY0"
     
+
 class RegexPattern:
     # course details
     COURSE_CODE = r"CSE[0-9]{3}"
