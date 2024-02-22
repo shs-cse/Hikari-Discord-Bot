@@ -19,11 +19,11 @@ class RegexPattern:
     MARKS_GROUPS = r"^\[\s*(\s*(\s*\[\s*([1-9][0-9]*\s*,\s*)*[1-9][0-9]*\s*\]\s*,\s*)*\[\s*([1-9][0-9]*\s*,\s*)*[1-9][0-9]*\s*\]\s*)?\]$"
     # student details
     STUDENT_ID = r"[0-9]{8}"
-    NICK_NAME = r"\[[0-9]{8}\].*"
+    STUDENT_NICKNAME = r"\[[0-9]{8}\].+"
     # faculty details
-    INITIAL = r"^\[([A-Z0-9]{3,4})\].*"
+    FACULTY_NICKNAME = r"^\[([A-Z0-9]{3,4})\].+"
     # google drive file/folder id
-    r"(?<=/)[\w_-]{15,}|^[\w_-]{15,}"
+    GOOGLE_LINK_ID = r"(?<=/)[\w_-]{15,}|^[\w_-]{15,}"
     
     
 class InfoField:

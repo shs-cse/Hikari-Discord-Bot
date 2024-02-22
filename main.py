@@ -13,8 +13,9 @@ def main():
     if not is_json_passed_before(info):
         ... # check each field
         check_info_fields(info)
-        check_course_details_regex(info)
+        check_regex_patterns(info)
         check_sections(info)
+        check_routine_spreadsheet(info)
     
 if __name__ == "__main__":
     main()

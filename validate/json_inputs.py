@@ -3,7 +3,7 @@ from singletons.bot_config import FileName, RegexPattern, InfoField
 from wrappers.json import read_json, update_json
 from wrappers.utils import format_success_msg, format_warning_msg, format_error_msg
 
-# match `info.jsonc` the `passed.jsonc` file to skip checking all the fields
+# match info file with the passed file to skip checking all the fields
 def is_json_passed_before(info):
     if os.path.exists(FileName.PASSED_JSON):
         passed = read_json(FileName.PASSED_JSON)
@@ -19,7 +19,7 @@ def is_json_passed_before(info):
             return False
         
 
-# check if `info.jsonc` file contains all the fields
+# check if info file contains all the fields
 def check_info_fields(info):
     for attr, field in vars(InfoField).items():
         # skip private variables/attributes
@@ -34,8 +34,8 @@ def check_info_fields(info):
     print(format_success_msg(msg))
     
 
-# check if course details matches proper regex
-def check_course_details_regex(info):
+# check if info details matches proper regex
+def check_regex_patterns(info):
     field_patterns = {
         InfoField.COURSE_CODE: RegexPattern.COURSE_CODE,
         InfoField.COURSE_NAME: RegexPattern.COURSE_NAME,
@@ -67,3 +67,27 @@ def check_sections(info):
     # passed all checks
     msg = "Number of sections and missing sections seems ok."
     print(format_success_msg(msg))
+    
+
+# check original routine spreadsheet id in json
+def check_routine_spreadsheet(info):
+    routine_file_id = info[InfoField.ROUTINE_SHEET_ID]
+    # empty value
+    if not routine_file_id:
+        msg = 'No routine sheet was provided. '
+        msg += f'Please update "{InfoField.ROUTINE_SHEET_ID}" in {FileName.INFO_JSON} file'
+        raise ValueError(format_error_msg(msg))
+    # does not match regex
+    if not re.match(RegexPattern.GOOGLE_LINK_ID, routine_file_id):
+        # not exact regex-match but pattern exists (probably link) 
+        if extracted := re.search(RegexPattern.GOOGLE_LINK_ID, routine_file_id):
+            # replace extracted id only
+            info[InfoField.ROUTINE_SHEET_ID] = extracted[0]
+            update_json(info, FileName.INFO_JSON)
+            msg = f'Updated "{InfoField.ROUTINE_SHEET_ID}" field in {FileName.INFO_JSON} file with extracted sheet id.'
+            print(format_warning_msg(msg))
+        else:
+            # no id found in input
+            msg = f'"{InfoField.ROUTINE_SHEET_ID}" field in {FileName.INFO_JSON} file does not match expected pattern.'
+            raise ValueError(format_error_msg(msg))
+    
