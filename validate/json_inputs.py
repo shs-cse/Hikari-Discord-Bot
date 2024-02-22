@@ -30,10 +30,9 @@ def check_info_fields(info):
             msg = f'{FileName.INFO_JSON} file does not contain the field: "{field}".'
             raise KeyError(format_error_msg(msg))
     # passed all field checks
-    msg = f"{FileName.INFO_JSON} file contains all the field."
+    msg = f"{FileName.INFO_JSON} file contains all the necessary field keys."
     print(format_success_msg(msg))
     
-
 
 # check if course details matches proper regex
 def check_course_details_regex(info):
@@ -49,4 +48,22 @@ def check_course_details_regex(info):
             raise SyntaxError(format_error_msg(msg))
     # passed all regex checks
     msg = f"Course details regex checks out in {FileName.INFO_JSON} file."
+    print(format_success_msg(msg))
+    
+    
+# check number of sections and missing sections
+def check_sections(info):
+    if info[InfoField.SECTION_COUNT] <= 0:
+        msg = "Number of sections must be positive"
+        raise ValueError(format_error_msg(msg))
+    
+    if missing := info[InfoField.MISSING_SECTIONS]:
+        if 1 in missing:
+            msg = "Section 1 is used as template, can't be a missing section."
+            raise ValueError(format_error_msg(msg))
+        if not set(missing).issubset(range(1, info['n_sections'])): 
+            msg = "Missing sections that don't exist"
+            raise ValueError(format_error_msg(msg))
+    # passed all checks
+    msg = "Number of sections and missing sections seems ok."
     print(format_success_msg(msg))

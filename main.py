@@ -14,6 +14,7 @@ def main():
         ... # check each field
         check_info_fields(info)
         check_course_details_regex(info)
+        check_sections(info)
     
 if __name__ == "__main__":
     main()
