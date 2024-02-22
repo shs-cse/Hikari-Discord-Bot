@@ -37,7 +37,7 @@ def update_json(data, file):
         f.write(json_str)
 
 def main():
-    info = read_json("info.json5")
+    info = read_json("info.jsonc")
     pprint(info, sort_dicts=False)
     update_json(info, "info.jsonc")
     

@@ -3,4 +3,4 @@ sheets.googleapis.com-python.json
 __pycache__
 *.xls
 passed.json
-info.json*
+# info.json*
