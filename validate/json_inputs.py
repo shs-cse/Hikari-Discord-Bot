@@ -90,4 +90,8 @@ def check_routine_spreadsheet(info):
             # no id found in input
             msg = f'"{InfoField.ROUTINE_SHEET_ID}" field in {FileName.INFO_JSON} file does not match expected pattern.'
             raise ValueError(format_error_msg(msg))
+    # passed all routine tests
+    msg = "Original routine spreadsheet id seems ok."
+    print(format_success_msg(msg))
+    
     
