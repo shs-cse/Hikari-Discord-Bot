@@ -1,9 +1,14 @@
 import numpy as np
 import pandas as pd
+import pyjson5
+
+# read and write to json file
+def read_json(file):
+    with open(file) as f:
+        return pyjson5.load(f)
 
 def main():
-    s = pd.Series([1, 3, 5, np.nan, 6, 8])
-    print(s)
+    print(read_json("info.jsonc"))
     
 if __name__ == "__main__":
     main()
