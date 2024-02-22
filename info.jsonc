@@ -1,0 +1,19 @@
+{
+    // General information about the course
+    "course_code": "<course code>",
+    "course_name": "<course name>",
+    "semester": "<semester> <yyyy>",
+    "n_sections": 0,
+    "missing_sections": [],
+    "marks_groups": [],
+    // Tokens and IDs
+    "routine_sheet_id": "",
+    "guild_id": 0,
+    "bot_token": "OTM2NjE1NDUyNDQ3MjMyMDQy.GvT8cL.HOL_K1HTXm_r71h0v4aBEG5BYj4qKIswaVdwnw",
+    // Links
+    "invite": "",
+    "enrolment": "",
+    "marks": {},
+    // Buttons for revival after reboot
+    "buttons": {}
+}
