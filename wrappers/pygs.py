@@ -1,6 +1,6 @@
 import requests
 import pygsheets as pygs
-from consts import FileName
+from singletons.bot_config import FileName
 
 
 def get_google_client():
