@@ -1,21 +1,16 @@
 import requests
 import pygsheets as pygs
-from consts import FileName, Color
+from consts import FileName
+from wrappers.utils import format_error_msg, format_success_msg, format_warning_msg
 
 
 def check_google_creds():
     try:
         get_google_client()
-        msg = Color.OK_GREEN
-        msg += "✔ Google authorization was successful."
-        msg += Color.RESET
-        print(msg)
+        print(format_success_msg("Google authorization was successful."))
     except Exception as error:
-        msg = '\n'
-        msg += Color.FAIL
-        msg += "✘ Google authorization failed!"
-        msg += " Did you forget to provide the credentials.json file?"
-        msg += Color.RESET
+        msg = format_error_msg("Google authorization failed!"
+                               " Did you forget to provide the credentials.json file?")
         raise pygs.AuthenticationError(msg) from error
     
 
