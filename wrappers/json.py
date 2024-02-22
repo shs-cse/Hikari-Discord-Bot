@@ -17,6 +17,7 @@ def read_json(file):
         return JSON5Decoder().decode(data)
 
 
+
 # encoder for json files with comments
 class JSON5Encoder(json.JSONEncoder):
     # convert value with "__comment_LineNum__" key to actual comment
@@ -28,7 +29,6 @@ class JSON5Encoder(json.JSONEncoder):
                              for line in json_str.split('\n'))
         return json_str
         
-
 # write to json file
 def update_json(data, file):
     with open(file, 'w') as f:
