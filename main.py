@@ -1,14 +1,17 @@
-# from consts import Color
+import os
+from consts import FileName
 from wrappers.json import read_json, update_json
-from wrappers.pygs import check_google_creds
-from pprint import pprint
+from validate.google_creds import check_google_credentials
+from validate.json_inputs import check_passed_json
     
 
 def main():
     # info = read_json("info.jsonc")
     # pprint(info, sort_dicts=False)
     # update_json(info, "info.jsonc")
-    check_google_creds()
+    check_google_credentials()
+    info = read_json(FileName.COURSE_INFO)
+    check_passed_json()
     
 if __name__ == "__main__":
     main()
