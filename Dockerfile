@@ -1,3 +1,5 @@
 FROM continuumio/miniconda3:main
 COPY . .
-CMD [ "which", "python" ]
+RUN conda install pandas
+# CMD [ "conda", "list"]
+CMD ["python", "main.py"]
