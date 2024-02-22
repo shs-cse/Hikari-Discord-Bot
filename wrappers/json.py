@@ -1,7 +1,7 @@
 import json
 
 # decoder for json files with comments
-class JSON5Decoder(json.JSONDecoder):
+class JSONCDecoder(json.JSONDecoder):
     # preserves empty lines and comments by wrapping with the key "__comment_LineNum__"
     # encoder assumes data will remain sorted according to insertion order
     def decode(self, json_str: str):
@@ -14,12 +14,12 @@ class JSON5Decoder(json.JSONDecoder):
 def read_json(file):
     with open(file) as f:
         data = f.read()
-        return JSON5Decoder().decode(data)
+        return JSONCDecoder().decode(data)
 
 
 
 # encoder for json files with comments
-class JSON5Encoder(json.JSONEncoder):
+class JSONCEncoder(json.JSONEncoder):
     # convert value with "__comment_LineNum__" key to actual comment
     # assumes data will remain sorted according to insertion order
     def encode(self, obj):
@@ -32,7 +32,7 @@ class JSON5Encoder(json.JSONEncoder):
 # write to json file
 def update_json(data, file):
     with open(file, 'w') as f:
-        json_str = JSON5Encoder(indent=4).encode(data)
+        json_str = JSONCEncoder(indent=4).encode(data)
         f.write(json_str)
 
 
