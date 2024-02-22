@@ -12,3 +12,7 @@ This code is meant for maintaining official discord servers of CSE250, CSE251, C
     ```bash
     git update-index --skip-worktree info.jsonc
     ```
+- Track changes in the file again:
+    ```bash
+    git update-index --no-skip-worktree info.jsonc
+    ```
