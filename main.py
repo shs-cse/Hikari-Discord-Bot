@@ -8,11 +8,11 @@ from validation.json_inputs import *
 import hikari, crescent
 
 
-def main():
-    info = read_json(FileName.INFO_JSON)
-    bot = hikari.GatewayBot(token=info[InfoField.BOT_TOKEN], intents=hikari.Intents.ALL)
+def test_commands():
+    state.info = read_json(FileName.INFO_JSON)
+    bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], intents=hikari.Intents.ALL)
     # from slash_commands import test
-    client = crescent.Client(bot, default_guild=info[InfoField.GUILD_ID])
+    client = crescent.Client(bot, default_guild=state.info[InfoField.GUILD_ID])
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     bot.run(
         asyncio_debug=True,             # enable asyncio debug to detect blocking and slow code.
@@ -22,15 +22,22 @@ def main():
     )
 
 
-def checks():
+def test_checks():
     check_google_credentials()
-    info = read_json(FileName.INFO_JSON)
-    if not is_json_passed_before(info):
-        check_info_fields(info)
-        check_regex_patterns(info)
-        check_sections(info[InfoField.NUM_SECTIONS], info[InfoField.MISSING_SECTIONS])
-        info = check_and_update_routine_sheet(info)
+    state.info = read_json(FileName.INFO_JSON)
+    if not is_json_passed_before():
+        check_info_fields()
+        check_regex_patterns()
+        check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
+        # TODO: check or create enrolment sheet
+        check_and_routine_sheet()
         ... # TODO: check sheets and stuff
+        # TODO: create passed.jsonc
     
+
+
+def main():
+    test_checks()
+
 if __name__ == "__main__":
     main()

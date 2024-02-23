@@ -1,16 +1,17 @@
 import re, os
+from bot_variables import state
 from bot_variables.config import FileName, RegexPattern, InfoField
 from wrappers.json import read_json, update_json
 from wrappers.utils import FormatText
 
 # match info file with the passed file to skip checking all the fields
-def is_json_passed_before(info):
+def is_json_passed_before():
     if os.path.exists(FileName.PASSED_JSON):
         passed = read_json(FileName.PASSED_JSON)
         # matches all values with previously passed json (except buttons)
-        if all(info[key] == passed[key] for key in info.keys() if key != InfoField.BUTTONS):
+        if all(state.info[key] == passed[key] for key in state.info.keys() if key != InfoField.BUTTONS):
             print(FormatText.success("Check complete! Matches previously passed json."))
-            update_json(info, FileName.PASSED_JSON)
+            update_json(state.info, FileName.PASSED_JSON)
             return True
         else: 
             # mismatch -> needs checking each field
@@ -20,13 +21,13 @@ def is_json_passed_before(info):
         
 
 # check if info file contains all the fields
-def check_info_fields(info):
+def check_info_fields():
     for attr, field in vars(InfoField).items():
         # skip private variables/attributes
         if attr.startswith("_"):
             continue
         # check if every fieldname exists in info
-        if not field in info:
+        if not field in state.info:
             msg = f'{FileName.INFO_JSON} file does not contain the field: "{field}".'
             raise KeyError(FormatText.error(msg))
     # passed all field checks
@@ -35,7 +36,7 @@ def check_info_fields(info):
     
 
 # check if info details matches proper regex
-def check_regex_patterns(info):
+def check_regex_patterns():
     fields_and_patterns = {
         InfoField.COURSE_CODE: RegexPattern.COURSE_CODE,
         InfoField.COURSE_NAME: RegexPattern.COURSE_NAME,
@@ -45,8 +46,8 @@ def check_regex_patterns(info):
     }
     # check each of the fields in a loop
     for field,pattern in fields_and_patterns.items():
-        if not re.match(pattern, str(info[field])):
-            msg = f'"{field}" in {FileName.INFO_JSON} file "{info[field]}"'
+        if not re.match(pattern, str(state.info[field])):
+            msg = f'"{field}" in {FileName.INFO_JSON} file "{state.info[field]}"'
             msg += fr' does not match expected pattern: "{pattern}".'
             raise SyntaxError(FormatText.error(msg))
     # passed all regex checks
@@ -74,10 +75,10 @@ def check_sections(num_sec, missing_secs):
     
 
 # check original routine spreadsheet id in json
-def check_and_update_routine_sheet(info):
+def check_and_routine_sheet():
     pattern = RegexPattern.GOOGLE_LINK_ID
     field_name = InfoField.ROUTINE_SHEET_ID
-    routine_id = info[field_name]
+    routine_id = state.info[field_name]
     extracted = re.search(pattern, routine_id)
     # raise error if no match found
     if not extracted:
@@ -86,21 +87,19 @@ def check_and_update_routine_sheet(info):
         raise ValueError(FormatText.error(msg))
     elif routine_id != extracted[0]:
         # extracted id doesn't match routine exactly
-        info = update_json_routine_sheet(info, field_name, extracted[0])
+        update_json_routine_sheet(field_name, extracted[0])
     
     # TODO: check if routine sheet is reachable
     # passed all routine tests
     msg = "Original routine spreadsheet id seems ok."
     print(FormatText.success(msg))
-    return info
-
+    
 
 # replace full link with extracted id only
-def update_json_routine_sheet(info, routine_field, extracted_id):
-    info[routine_field] = extracted_id
-    update_json(info, FileName.INFO_JSON)
+def update_json_routine_sheet(routine_field, extracted_id):
+    state.info[routine_field] = extracted_id
+    update_json(state.info, FileName.INFO_JSON)
     msg = f'Updated "{routine_field}" field in {FileName.INFO_JSON}' 
     msg += ' file with just the extracted sheet id.'
     print(FormatText.warning(msg))
-    return info
     

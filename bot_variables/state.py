@@ -1,4 +1,4 @@
 import crescent
-# info = None
+info = None
 # bot: hikari.GatewayBot = None
 client: crescent.Client = None

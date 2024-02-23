@@ -22,3 +22,7 @@ def check_google_credentials():
         msg = FormatText.error("Google authorization failed!"
                                " Did you forget to provide the credentials.json file?")
         raise AuthenticationError(msg) from error
+    
+
+def check_enrolment():
+    ...
