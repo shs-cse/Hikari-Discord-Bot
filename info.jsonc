@@ -10,6 +10,7 @@
     "routine_sheet_id": "",
     "guild_id": 0,
     "bot_token": "",
+    "enrolment_and_marks_folder_id": "",
     
     
     // The remaining parts are managed by the bot.
