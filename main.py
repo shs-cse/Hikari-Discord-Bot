@@ -1,21 +1,29 @@
 import os
-# from bot_variables import bot_state
-# import bot_variables
+from bot_variables import state
 from bot_variables.config import FileName
 from wrappers.json import read_json, update_json
 from validation.google_sheets import check_google_credentials
 from validation.json_inputs import *
-    
+
+import hikari
+
 
 def main():
+    info = read_json(FileName.INFO_JSON)
+    state.bot = hikari.GatewayBot(token=info[InfoField.BOT_TOKEN])
+    from commands import test
+    state.bot.run()
+
+
+def checks():
     check_google_credentials()
     info = read_json(FileName.INFO_JSON)
     if not is_json_passed_before(info):
-        ... # check each field
         check_info_fields(info)
         check_regex_patterns(info)
         check_sections(info[InfoField.NUM_SECTIONS], info[InfoField.MISSING_SECTIONS])
         info = check_and_update_routine_sheet(info)
+        ... # TODO: check sheets and stuff
     
 if __name__ == "__main__":
     main()

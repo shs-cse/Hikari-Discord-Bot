@@ -4,11 +4,8 @@ from pygsheets import AuthenticationError
 from wrappers.pygs import get_google_client
 from wrappers.utils import FormatMessage
 
-# TODO: check for sheets.googleapis.com-python.json
-#       if that json file exists, success
-#       else prompt for browser login
-
 # TODO: check routine sheet id in B16
+# TODO: check enrolment sheet
 # TODO: allow access routine
 # TODO: fetch marks groups
 
