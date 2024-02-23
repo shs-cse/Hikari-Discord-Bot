@@ -16,8 +16,6 @@ class RegexPattern:
     COURSE_CODE = r"CSE[0-9]{3}"
     COURSE_NAME = r"(?!<).+"
     SEMESTER = r"(Fall|Spring|Summer) 20[0-9]{2}"
-    # marks group (with space)
-    MARKS_GROUPS = r"^\[\s*(\s*(\s*\[\s*([1-9][0-9]*\s*,\s*)*[1-9][0-9]*\s*\]\s*,\s*)*\[\s*([1-9][0-9]*\s*,\s*)*[1-9][0-9]*\s*\]\s*)?\]$"
     # student details
     STUDENT_ID = r"[0-9]{8}"
     STUDENT_NICKNAME = r"\[[0-9]{8}\].+"
