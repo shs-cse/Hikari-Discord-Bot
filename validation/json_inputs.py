@@ -1,5 +1,5 @@
 import os, re
-from singletons.bot_config import FileName, RegexPattern, InfoField
+from bot_variables.config import FileName, RegexPattern, InfoField
 from wrappers.json import read_json, update_json
 from wrappers.utils import format_success_msg, format_warning_msg, format_error_msg
 

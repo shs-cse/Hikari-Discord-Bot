@@ -1,7 +1,7 @@
 import os
-# from singletons import bot_state
-# import singletons
-from singletons.bot_config import FileName
+# from bot_variables import bot_state
+# import bot_variables
+from bot_variables.config import FileName
 from wrappers.json import read_json, update_json
 from validation.google_sheets import check_google_credentials
 from validation.json_inputs import *
