@@ -3,6 +3,7 @@ class FileName:
     SHEETS_CREDENTIALS = 'sheets.googleapis.com-python.json'
     INFO_JSON = 'info.jsonc'
     PASSED_JSON = 'passed.jsonc'
+    COMMANDS_FOLDER = 'commands'
     
 
 class TemplateLinks:
