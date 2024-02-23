@@ -3,7 +3,7 @@ import os
 # import singletons
 from singletons.bot_config import FileName
 from wrappers.json import read_json, update_json
-from validate.google_creds import check_google_credentials
+from validate.google_sheets import check_google_credentials
 from validate.json_inputs import *
     
 
@@ -15,7 +15,7 @@ def main():
         check_info_fields(info)
         check_regex_patterns(info)
         check_sections(info)
-        check_routine_spreadsheet(info)
+        info = check_and_update_routine_sheet(info)
     
 if __name__ == "__main__":
     main()

@@ -36,12 +36,13 @@ def check_info_fields(info):
 
 # check if info details matches proper regex
 def check_regex_patterns(info):
-    field_patterns = {
+    field_and_patterns = {
         InfoField.COURSE_CODE: RegexPattern.COURSE_CODE,
         InfoField.COURSE_NAME: RegexPattern.COURSE_NAME,
         InfoField.SEMESTER: RegexPattern.SEMESTER
     }
-    for field,pattern in field_patterns.items():
+    # check each of the fields in a loop
+    for field,pattern in field_and_patterns.items():
         if not re.match(pattern, info[field]):
             msg = f'"{field}" in {FileName.INFO_JSON} file "{info[field]}"'
             msg += fr' does not match expected pattern: "{pattern}".'
@@ -53,15 +54,18 @@ def check_regex_patterns(info):
     
 # check number of sections and missing sections
 def check_sections(info):
-    if info[InfoField.SECTION_COUNT] <= 0:
+    num_sec = info[InfoField.SECTION_COUNT]
+    missing = info[InfoField.MISSING_SECTIONS]
+    # make sure positive
+    if num_sec <= 0:
         msg = "Number of sections must be positive"
         raise ValueError(format_error_msg(msg))
-    
-    if missing := info[InfoField.MISSING_SECTIONS]:
+    # check missing sections
+    if missing:
         if 1 in missing:
             msg = "Section 1 is used as template, can't be a missing section."
             raise ValueError(format_error_msg(msg))
-        if not set(missing).issubset(range(1, info['n_sections'])): 
+        if not set(missing).issubset(range(1, num_sec)): 
             msg = "Missing sections that don't exist"
             raise ValueError(format_error_msg(msg))
     # passed all checks
@@ -70,28 +74,37 @@ def check_sections(info):
     
 
 # check original routine spreadsheet id in json
-def check_routine_spreadsheet(info):
-    routine_file_id = info[InfoField.ROUTINE_SHEET_ID]
-    # empty value
-    if not routine_file_id:
-        msg = 'No routine sheet was provided. '
-        msg += f'Please update "{InfoField.ROUTINE_SHEET_ID}" in {FileName.INFO_JSON} file'
+def check_and_update_routine_sheet(info):
+    pattern = RegexPattern.GOOGLE_LINK_ID
+    field_name = InfoField.ROUTINE_SHEET_ID
+    routine_id = info[field_name]
+    extracted = re.search(pattern, routine_id)
+    # raise error if no match found
+    if not extracted:
+        # no sheet id found in input
+        msg = f'"{field_name}" field in {FileName.INFO_JSON} ' 
+        msg += f'file does not match expected pattern: "{pattern}"'
         raise ValueError(format_error_msg(msg))
-    # does not match regex
-    if not re.match(RegexPattern.GOOGLE_LINK_ID, routine_file_id):
-        # not exact regex-match but pattern exists (probably link) 
-        if extracted := re.search(RegexPattern.GOOGLE_LINK_ID, routine_file_id):
-            # replace extracted id only
-            info[InfoField.ROUTINE_SHEET_ID] = extracted[0]
-            update_json(info, FileName.INFO_JSON)
-            msg = f'Updated "{InfoField.ROUTINE_SHEET_ID}" field in {FileName.INFO_JSON} file with extracted sheet id.'
-            print(format_warning_msg(msg))
-        else:
-            # no id found in input
-            msg = f'"{InfoField.ROUTINE_SHEET_ID}" field in {FileName.INFO_JSON} file does not match expected pattern.'
-            raise ValueError(format_error_msg(msg))
+    elif routine_id != extracted[0]:
+        # extracted id doesn't match routine exactly
+        info = update_json_routine_sheet(info, field_name, extracted[0])
+    
+    # TODO: check if routine sheet is reachable
     # passed all routine tests
     msg = "Original routine spreadsheet id seems ok."
     print(format_success_msg(msg))
+    return info
+
+
+# replace full link with extracted id only
+def update_json_routine_sheet(info, routine_field, extracted_id):
+    info[routine_field] = extracted_id
+    update_json(info, FileName.INFO_JSON)
+    msg = f'Updated "{routine_field}" field in {FileName.INFO_JSON}' 
+    msg += ' file with just the extracted sheet id.'
+    print(format_warning_msg(msg))
+    return info
     
     
+    # TODO: check guild id
+    # TODO: check bot token
