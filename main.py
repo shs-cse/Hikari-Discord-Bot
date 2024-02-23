@@ -3,8 +3,8 @@ import os
 # import singletons
 from singletons.bot_config import FileName
 from wrappers.json import read_json, update_json
-from validate.google_sheets import check_google_credentials
-from validate.json_inputs import *
+from validation.google_sheets import check_google_credentials
+from validation.json_inputs import *
     
 
 def main():
