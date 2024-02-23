@@ -1,4 +1,4 @@
-class FormatMessage:
+class FormatText:
     MAGENTA = '\033[95m'
     BLUE = '\033[94m'
     CYAN = '\033[96m'
@@ -11,10 +11,10 @@ class FormatMessage:
 
 
     def success(text):
-        return f"\n{FormatMessage.GREEN}✔ {text}{FormatMessage.RESET}"
+        return f"\n{FormatText.GREEN}✔ {text}{FormatText.RESET}"
 
     def warning(text):
-        return f"\n{FormatMessage.YELLOW}{FormatMessage.BOLD}‼️ {text}{FormatMessage.RESET}"
+        return f"\n{FormatText.YELLOW}{FormatText.BOLD}‼️ {text}{FormatText.RESET}"
 
     def error(text):
-        return f"\n{FormatMessage.RED}{FormatMessage.BOLD}✘ {text}{FormatMessage.RESET}"
+        return f"\n{FormatText.RED}{FormatText.BOLD}✘ {text}{FormatText.RESET}"
