@@ -1,11 +1,12 @@
-import os, re
+from os import path
+import re
 from bot_variables.config import FileName, RegexPattern, InfoField
 from wrappers.json import read_json, update_json
 from wrappers.utils import format_success_msg, format_warning_msg, format_error_msg
 
 # match info file with the passed file to skip checking all the fields
 def is_json_passed_before(info):
-    if os.path.exists(FileName.PASSED_JSON):
+    if path.exists(FileName.PASSED_JSON):
         passed = read_json(FileName.PASSED_JSON)
         # matches all values with previously passed json (except buttons)
         if all(info[key] == passed[key] for key in info.keys() if key != InfoField.BUTTONS):

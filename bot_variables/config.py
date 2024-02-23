@@ -1,5 +1,6 @@
 class FileName:
     GOOGLE_CREDENTIALS = 'credentials.json'
+    SHEETS_CREDENTIALS = 'sheets.googleapis.com-python.json'
     INFO_JSON = 'info.jsonc'
     PASSED_JSON = 'passed.jsonc'
     
