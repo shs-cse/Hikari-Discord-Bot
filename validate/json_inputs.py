@@ -39,7 +39,9 @@ def check_regex_patterns(info):
     field_and_patterns = {
         InfoField.COURSE_CODE: RegexPattern.COURSE_CODE,
         InfoField.COURSE_NAME: RegexPattern.COURSE_NAME,
-        InfoField.SEMESTER: RegexPattern.SEMESTER
+        InfoField.SEMESTER: RegexPattern.SEMESTER,
+        InfoField.GUILD_ID: RegexPattern.DISCORD_ID,
+        InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN
     }
     # check each of the fields in a loop
     for field,pattern in field_and_patterns.items():
@@ -53,19 +55,17 @@ def check_regex_patterns(info):
     
     
 # check number of sections and missing sections
-def check_sections(info):
-    num_sec = info[InfoField.SECTION_COUNT]
-    missing = info[InfoField.MISSING_SECTIONS]
+def check_sections(num_sec, missing_secs):
     # make sure positive
     if num_sec <= 0:
         msg = "Number of sections must be positive"
         raise ValueError(format_error_msg(msg))
     # check missing sections
-    if missing:
-        if 1 in missing:
+    if missing_secs:
+        if 1 in missing_secs:
             msg = "Section 1 is used as template, can't be a missing section."
             raise ValueError(format_error_msg(msg))
-        if not set(missing).issubset(range(1, num_sec)): 
+        if not set(missing_secs).issubset(range(1, num_sec)): 
             msg = "Missing sections that don't exist"
             raise ValueError(format_error_msg(msg))
     # passed all checks
@@ -81,7 +81,6 @@ def check_and_update_routine_sheet(info):
     extracted = re.search(pattern, routine_id)
     # raise error if no match found
     if not extracted:
-        # no sheet id found in input
         msg = f'"{field_name}" field in {FileName.INFO_JSON} ' 
         msg += f'file does not match expected pattern: "{pattern}"'
         raise ValueError(format_error_msg(msg))
@@ -105,6 +104,3 @@ def update_json_routine_sheet(info, routine_field, extracted_id):
     print(format_warning_msg(msg))
     return info
     
-    
-    # TODO: check guild id
-    # TODO: check bot token

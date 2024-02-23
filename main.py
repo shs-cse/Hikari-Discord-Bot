@@ -14,7 +14,7 @@ def main():
         ... # check each field
         check_info_fields(info)
         check_regex_patterns(info)
-        check_sections(info)
+        check_sections(info[InfoField.NUM_SECTIONS], info[InfoField.MISSING_SECTIONS])
         info = check_and_update_routine_sheet(info)
     
 if __name__ == "__main__":

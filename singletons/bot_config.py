@@ -24,13 +24,16 @@ class RegexPattern:
     FACULTY_NICKNAME = r"^\[([A-Z0-9]{3,4})\].+"
     # google drive file/folder id
     GOOGLE_LINK_ID = r"(?<=/)[\w_-]{15,}|^[\w_-]{15,}"
+    # discord id
+    DISCORD_ID = r"[0-9]{17,19}"
+    DISCORD_BOT_TOKEN = r"[\w-]{24}\.[\w-]{6}\.[\w-]{38}"
     
     
 class InfoField:
     COURSE_CODE = "course_code"
     COURSE_NAME = "course_name"
     SEMESTER = "semester"
-    SECTION_COUNT = "n_sections"
+    NUM_SECTIONS = "n_sections"
     MISSING_SECTIONS = "missing_sections"
     # tokens and ids
     ROUTINE_SHEET_ID = "routine_sheet_id"
