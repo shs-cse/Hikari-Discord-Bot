@@ -36,7 +36,7 @@ def check_info_fields(info):
 
 # check if info details matches proper regex
 def check_regex_patterns(info):
-    field_and_patterns = {
+    fields_and_patterns = {
         InfoField.COURSE_CODE: RegexPattern.COURSE_CODE,
         InfoField.COURSE_NAME: RegexPattern.COURSE_NAME,
         InfoField.SEMESTER: RegexPattern.SEMESTER,
@@ -44,7 +44,7 @@ def check_regex_patterns(info):
         InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN
     }
     # check each of the fields in a loop
-    for field,pattern in field_and_patterns.items():
+    for field,pattern in fields_and_patterns.items():
         if not re.match(pattern, info[field]):
             msg = f'"{field}" in {FileName.INFO_JSON} file "{info[field]}"'
             msg += fr' does not match expected pattern: "{pattern}".'
