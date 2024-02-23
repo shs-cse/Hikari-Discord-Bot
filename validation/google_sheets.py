@@ -2,7 +2,7 @@ from os import path
 from bot_variables.config import FileName
 from pygsheets import AuthenticationError
 from wrappers.pygs import get_google_client
-from wrappers.utils import *
+from wrappers.utils import FormatMessage
 
 # TODO: check for sheets.googleapis.com-python.json
 #       if that json file exists, success
@@ -17,11 +17,11 @@ def check_google_credentials():
         msg = f'Sheets credential file "{FileName.SHEETS_CREDENTIALS}" was not found.'
         msg += ' You will need to log on by clicking on this following link' 
         msg += ' and pasting the code from browser.'
-        print(format_warning_msg(msg))
+        print(FormatMessage.warning(msg))
     try:
         get_google_client()
-        print(format_success_msg("Google authorization was successful."))
+        print(FormatMessage.success("Google authorization was successful."))
     except Exception as error:
-        msg = format_error_msg("Google authorization failed!"
+        msg = FormatMessage.error("Google authorization failed!"
                                " Did you forget to provide the credentials.json file?")
         raise AuthenticationError(msg) from error
