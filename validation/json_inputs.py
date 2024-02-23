@@ -1,7 +1,7 @@
 import re, os
 from bot_variables import state
 from bot_variables.config import FileName, RegexPattern, InfoField
-from wrappers.json import read_json, update_json
+from wrappers.json import read_json, update_json, update_info_field
 from wrappers.utils import FormatText
 
 # match info file with the passed file to skip checking all the fields
@@ -42,7 +42,8 @@ def check_regex_patterns():
         InfoField.COURSE_NAME: RegexPattern.COURSE_NAME,
         InfoField.SEMESTER: RegexPattern.SEMESTER,
         InfoField.GUILD_ID: RegexPattern.DISCORD_ID,
-        InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN
+        InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN,
+        InfoField.MARKS_FOLDER_ID: RegexPattern.GOOGLE_DRIVE_LINK_ID
     }
     # check each of the fields in a loop
     for field,pattern in fields_and_patterns.items():
@@ -76,7 +77,7 @@ def check_sections(num_sec, missing_secs):
 
 # check original routine spreadsheet id in json
 def check_and_routine_sheet():
-    pattern = RegexPattern.GOOGLE_LINK_ID
+    pattern = RegexPattern.GOOGLE_DRIVE_LINK_ID
     field_name = InfoField.ROUTINE_SHEET_ID
     routine_id = state.info[field_name]
     extracted = re.search(pattern, routine_id)
@@ -87,19 +88,10 @@ def check_and_routine_sheet():
         raise ValueError(FormatText.error(msg))
     elif routine_id != extracted[0]:
         # extracted id doesn't match routine exactly
-        update_json_routine_sheet(field_name, extracted[0])
+        update_info_field(field_name, extracted[0])
     
     # TODO: check if routine sheet is reachable
     # passed all routine tests
     msg = "Original routine spreadsheet id seems ok."
     print(FormatText.success(msg))
-    
-
-# replace full link with extracted id only
-def update_json_routine_sheet(routine_field, extracted_id):
-    state.info[routine_field] = extracted_id
-    update_json(state.info, FileName.INFO_JSON)
-    msg = f'Updated "{routine_field}" field in {FileName.INFO_JSON}' 
-    msg += ' file with just the extracted sheet id.'
-    print(FormatText.warning(msg))
     

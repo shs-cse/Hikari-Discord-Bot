@@ -1,4 +1,7 @@
 import json
+from bot_variables import state
+from bot_variables.config import FileName
+from wrappers.utils import FormatText
 
 # decoder for json files with comments
 class JSONCDecoder(json.JSONDecoder):
@@ -39,14 +42,22 @@ def update_json(data, file):
     with open(file, 'w') as f:
         json_str = JSONCEncoder(indent=4).encode(data)
         f.write(json_str)
+        
+
+# update specific field in info
+def update_info_field(field, new_value):
+    state.info[field] = new_value
+    update_json(state.info, FileName.INFO_JSON)
+    msg = f'Updated "{field}" field in {FileName.INFO_JSON} file to: {new_value}'
+    print(FormatText.warning(msg))
 
 
 # test reading and writing
 def test():
     from pprint import pprint
-    info = read_json("info.jsonc")
+    info = read_json(FileName.INFO_JSON)
     pprint(info, sort_dicts=False)
-    update_json(info, "info.jsonc")
+    update_json(info, FileName.INFO_JSON)
     
 if __name__ == "__main__":
     test()
