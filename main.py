@@ -11,8 +11,13 @@ import hikari
 def main():
     info = read_json(FileName.INFO_JSON)
     state.bot = hikari.GatewayBot(token=info[InfoField.BOT_TOKEN])
-    from commands import test
-    state.bot.run()
+    from slash_commands import test
+    state.bot.run(
+        asyncio_debug=True,             # enable asyncio debug to detect blocking and slow code.
+        coroutine_tracking_depth=20,    # enable tracking of coroutines, makes some asyncio
+                                        # errors clearer.
+        propagate_interrupts=True,      # Any OS interrupts get rethrown as errors.
+    )
 
 
 def checks():
