@@ -29,15 +29,12 @@ def test_checks():
         check_info_fields()
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
-        # TODO: folder for enrolment and marks
-        # TODO: check or create enrolment sheet
-        routine_sheet = check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
-        
+        check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
         ... # TODO: check sheets and stuff
-        # TODO: create passed.jsonc
         enrolment_sheet = check_enrolment_sheet()
-        # update_enrolment_cells(enrolment_sheet)
         update_marks_groups(enrolment_sheet)
+        # TODO: marks sheets
+        # TODO: create passed.jsonc
     
 
 
