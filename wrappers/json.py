@@ -15,11 +15,16 @@ class JSONCDecoder(json.JSONDecoder):
                              for n,line in enumerate(json_str.strip().split('\n')))
         return super().decode(json_str)
 
+
+# read json string
+def loads(json_str):
+    return JSONCDecoder().decode(json_str)
+
 # read json file
 def read_json(file):
     with open(file) as f:
-        data = f.read()
-        return JSONCDecoder().decode(data)
+        json_str = f.read()
+        return loads(json_str)
 
 
 
@@ -48,6 +53,8 @@ def update_json(data, file):
 # update specific field in info
 def update_info_field(field, new_value):
     old_value = state.info[field]
+    if old_value == new_value:
+        return
     state.info[field] = new_value
     update_json(state.info, FileName.INFO_JSON)
     msg = f'{FileName.INFO_JSON} > "{field}": updated...\n' 

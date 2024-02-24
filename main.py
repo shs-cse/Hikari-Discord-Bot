@@ -31,9 +31,13 @@ def test_checks():
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
         # TODO: folder for enrolment and marks
         # TODO: check or create enrolment sheet
-        check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
+        routine_sheet = check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
+        
         ... # TODO: check sheets and stuff
         # TODO: create passed.jsonc
+        enrolment_sheet = check_enrolment_sheet()
+        # update_enrolment_cells(enrolment_sheet)
+        update_marks_groups(enrolment_sheet)
     
 
 

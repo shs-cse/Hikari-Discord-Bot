@@ -18,9 +18,14 @@ class FormatText:
     DIM_BOLD_RESET = '\033[22m'
     ITALICS = '\033[3m'
     UNDERLINE = '\033[4m'
+    
+    
+    # dim yellow
+    def wait(text):
+        return f"\n{FormatText.YELLOW}{FormatText.DIM} {text}{FormatText.RESET}"
 
-    # blue
-    def ok(text):
+    # cyan
+    def status(text):
         return f"\n{FormatText.CYAN}\t• {text}{FormatText.RESET}"
         
     # green
@@ -35,6 +40,10 @@ class FormatText:
     def error(text):
         return f"\n{FormatText.RED}{FormatText.BOLD}✘ {text}{FormatText.RESET}"
     
+    
+# folder id -> link
+def get_link_from_folder_id(folder_id):
+    return f"https://drive.google.com/drive/folders/{folder_id}"
     
 # sheet id -> link
 def get_link_from_sheet_id(sheet_id):
