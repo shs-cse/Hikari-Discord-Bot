@@ -66,8 +66,25 @@ def update_sheet_values(cell_value_dict, sheet_obj=None, *, sheet_id=None, sheet
     print(FormatText.status(f'Url: {FormatText.BOLD}{sheet_obj.url}'))
     print(FormatText.status(f'Setting cell values: {FormatText.BOLD}{cell_value_dict}'))
     sheet_obj.update_values_batch(ranges, values)
+
+
+
+# directly update cells, no need to check
+def update_cells_from_fields(spreadsheet: pygs.Spreadsheet, sheet_cell_fields_dict: dict):
+    for sheet_name, cell_field_dict in sheet_cell_fields_dict.items():
+        sheet = spreadsheet.worksheet_by_title(sheet_name)
+        # map info field to their actual values for updating sheets
+        cell_value_dict = {}
+        for cell,field in cell_field_dict.items():
+            value = state.info[field]
+            if isinstance(value, list):
+                value = ','.join(str(item) for item in value)
+            cell_value_dict[cell] = value
+        update_sheet_values(cell_value_dict, sheet)    
+
     
     
+
 # allow access shenanigans
 def allow_access(dest_sheet_id, src_sheet_id):
     print(FormatText.wait("Allowing sheet access..."))

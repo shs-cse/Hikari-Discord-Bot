@@ -34,20 +34,6 @@ def check_spreadsheet(spreadsheet_id):
         raise pygs.SpreadsheetNotFound(FormatText.error(msg)) from error
     
 
-# directly update cells, no need to check
-def update_cells_from_fields(spreadsheet: pygs.Spreadsheet, sheet_cell_fields_dict: dict):
-    for sheet_name, cell_field_dict in sheet_cell_fields_dict.items():
-        sheet = spreadsheet.worksheet_by_title(sheet_name)
-        # map info field to their actual values for updating sheets
-        cell_value_dict = {}
-        for cell,field in cell_field_dict.items():
-            value = state.info[field]
-            if isinstance(value, list):
-                value = ','.join(str(item) for item in value)
-            cell_value_dict[cell] = value
-        update_sheet_values(cell_value_dict, sheet)
-    
-
 # TODO: split into multiple function
 def check_enrolment_sheet():
     # enrolment id may be empty
@@ -75,7 +61,7 @@ def check_enrolment_sheet():
     return enrolment_sheet
     
     
-def update_marks_groups(enrolment_sheet):
+def fetch_marks_groups(enrolment_sheet):
     print(FormatText.wait(f'Fetching "{InfoField.MARKS_GROUPS}" from spreadsheet...'))
     routine_wrksht = enrolment_sheet.worksheet_by_title(PullMarksGroupsFrom.WRKSHT)
     marks_groups = routine_wrksht.get_value(PullMarksGroupsFrom.CELL)
