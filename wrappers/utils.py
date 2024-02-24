@@ -1,4 +1,11 @@
+import re
+from bot_variables.config import RegexPattern
+
 class FormatText:
+    """
+    Use ANSI color codes/graphics mode to emphasize changes
+    reference: https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+    """
     MAGENTA = '\033[95m'
     BLUE = '\033[94m'
     CYAN = '\033[96m'
@@ -7,11 +14,14 @@ class FormatText:
     RED = '\033[91m'
     RESET = '\033[0m'
     BOLD = '\033[1m'
+    DIM = '\033[2m'
+    DIM_BOLD_RESET = '\033[22m'
+    ITALICS = '\033[3m'
     UNDERLINE = '\033[4m'
 
     # blue
     def ok(text):
-        return f"\n{FormatText.CYAN}\t- {text}{FormatText.RESET}"
+        return f"\n{FormatText.CYAN}\t• {text}{FormatText.RESET}"
         
     # green
     def success(text):
@@ -24,3 +34,13 @@ class FormatText:
     # red
     def error(text):
         return f"\n{FormatText.RED}{FormatText.BOLD}✘ {text}{FormatText.RESET}"
+    
+    
+# sheet id -> link
+def get_link_from_sheet_id(sheet_id):
+    return f"https://docs.google.com/spreadsheets/d/{sheet_id}"
+
+
+# link -> sheets/folder id
+def get_drive_id_from_link(link):
+    return re.search(RegexPattern.GOOGLE_DRIVE_LINK_ID, link).group()

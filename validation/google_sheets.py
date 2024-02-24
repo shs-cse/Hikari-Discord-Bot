@@ -2,8 +2,8 @@ from os import path
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
 from pygsheets import AuthenticationError
-from wrappers.pygs import get_google_client
-from wrappers.utils import FormatText
+from wrappers.pygs import *
+from wrappers.utils import FormatText, get_link_from_sheet_id
 
 # TODO: check routine sheet id in B16
 # TODO: check enrolment sheet
@@ -24,10 +24,25 @@ def check_google_credentials():
                                " Did you forget to provide the credentials.json file?")
         raise AuthenticationError(msg) from error
     
+# check if spreadsheet file exists
+def check_spreadsheet(spreadsheet_id):
+    try:
+        print(FormatText.ok("Fetching routine sheet..."))
+        spreadsheet = get_spreadsheet(spreadsheet_id)
+        print(FormatText.success("Fetched routine sheet."))
+        return spreadsheet
+    except Exception as error:
+        msg = "Could not access this sheet. Is this link correct?"
+        msg += " And accessible with your GSUITE accout?\n" 
+        msg += get_link_from_sheet_id(spreadsheet_id)
+        raise pygs.SpreadsheetNotFound(FormatText.error(msg)) from error
+    
 
 def check_enrolment():
-    # TODO: check if enrolment sheet exists
-    if not state.info[InfoField.ENROLMENT_SHEET_ID]:
+    enrolment_id = state.info[InfoField.ENROLMENT_SHEET_ID]
+    if enrolment_id:
+        enrolment_sheet = check_spreadsheet(enrolment_id)
+    else:
         # TODO: if not, create one
         msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
         msg += ' Creating a new sheet...'

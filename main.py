@@ -2,7 +2,7 @@ import os
 from bot_variables import state
 from bot_variables.config import FileName
 from wrappers.json import read_json, update_json
-from validation.google_sheets import check_google_credentials
+from validation.google_sheets import *
 from validation.json_inputs import *
 
 import hikari, crescent
@@ -31,7 +31,7 @@ def test_checks():
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
         # TODO: folder for enrolment and marks
         # TODO: check or create enrolment sheet
-        check_and_routine_sheet()
+        check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
         ... # TODO: check sheets and stuff
         # TODO: create passed.jsonc
     

@@ -44,11 +44,15 @@ def update_json(data, file):
         f.write(json_str)
         
 
+# TODO: update FormatText code
 # update specific field in info
 def update_info_field(field, new_value):
+    old_value = state.info[field]
     state.info[field] = new_value
     update_json(state.info, FileName.INFO_JSON)
-    msg = f'{FileName.INFO_JSON} > "{field}": Updated to "{new_value}"'
+    msg = f'{FileName.INFO_JSON} > "{field}": updated...\n' 
+    msg += f'\t{FormatText.DIM}- {"from:":>8}\t{old_value}\n'
+    msg += f'\t{FormatText.DIM_BOLD_RESET}{FormatText.BOLD}+ {"to:":>8}\t{new_value}'
     print(FormatText.warning(msg))
 
 

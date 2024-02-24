@@ -43,6 +43,7 @@ def check_regex_patterns():
         InfoField.SEMESTER: RegexPattern.SEMESTER,
         InfoField.GUILD_ID: RegexPattern.DISCORD_ID,
         InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN,
+        InfoField.ROUTINE_SHEET_ID: RegexPattern.GOOGLE_DRIVE_LINK_ID,
         InfoField.MARKS_FOLDER_ID: RegexPattern.GOOGLE_DRIVE_LINK_ID
     }
     # check each of the fields in a loop
@@ -82,24 +83,24 @@ def check_sections(num_sec, missing_secs):
     print(FormatText.success(msg))
     
 
-# TODO: make this function obsolete
-# check original routine spreadsheet id in json
-def check_and_routine_sheet():
-    pattern = RegexPattern.GOOGLE_DRIVE_LINK_ID
-    routine_field = InfoField.ROUTINE_SHEET_ID
-    routine_id = state.info[routine_field]
-    extracted = re.search(pattern, routine_id)
-    # raise error if no match found
-    if not extracted:
-        msg = f'{FileName.INFO_JSON} > "{routine_field}":' 
-        msg += f' file does not match expected pattern: "{pattern}"'
-        raise ValueError(FormatText.error(msg))
-    elif routine_id != extracted[0]:
-        # extracted id doesn't match routine exactly
-        update_info_field(routine_field, extracted[0])
+# # TODO: make this function obsolete
+# # check original routine spreadsheet id in json
+# def check_and_routine_sheet():
+#     pattern = RegexPattern.GOOGLE_DRIVE_LINK_ID
+#     routine_field = InfoField.ROUTINE_SHEET_ID
+#     routine_id = state.info[routine_field]
+#     extracted = re.search(pattern, routine_id)
+#     # raise error if no match found
+#     if not extracted:
+#         msg = f'{FileName.INFO_JSON} > "{routine_field}":' 
+#         msg += f' file does not match expected pattern: "{pattern}"'
+#         raise ValueError(FormatText.error(msg))
+#     elif routine_id != extracted[0]:
+#         # extracted id doesn't match routine exactly
+#         update_info_field(routine_field, extracted[0])
     
-    # TODO: check if routine sheet is reachable
-    # passed all routine tests
-    msg = "Original routine spreadsheet id seems ok."
-    print(FormatText.success(msg))
+#     # TODO: check if routine sheet is reachable
+#     # passed all routine tests
+#     msg = "Original routine spreadsheet id seems ok."
+#     print(FormatText.success(msg))
     

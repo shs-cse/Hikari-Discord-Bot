@@ -7,15 +7,19 @@ def get_google_client():
     return pygs.authorize(client_secret = FileName.GOOGLE_CREDENTIALS)
 
 
-# get a specific sheet by name from a spreadsheet
-def get_sheet(spreadsheet_id, sheet_name):
-    spreadsheet = get_google_client().open_by_key(spreadsheet_id)
-    return spreadsheet.worksheet_by_title(sheet_name)
+# get a spreadsheet object
+def get_spreadsheet(spreadsheet_id):
+    return get_google_client().open_by_key(spreadsheet_id)
+
+
+# get a specific sheet (tab) by name from a spreadsheet
+def get_sheet_by_name(spreadsheet_id, sheet_name):
+    return get_spreadsheet(spreadsheet_id).worksheet_by_title(sheet_name)
 
 
 # get complete sheet data as pandas dataframe
 def get_sheet_data(spreadsheet_id, sheet_name):
-    sheet = get_sheet(spreadsheet_id, sheet_name)
+    sheet = get_sheet_by_name(spreadsheet_id, sheet_name)
     return sheet.get_as_df()
 
 
@@ -41,5 +45,5 @@ def update_sheet_values(set_values_dict, sheet_obj=None, sheet_id=None, sheet_na
               for val in set_values_dict.values()]
     # edit sheet with set_values
     if not sheet_obj:
-        sheet_obj = get_sheet(sheet_id, sheet_name)
+        sheet_obj = get_sheet_by_name(sheet_id, sheet_name)
     sheet_obj.update_values_batch(ranges, values)
