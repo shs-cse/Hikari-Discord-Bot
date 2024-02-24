@@ -40,7 +40,7 @@ def share_with_anyone(spreadsheet: pygs.Spreadsheet):
 
 
 # copy from a template spreadsheet and return a spreadsheet object
-def copy_spreadsheet(template_id, title, folder_id, set_sheet_cells=None):
+def copy_spreadsheet(template_id, title, folder_id):
     print(FormatText.wait('Copying spreadsheet from a template...'))
     print(FormatText.status(f'Template: {FormatText.BOLD}{get_link_from_sheet_id(template_id)}'))
     print(FormatText.status(f"Spreadsheet Title: {FormatText.BOLD}{title}"))
@@ -88,8 +88,8 @@ def update_cells_from_fields(spreadsheet: pygs.Spreadsheet, sheet_cell_fields_di
 # allow access shenanigans
 def allow_access(dest_sheet_id, src_sheet_id):
     print(FormatText.wait("Allowing sheet access..."))
-    print(FormatText.status(f"Pull from: {FormatText.BOLD}{get_link_from_sheet_id(dest_sheet_id)}"))
-    print(FormatText.status(f"Push to: {FormatText.BOLD}{get_link_from_sheet_id(src_sheet_id)}"))
+    print(FormatText.status(f"Pull from: {FormatText.BOLD}{get_link_from_sheet_id(src_sheet_id)}"))
+    print(FormatText.status(f"Push to: {FormatText.BOLD}{get_link_from_sheet_id(dest_sheet_id)}"))
     token = get_google_client().oauth.token
     url = f"https://docs.google.com/spreadsheets/d/{dest_sheet_id}"
     url += f"/externaldata/addimportrangepermissions?donorDocId={src_sheet_id}"

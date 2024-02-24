@@ -32,8 +32,9 @@ def test_checks():
         check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
         ... # TODO: check sheets and stuff
         enrolment_sheet = check_enrolment_sheet()
-        fetch_marks_groups(enrolment_sheet)
+        check_marks_groups(enrolment_sheet)
         # TODO: marks sheets
+        check_marks_sheets()
         # TODO: create passed.jsonc
     
 
