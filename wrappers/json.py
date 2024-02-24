@@ -12,7 +12,7 @@ class JSONCDecoder(json.JSONDecoder):
     def decode(self, json_str: str):
         json_str = '\n'.join(line if line.lstrip() and not line.lstrip().startswith('//')
                              else f'"__comment_{n+1:03d}__": {json.dumps(line)},'
-                             for n,line in enumerate(json_str.split('\n')))
+                             for n,line in enumerate(json_str.strip().split('\n')))
         return super().decode(json_str)
 
 # read json file
@@ -48,7 +48,7 @@ def update_json(data, file):
 def update_info_field(field, new_value):
     state.info[field] = new_value
     update_json(state.info, FileName.INFO_JSON)
-    msg = f'Updated "{field}" field in {FileName.INFO_JSON} file to: {new_value}'
+    msg = f'{FileName.INFO_JSON} > "{field}": Updated to "{new_value}"'
     print(FormatText.warning(msg))
 
 

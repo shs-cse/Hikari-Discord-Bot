@@ -47,10 +47,17 @@ def check_regex_patterns():
     }
     # check each of the fields in a loop
     for field,pattern in fields_and_patterns.items():
-        if not re.match(pattern, str(state.info[field])):
-            msg = f'"{field}" in {FileName.INFO_JSON} file "{state.info[field]}"'
-            msg += fr' does not match expected pattern: "{pattern}".'
-            raise SyntaxError(FormatText.error(msg))
+        msg = f'{FileName.INFO_JSON} > "{field}": '
+        value_str = str(state.info[field])
+        extracted = re.search(pattern, value_str)
+        if not extracted:
+            msg += fr'"{value_str}" does not match expected pattern: "{pattern}".'
+            raise ValueError(FormatText.error(msg))
+        # update if not exact match (e.g full link -> )
+        elif value_str != extracted[0]:
+            update_info_field(field, extracted[0])
+        msg += f'{FormatText.BOLD}{extracted[0]}'
+        print(FormatText.ok(msg))
     # passed all regex checks
     msg = f"Course details regex checks out in {FileName.INFO_JSON} file."
     print(FormatText.success(msg))
@@ -75,20 +82,21 @@ def check_sections(num_sec, missing_secs):
     print(FormatText.success(msg))
     
 
+# TODO: make this function obsolete
 # check original routine spreadsheet id in json
 def check_and_routine_sheet():
     pattern = RegexPattern.GOOGLE_DRIVE_LINK_ID
-    field_name = InfoField.ROUTINE_SHEET_ID
-    routine_id = state.info[field_name]
+    routine_field = InfoField.ROUTINE_SHEET_ID
+    routine_id = state.info[routine_field]
     extracted = re.search(pattern, routine_id)
     # raise error if no match found
     if not extracted:
-        msg = f'"{field_name}" field in {FileName.INFO_JSON} ' 
-        msg += f'file does not match expected pattern: "{pattern}"'
+        msg = f'{FileName.INFO_JSON} > "{routine_field}":' 
+        msg += f' file does not match expected pattern: "{pattern}"'
         raise ValueError(FormatText.error(msg))
     elif routine_id != extracted[0]:
         # extracted id doesn't match routine exactly
-        update_info_field(field_name, extracted[0])
+        update_info_field(routine_field, extracted[0])
     
     # TODO: check if routine sheet is reachable
     # passed all routine tests

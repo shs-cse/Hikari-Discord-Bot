@@ -1,5 +1,6 @@
 from os import path
-from bot_variables.config import FileName
+from bot_variables import state
+from bot_variables.config import FileName, InfoField
 from pygsheets import AuthenticationError
 from wrappers.pygs import get_google_client
 from wrappers.utils import FormatText
@@ -25,4 +26,12 @@ def check_google_credentials():
     
 
 def check_enrolment():
+    # TODO: check if enrolment sheet exists
+    if not state.info[InfoField.ENROLMENT_SHEET_ID]:
+        # TODO: if not, create one
+        msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
+        msg += ' Creating a new sheet...'
+        print(FormatText.warning(msg))
+        
+    # TODO: check routine sheet is in B16
     ...

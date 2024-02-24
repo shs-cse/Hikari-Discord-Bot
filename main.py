@@ -29,6 +29,7 @@ def test_checks():
         check_info_fields()
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
+        # TODO: folder for enrolment and marks
         # TODO: check or create enrolment sheet
         check_and_routine_sheet()
         ... # TODO: check sheets and stuff
