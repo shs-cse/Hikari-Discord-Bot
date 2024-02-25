@@ -17,7 +17,15 @@ def get_spreadsheet(spreadsheet_id):
     print(FormatText.wait("Fetching spreadsheet..."))
     msg = f"Url: {FormatText.BOLD}{get_link_from_sheet_id(spreadsheet_id)}"
     print(FormatText.status(msg))
-    return get_google_client().open_by_key(spreadsheet_id)
+    google_client = get_google_client()
+    spreadsheet = google_client.open_by_key(spreadsheet_id)
+    # warn if file is trashed
+    drive_api_files = google_client.drive.service.files()
+    trashed_response = drive_api_files.get(fileId=spreadsheet_id, fields='trashed').execute()
+    trashed = trashed_response['trashed']
+    if trashed:
+        print(FormatText.warning('Fetched spreadsheet is in trash!!'))
+    return spreadsheet
 
 
 # get a specific sheet (tab) by name from a spreadsheet
