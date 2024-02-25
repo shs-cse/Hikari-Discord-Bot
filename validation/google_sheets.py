@@ -76,42 +76,76 @@ def check_marks_groups(enrolment_sheet):
     # update info json
     json.update_info_field(InfoField.MARKS_GROUPS, marks_groups)
     
-    
-# TODO: check marks sheets
-def check_marks_sheets():
-    marks_groups = state.info[InfoField.MARKS_GROUPS]
-    marks_ids = state.info[InfoField.MARKS_SHEET_IDS].copy()
-    for group in marks_groups:
-        for sec in group:
-            if marks_ids.get(str(sec), ""): # key may not exist or value may be ""
-                spreadsheet = get_spreadsheet(marks_ids[str(sec)])
-            # no spreadsheet in info for the followings
-            elif sec == group[0]: # sec is the first member of the group 
-                print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...')) 
-                spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
-                                               'Marks Spreadsheet for Sec ' + ','.join(f'{s:02d}' for s in group),
-                                               state.info[InfoField.MARKS_FOLDER_ID])
-                update_cells_from_fields(spreadsheet, SheetCellToFieldDict.MARKS)
-            else: 
-                # first group member has spreadsheet
-                spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
-            marks_ids[str(sec)] = spreadsheet.id
-            msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
-            print(FormatText.success(msg))
-            # now deal with worksheet
-            try: # success -> sec worksheet already exists
-                sec_sheet = spreadsheet.worksheet_by_title(f"Sec {sec:02d}")
-            except pygs.WorksheetNotFound: 
-                # fail -> sec worksheet does not exist
-                print(FormatText.status('Creating new worksheet...'))
-                template_sheet = spreadsheet.worksheet_by_title(f"Sec 00")
-                print(FormatText.status(f'Template Worksheet Url: {FormatText.BOLD}{template_sheet.url}'))
-                sec_sheet = template_sheet.copy_to(spreadsheet.id)
-                sec_sheet.hidden = False
-                sec_sheet.title = f'Sec {sec:02d}'
-            print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
-            print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}'))   
-    # finally update json        
+
+def check_marks_sheet(sec, group, marks_ids):
+    if marks_ids.get(str(sec), ""): # key may not exist or value may be ""
+        spreadsheet = get_spreadsheet(marks_ids[str(sec)])
+    # no spreadsheet in info for the followings
+    elif sec == group[0]: # sec is the first member of the group 
+        print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...')) 
+        spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
+                                        'Marks Spreadsheet for Sec ' + ','.join(f'{s:02d}' for s in group),
+                                        state.info[InfoField.MARKS_FOLDER_ID])
+        update_cells_from_fields(spreadsheet, SheetCellToFieldDict.MARKS)
+    else: 
+        # first group member has spreadsheet
+        spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
+    marks_ids[str(sec)] = spreadsheet.id
     json.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
+    msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
+    print(FormatText.success(msg))
+    # now deal with worksheet
+    try: # success -> sec worksheet already exists
+        sec_sheet = spreadsheet.worksheet_by_title(f"Sec {sec:02d}")
+    except pygs.WorksheetNotFound: 
+        # fail -> sec worksheet does not exist
+        print(FormatText.status('Creating new worksheet...'))
+        template_sheet = spreadsheet.worksheet_by_title(f"Sec 00")
+        print(FormatText.status(f'Template Worksheet Url: {FormatText.BOLD}{template_sheet.url}'))
+        sec_sheet = template_sheet.copy_to(spreadsheet.id)
+        sec_sheet.hidden = False
+        sec_sheet.title = f'Sec {sec:02d}'
+    print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
+    print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
     # TODO: populate with student ids and names
     # TODO: move all fixed strings to config.py
+
+    
+# # TODO: check marks sheets
+# def check_marks_sheets():
+#     marks_groups = state.info[InfoField.MARKS_GROUPS]
+#     marks_ids = state.info[InfoField.MARKS_SHEET_IDS].copy()
+#     for group in marks_groups:
+#         for sec in group:
+#             if marks_ids.get(str(sec), ""): # key may not exist or value may be ""
+#                 spreadsheet = get_spreadsheet(marks_ids[str(sec)])
+#             # no spreadsheet in info for the followings
+#             elif sec == group[0]: # sec is the first member of the group 
+#                 print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...')) 
+#                 spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
+#                                                'Marks Spreadsheet for Sec ' + ','.join(f'{s:02d}' for s in group),
+#                                                state.info[InfoField.MARKS_FOLDER_ID])
+#                 update_cells_from_fields(spreadsheet, SheetCellToFieldDict.MARKS)
+#             else: 
+#                 # first group member has spreadsheet
+#                 spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
+#             marks_ids[str(sec)] = spreadsheet.id
+#             msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
+#             print(FormatText.success(msg))
+#             # now deal with worksheet
+#             try: # success -> sec worksheet already exists
+#                 sec_sheet = spreadsheet.worksheet_by_title(f"Sec {sec:02d}")
+#             except pygs.WorksheetNotFound: 
+#                 # fail -> sec worksheet does not exist
+#                 print(FormatText.status('Creating new worksheet...'))
+#                 template_sheet = spreadsheet.worksheet_by_title(f"Sec 00")
+#                 print(FormatText.status(f'Template Worksheet Url: {FormatText.BOLD}{template_sheet.url}'))
+#                 sec_sheet = template_sheet.copy_to(spreadsheet.id)
+#                 sec_sheet.hidden = False
+#                 sec_sheet.title = f'Sec {sec:02d}'
+#             print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
+#             print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}'))   
+#     # finally update json        
+#     json.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
+#     # TODO: populate with student ids and names
+#     # TODO: move all fixed strings to config.py

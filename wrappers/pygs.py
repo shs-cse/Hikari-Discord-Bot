@@ -5,6 +5,7 @@ from bot_variables.config import FileName
 from bot_variables import state
 
 # TODO: change all sheet to either spreadsheet or worksheet to clear confusions
+# TODO: check if file in trash
 
 # authorization
 def get_google_client():

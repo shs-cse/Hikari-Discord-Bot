@@ -34,7 +34,11 @@ def test_checks():
         enrolment_sheet = check_enrolment_sheet()
         check_marks_groups(enrolment_sheet)
         # TODO: marks sheets
-        check_marks_sheets()
+        for marks_group in state.info[InfoField.MARKS_GROUPS]:
+            for section in marks_group:
+                check_marks_sheet(section, marks_group, 
+                                  state.info[InfoField.MARKS_SHEET_IDS].copy())
+        # check_marks_sheets()
         # TODO: create passed.jsonc
     
 
