@@ -94,6 +94,10 @@ def check_marks_sheet(sec, group, marks_ids):
     json.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
+    create_marks_worksheet(spreadsheet, sec)
+    
+# create a worksheet for the section marks in spreadsheet
+def create_marks_worksheet(spreadsheet, sec):
     # now deal with worksheet
     try: # success -> sec worksheet already exists
         sec_sheet = spreadsheet.worksheet_by_title(f"Sec {sec:02d}")
