@@ -95,6 +95,7 @@ def check_marks_sheet(sec, group, marks_ids):
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
     create_marks_worksheet(spreadsheet, sec)
+    # TODO: move all fixed strings to config.py
     
 # create a worksheet for the section marks in spreadsheet
 def create_marks_worksheet(spreadsheet, sec):
