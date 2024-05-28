@@ -1,7 +1,6 @@
 from os import path
 from bot_variables import state
 from bot_variables.config import *
-from pygsheets import AuthenticationError
 from wrappers.pygs import *
 from wrappers.utils import FormatText, get_link_from_sheet_id
 from wrappers import json
@@ -21,24 +20,12 @@ def check_google_credentials():
                                " Did you forget to provide the credentials.json file?")
         raise AuthenticationError(msg) from error
     
-# check if spreadsheet file exists
-def check_spreadsheet(spreadsheet_id):
-    try:
-        spreadsheet = get_spreadsheet(spreadsheet_id)
-        print(FormatText.success(f'Fetched "{spreadsheet.title}" spreadsheet successfully.'))
-        return spreadsheet
-    except Exception as error:
-        msg = "Could not access this sheet. Is this link correct?"
-        msg += " And accessible with your GSUITE accout?\n" 
-        msg += get_link_from_sheet_id(spreadsheet_id)
-        raise pygs.SpreadsheetNotFound(FormatText.error(msg)) from error
-    
 
 # TODO: split into multiple function
 def check_enrolment_sheet():
     # enrolment id may be empty
     if enrolment_id := state.info[InfoField.ENROLMENT_SHEET_ID]:
-        enrolment_sheet = check_spreadsheet(enrolment_id)
+        enrolment_sheet = get_spreadsheet(enrolment_id)
     else:
         # enrolment id not found -> create a new sheet
         msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
@@ -62,7 +49,7 @@ def check_enrolment_sheet():
     
 def check_marks_groups(enrolment_sheet):
     print(FormatText.wait(f'Fetching "{InfoField.MARKS_GROUPS}" from spreadsheet...'))
-    routine_wrksht = enrolment_sheet.worksheet_by_title(PullMarksGroupsFrom.WRKSHT)
+    routine_wrksht = get_sheet_by_name(enrolment_sheet, PullMarksGroupsFrom.WRKSHT)
     marks_groups = routine_wrksht.get_value(PullMarksGroupsFrom.CELL)
     marks_groups = json.loads(marks_groups)
     print(FormatText.status(f'"{InfoField.MARKS_GROUPS}": {FormatText.BOLD}{marks_groups}'))
@@ -101,17 +88,16 @@ def check_marks_sheet(sec, group, marks_ids):
 def create_marks_worksheet(spreadsheet, sec):
     # now deal with worksheet
     try: # success -> sec worksheet already exists
-        sec_sheet = spreadsheet.worksheet_by_title(f"Sec {sec:02d}")
-    except pygs.WorksheetNotFound: 
+        sec_sheet = get_sheet_by_name(spreadsheet, f"Sec {sec:02d}")
+    except WorksheetNotFound: 
         # fail -> sec worksheet does not exist
         print(FormatText.status('Creating new worksheet...'))
-        template_sheet = spreadsheet.worksheet_by_title(f"Sec 00")
-        print(FormatText.status(f'Template Worksheet Url: {FormatText.BOLD}{template_sheet.url}'))
+        template_sheet = get_sheet_by_name(spreadsheet, "Sec 00")
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
         sec_sheet.title = f'Sec {sec:02d}'
-    print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
-    print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
+    # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
+    # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
     # TODO: populate with student ids and names
     # TODO: move all fixed strings to config.py
 

@@ -1,6 +1,8 @@
 import requests
-import pygsheets as pygs
-from wrappers.utils import FormatText, get_link_from_sheet_id, get_link_from_folder_id
+import pygsheets
+from pygsheets import WorksheetNotFound
+from pygsheets.exceptions import *
+from wrappers.utils import FormatText, get_link_from_sheet_id, get_link_from_folder_id, get_allow_access_link_from_sheet_id
 from bot_variables.config import FileName
 from bot_variables import state
 
@@ -9,30 +11,47 @@ from bot_variables import state
 
 # authorization
 def get_google_client():
-    return pygs.authorize(client_secret = FileName.GOOGLE_CREDENTIALS)
+    return pygsheets.authorize(client_secret = FileName.GOOGLE_CREDENTIALS)
 
 
 # get a spreadsheet object
 def get_spreadsheet(spreadsheet_id):
     print(FormatText.wait("Fetching spreadsheet..."))
-    msg = f"Url: {FormatText.BOLD}{get_link_from_sheet_id(spreadsheet_id)}"
+    url = get_link_from_sheet_id(spreadsheet_id)
+    msg = f"Url: {FormatText.BOLD}{url}"
     print(FormatText.status(msg))
     google_client = get_google_client()
-    spreadsheet = google_client.open_by_key(spreadsheet_id)
+    try:
+        spreadsheet = google_client.open_by_key(spreadsheet_id)
+        print(FormatText.success(f'Fetched "{spreadsheet.title}" spreadsheet successfully.'))
+    except Exception as error:
+        msg = "Could not access this sheet. Is this link correct?"
+        msg += " And accessible with your GSUITE accout?\n" 
+        msg += get_link_from_sheet_id(spreadsheet_id)
+        raise SpreadsheetNotFound(FormatText.error(msg)) from error
     # warn if file is trashed
     drive_api_files = google_client.drive.service.files()
     trashed_response = drive_api_files.get(fileId=spreadsheet_id, fields='trashed').execute()
     trashed = trashed_response['trashed']
     if trashed:
-        print(FormatText.warning('Fetched spreadsheet is in trash!!'))
+        print(FormatText.warning('Fetched spreadsheet is in google drive trash!!'))
     return spreadsheet
 
 
 # get a specific sheet (tab) by name from a spreadsheet
-def get_sheet_by_name(spreadsheet_id, sheet_name):
-    spreadsheet = get_spreadsheet(spreadsheet_id)
-    print(FormatText.status(f'Sheet/Tab Name: {sheet_name}'))
-    return spreadsheet.worksheet_by_title(sheet_name)
+def get_sheet_by_name(spreadsheet_obj_or_id, sheet_name):
+    if isinstance(spreadsheet_obj_or_id, pygsheets.Spreadsheet):
+        spreadsheet = spreadsheet_obj_or_id
+    else:
+        spreadsheet = get_spreadsheet(spreadsheet_obj_or_id)
+    print(FormatText.status(f'Worksheet/Tab Name: {FormatText.BOLD}{sheet_name}', +1))
+    try:
+        sheet = spreadsheet.worksheet_by_title(sheet_name)
+        print(FormatText.status(f'Worksheet/Tab Url: {FormatText.BOLD}{sheet.url}', -1)) 
+        return sheet
+    except Exception as error:
+        msg = FormatText.error(f"Could not find sheet named '{sheet_name}'!")
+        raise WorksheetNotFound(msg) from error
 
 
 # get complete sheet data as pandas dataframe
@@ -42,7 +61,7 @@ def get_sheet_data(spreadsheet_id, sheet_name):
 
 
 # share spreadsheet publicly
-def share_with_anyone(spreadsheet: pygs.Spreadsheet):
+def share_with_anyone(spreadsheet: pygsheets.Spreadsheet):
     print(FormatText.wait('Sharing spreadsheet publicly...'))
     print(FormatText.status(f'Url: {FormatText.BOLD}{spreadsheet.url}'))
     spreadsheet.share('', role='reader', type='anyone')
@@ -79,7 +98,7 @@ def update_sheet_values(cell_value_dict, sheet_obj=None, *, sheet_id=None, sheet
 
 
 # directly update cells, no need to check
-def update_cells_from_fields(spreadsheet: pygs.Spreadsheet, sheet_cell_fields_dict: dict):
+def update_cells_from_fields(spreadsheet: pygsheets.Spreadsheet, sheet_cell_fields_dict: dict):
     for sheet_name, cell_field_dict in sheet_cell_fields_dict.items():
         sheet = spreadsheet.worksheet_by_title(sheet_name)
         # map info field to their actual values for updating sheets
@@ -100,6 +119,5 @@ def allow_access(dest_sheet_id, src_sheet_id):
     print(FormatText.status(f"Pull from: {FormatText.BOLD}{get_link_from_sheet_id(src_sheet_id)}"))
     print(FormatText.status(f"Push to: {FormatText.BOLD}{get_link_from_sheet_id(dest_sheet_id)}"))
     token = get_google_client().oauth.token
-    url = f"https://docs.google.com/spreadsheets/d/{dest_sheet_id}"
-    url += f"/externaldata/addimportrangepermissions?donorDocId={src_sheet_id}"
+    url = get_allow_access_link_from_sheet_id(dest_sheet_id, src_sheet_id)
     requests.post(url, headers={'Authorization': f"Bearer {token}"})

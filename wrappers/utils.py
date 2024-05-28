@@ -1,5 +1,6 @@
 import re
 from bot_variables.config import RegexPattern
+from bot_variables import state
 
 class FormatText:
     """
@@ -25,8 +26,16 @@ class FormatText:
         return f"\n{FormatText.YELLOW}{FormatText.DIM} {text}{FormatText.RESET}"
 
     # cyan
-    def status(text):
-        return f"\n{FormatText.CYAN}\t• {text}{FormatText.RESET}"
+    def status(text, add_to_indentation_level=0):
+        # remove extra indentation from this point onward
+        if add_to_indentation_level < 0:
+            state.print_indentation_level += add_to_indentation_level
+        indentation = '\t' * max(0, state.print_indentation_level)
+        msg = f"\n{FormatText.CYAN}{indentation}• {text}{FormatText.RESET}"
+        # add extra indentation after this point onward
+        if add_to_indentation_level >= 0:
+            state.print_indentation_level += add_to_indentation_level
+        return msg
         
     # green
     def success(text):
@@ -38,7 +47,7 @@ class FormatText:
 
     # red
     def error(text):
-        return f"\n{FormatText.RED}{FormatText.BOLD}✘ {text}{FormatText.RESET}"
+        return f"\n\n{FormatText.RED}{FormatText.BOLD}✘ {text}{FormatText.RESET}"
     
     
 # folder id -> link
@@ -48,6 +57,11 @@ def get_link_from_folder_id(folder_id):
 # sheet id -> link
 def get_link_from_sheet_id(sheet_id):
     return f"https://docs.google.com/spreadsheets/d/{sheet_id}"
+
+# destination sheet id + source sheet id -> allow access link
+def get_allow_access_link_from_sheet_id(dest_sheet_id, src_sheet_id):
+    dest_sheet_url = get_link_from_sheet_id(dest_sheet_id)
+    return f"{dest_sheet_url}/externaldata/addimportrangepermissions?donorDocId={src_sheet_id}"
 
 
 # link -> sheets/folder id

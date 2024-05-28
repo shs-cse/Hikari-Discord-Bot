@@ -29,7 +29,7 @@ def test_checks():
         check_info_fields()
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
-        check_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
+        get_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
         ... # TODO: check sheets and stuff
         enrolment_sheet = check_enrolment_sheet()
         check_marks_groups(enrolment_sheet)
