@@ -25,7 +25,7 @@ def test_commands():
 def test_checks():
     check_google_credentials()
     state.info = read_json(FileName.INFO_JSON)
-    if not is_json_passed_before():
+    if not has_json_passed_before():
         check_info_fields()
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])

@@ -5,7 +5,7 @@ from wrappers.json import read_json, update_json, update_info_field
 from wrappers.utils import FormatText
 
 # match info file with the passed file to skip checking all the fields
-def is_json_passed_before():
+def has_json_passed_before():
     if os.path.exists(FileName.PASSED_JSON):
         passed = read_json(FileName.PASSED_JSON)
         # matches all values with previously passed json (except buttons)
