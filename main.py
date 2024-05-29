@@ -1,4 +1,6 @@
 import os
+
+# from hikari.presences import Status
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
 from wrappers.json import read_json, update_json
@@ -13,10 +15,12 @@ def test_commands():
     bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], 
                             intents=hikari.Intents.ALL)
     client = crescent.Client(bot, 
+                             tracked_guilds=[int(state.info[InfoField.GUILD_ID])],
                              default_guild=int(state.info[InfoField.GUILD_ID]))
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     
     bot.run(
+        status=hikari.Status.IDLE,          # start bot with idle status 
         asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
         coroutine_tracking_depth=20, # enable coroutine tracking, makes some asyncio errors clearer.
     )
@@ -44,7 +48,7 @@ def test_checks():
 
 
 def main():
-    test_checks()
+    test_commands()
 
 if __name__ == "__main__":
     main()
