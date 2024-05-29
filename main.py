@@ -1,6 +1,6 @@
 import os
 from bot_variables import state
-from bot_variables.config import FileName
+from bot_variables.config import FileName, InfoField
 from wrappers.json import read_json, update_json
 from validation.google_sheets import *
 from validation.json_inputs import *
@@ -11,9 +11,9 @@ import hikari, crescent
 def test_commands():
     state.info = read_json(FileName.INFO_JSON)
     bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], intents=hikari.Intents.ALL)
-    # from slash_commands import test
-    client = crescent.Client(bot, default_guild=state.info[InfoField.GUILD_ID])
+    client = crescent.Client(bot, default_guild=int(state.info[InfoField.GUILD_ID]))
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
+    
     bot.run(
         asyncio_debug=True,             # enable asyncio debug to detect blocking and slow code.
         coroutine_tracking_depth=20,    # enable tracking of coroutines, makes some asyncio
@@ -44,7 +44,7 @@ def test_checks():
 
 
 def main():
-    test_checks()
+    test_commands()
 
 if __name__ == "__main__":
     main()

@@ -4,7 +4,7 @@ plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 @plugin.include
 @crescent.command
-async def ping(ctx: crescent.Context):
+async def ping(ctx: crescent.Context) -> None:
     await ctx.respond("Pong!")
     
 
