@@ -19,7 +19,10 @@ def check_google_credentials():
         msg = FormatText.error("Google authorization failed!"
                                " Did you forget to provide the credentials.json file?")
         raise AuthenticationError(msg) from error
-    
+
+
+def check_spreadsheet_id(spreadsheet_id):
+    get_spreadsheet(spreadsheet_id)
 
 # TODO: split into multiple function
 def check_enrolment_sheet():

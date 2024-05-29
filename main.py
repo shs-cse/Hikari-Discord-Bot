@@ -10,15 +10,15 @@ import hikari, crescent
 
 def test_commands():
     state.info = read_json(FileName.INFO_JSON)
-    bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], intents=hikari.Intents.ALL)
-    client = crescent.Client(bot, default_guild=int(state.info[InfoField.GUILD_ID]))
+    bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], 
+                            intents=hikari.Intents.ALL)
+    client = crescent.Client(bot, 
+                             default_guild=int(state.info[InfoField.GUILD_ID]))
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     
     bot.run(
-        asyncio_debug=True,             # enable asyncio debug to detect blocking and slow code.
-        coroutine_tracking_depth=20,    # enable tracking of coroutines, makes some asyncio
-                                        # errors clearer.
-        # propagate_interrupts=True,      # Any OS interrupts get rethrown as errors.
+        asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
+        coroutine_tracking_depth=20, # enable coroutine tracking, makes some asyncio errors clearer.
     )
 
 
@@ -29,7 +29,7 @@ def test_checks():
         check_info_fields()
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
-        get_spreadsheet(state.info[InfoField.ROUTINE_SHEET_ID])
+        check_spreadsheet_id(state.info[InfoField.ROUTINE_SHEET_ID])
         ... # TODO: check sheets and stuff
         enrolment_sheet = check_enrolment_sheet()
         check_marks_groups(enrolment_sheet)
