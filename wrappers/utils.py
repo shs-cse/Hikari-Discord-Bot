@@ -1,6 +1,5 @@
 import re
 from bot_variables.config import RegexPattern
-from bot_variables import state
 
 class FormatText:
     print_indentation_level = 0
@@ -52,6 +51,11 @@ class FormatText:
     def error(text):
         return f"\n\n{FormatText.RED}{FormatText.BOLD}✘ {text}{FormatText.RESET}"
     
+
+# sec -> marks worksheet title
+def get_marks_worksheet_name_from_sec(sec):
+    return f"Sec {sec:02d}"
+    
     
 # folder id -> link
 def get_link_from_folder_id(folder_id):
@@ -65,7 +69,6 @@ def get_link_from_sheet_id(sheet_id):
 def get_allow_access_link_from_sheet_id(dest_sheet_id, src_sheet_id):
     dest_sheet_url = get_link_from_sheet_id(dest_sheet_id)
     return f"{dest_sheet_url}/externaldata/addimportrangepermissions?donorDocId={src_sheet_id}"
-
 
 # link -> sheets/folder id
 def get_drive_id_from_link(link):

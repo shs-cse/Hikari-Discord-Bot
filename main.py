@@ -44,7 +44,7 @@ def test_checks():
 
 
 def main():
-    test_commands()
+    test_checks()
 
 if __name__ == "__main__":
     main()

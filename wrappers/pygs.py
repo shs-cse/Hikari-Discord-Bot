@@ -2,7 +2,8 @@ import requests
 import pygsheets
 from pygsheets import WorksheetNotFound
 from pygsheets.exceptions import *
-from wrappers.utils import FormatText, get_link_from_sheet_id, get_link_from_folder_id, get_allow_access_link_from_sheet_id
+from wrappers.utils import FormatText
+from wrappers.utils import get_link_from_sheet_id, get_link_from_folder_id, get_allow_access_link_from_sheet_id
 from bot_variables.config import FileName
 from bot_variables import state
 

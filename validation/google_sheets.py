@@ -1,8 +1,12 @@
 from os import path
 from bot_variables import state
-from bot_variables.config import *
-from wrappers.pygs import *
-from wrappers.utils import FormatText, get_link_from_sheet_id
+from bot_variables.config import InfoField, TemplateLinks, SheetCellToFieldDict, PullMarksGroupsFrom
+from wrappers.pygs import FileName, AuthenticationError, WorksheetNotFound
+from wrappers.pygs import update_cells_from_fields, get_google_client
+from wrappers.pygs import get_spreadsheet, get_sheet_by_name, copy_spreadsheet
+from wrappers.pygs import allow_access, share_with_anyone
+from wrappers.utils import FormatText
+from wrappers.utils import get_marks_worksheet_name_from_sec
 from wrappers import json
 
 
@@ -91,14 +95,14 @@ def check_marks_sheet(sec, group, marks_ids):
 def create_marks_worksheet(spreadsheet, sec):
     # now deal with worksheet
     try: # success -> sec worksheet already exists
-        sec_sheet = get_sheet_by_name(spreadsheet, f"Sec {sec:02d}")
+        sec_sheet = get_sheet_by_name(spreadsheet, get_marks_worksheet_name_from_sec(sec))
     except WorksheetNotFound: 
         # fail -> sec worksheet does not exist
         print(FormatText.status('Creating new worksheet...'))
-        template_sheet = get_sheet_by_name(spreadsheet, "Sec 00")
+        template_sheet = get_sheet_by_name(spreadsheet, get_marks_worksheet_name_from_sec(0))
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
-        sec_sheet.title = f'Sec {sec:02d}'
+        sec_sheet.title = get_marks_worksheet_name_from_sec(sec)
     # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
     # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
     # TODO: populate with student ids and names
