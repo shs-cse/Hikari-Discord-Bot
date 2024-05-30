@@ -73,10 +73,9 @@ def check_regex_patterns():
     # check each of the fields in a loop
     for field,pattern in fields_and_patterns.items():
         msg = f'{FileName.INFO_JSON} > "{field}": '
-        value_str = str(state.info[field])
         extracted = re.search(pattern, state.info[field])
         if not extracted:
-            msg += fr'"{value_str}" does not match expected pattern: "{pattern}".'
+            msg += fr'"{state.info[field]}" does not match expected pattern: "{pattern}".'
             raise ValueError(FormatText.error(msg))
         # update if not exact match (e.g full link -> id only)
         update_info_field(field, extracted[0])
