@@ -81,7 +81,7 @@ def check_regex_patterns():
         update_info_field(field, extracted[0])
         msg += f'{FormatText.BOLD}{extracted[0]}'
         print(FormatText.status(msg))
-    # passed all regex checks
+    # validated all regex checks
     msg = f"Course details regex checks out in {FileName.INFO_JSON} file."
     print(FormatText.success(msg))
     

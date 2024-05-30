@@ -2,7 +2,7 @@ from bot_variables import state
 from bot_variables.config import FileName, InfoField
 from wrappers.jsonc import read_json, update_json
 from validation.google_sheets import *
-from validation.json_inputs import *
+from validation.json_inputs import check_and_load_info
 import hikari, crescent
 
 def test_commands():
@@ -21,29 +21,13 @@ def test_commands():
 
 
 def test_checks():
-    check_google_credentials()
-    state.info = read_json(FileName.INFO_JSON)
-    if not has_info_passed_before():
-        check_info_fields()
-        check_regex_patterns()
-        check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
-        check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
-        ... # TODO: check sheets and stuff
-        enrolment_sheet = check_enrolment_sheet()
-        check_marks_groups(enrolment_sheet)
-        # TODO: marks sheets
-        for marks_group in state.info[InfoField.MARKS_GROUPS]:
-            for section in marks_group:
-                check_marks_sheet(section, marks_group, 
-                                  state.info[InfoField.MARKS_SHEET_IDS].copy())
-        # check_marks_sheets()
-        # TODO: create passed.jsonc
+    check_and_load_info() # update state.info
     
 
 
 def main():
-    # test_checks()
-    test_commands()
+    test_checks()
+    # test_commands()
 
 if __name__ == "__main__":
     main()
