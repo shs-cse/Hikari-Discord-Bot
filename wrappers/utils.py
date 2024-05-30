@@ -68,7 +68,7 @@ async def fetch_guild_from_id(guild_id: hikari.Snowflakeish) -> hikari.Guild | N
         msg = f"Could not reach the {guild_hint} server. \n  Have you added this bot"
         msg += f" ({bot_acc} {bot_acc.mention}) in the {guild_hint} server?"
         msg = FormatText.error(msg)
-        raise Exception(msg) from error
+        raise hikari.HikariError(msg) from error
     
 
 # cache get methods by using fetch methods occasionally
@@ -82,7 +82,7 @@ async def update_guild_cache(guild=None,members=True, roles=True, channels=True)
         await plugin.app.rest.fetch_roles(guild)
     if channels:
         await plugin.app.rest.fetch_guild_channels(guild)
-    print(FormatText.status(f"Caching {guild} guild's data done."))
+    print(FormatText.status(f"Cached: {FormatText.bold(guild)} guild's data"))
 
 
 def get_channel_by_name(name: str):

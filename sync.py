@@ -22,23 +22,20 @@ async def init():
         msg = "Bot was not assigned @bot role.\n  Please add"
         msg += f" @bot role to {bot_mem} before proceeding."
         msg = FormatText.error(msg)
-        raise Exception(msg)
+        raise hikari.HikariError(msg)
     else:
-        msg = FormatText.bold("@bot")
-        msg = f"Bot Role: {msg} has been added by admin."
+        msg = f"Bot Role: {FormatText.bold('@bot')} has been added by admin."
         print(FormatText.status(msg))
-    # TODO: check if bot has bot role
-    
     # list of available sections (integers)
     state.available_sections = [sec for sec in 
                                     range(1, state.info[InfoField.NUM_SECTIONS]+1)
                                     if sec not in state.info[InfoField.MISSING_SECTIONS]]
-    print(FormatText.status(f"Available Sections: {state.available_sections}"))
-    
+    print(FormatText.status(f"Available Sections: {FormatText.bold(state.available_sections)}"))
     # create invite link from welcome channel if not found
     if not state.info[InfoField.INVITE_LINK]:
         welcome = get_channel_by_name(state.guild, ChannelName.WELCOME)
         invite = await plugin.app.rest.create_invite(welcome)
         update_info_field(InfoField.INVITE_LINK, str(invite))
-    print(FormatText.status(f"Invite Link: {state.info[InfoField.INVITE_LINK]}"))
+    msg = FormatText.bold(state.info[InfoField.INVITE_LINK])
+    print(FormatText.status(f"Invite Link: {msg}"))
     print(FormatText.success("Syncing initialization complete."))
