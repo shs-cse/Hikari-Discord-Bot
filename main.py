@@ -20,7 +20,6 @@ def test_commands():
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     
     bot.run(
-        status=hikari.Status.IDLE,          # start bot with idle status 
         asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
         coroutine_tracking_depth=20, # enable coroutine tracking, makes some asyncio errors clearer.
     )
@@ -48,6 +47,7 @@ def test_checks():
 
 
 def main():
+    # test_checks()
     test_commands()
 
 if __name__ == "__main__":

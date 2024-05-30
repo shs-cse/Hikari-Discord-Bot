@@ -6,7 +6,6 @@ from wrappers.pygs import update_cells_from_fields, get_google_client
 from wrappers.pygs import get_spreadsheet, get_sheet_by_name, copy_spreadsheet
 from wrappers.pygs import allow_access, share_with_anyone
 from wrappers.utils import FormatText
-from wrappers.utils import get_marks_worksheet_name_from_sec
 from wrappers import json
 
 
@@ -38,7 +37,7 @@ def check_enrolment_sheet():
         msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
         msg += ' Creating a new spreadsheet...'
         print(FormatText.warning(msg))
-        file_name = FileName.ENROLMENT_SHEET.format(
+        file_name = FileName.ENROLMENT_SPREADSHEET.format(
                              course_code=state.info[InfoField.COURSE_CODE],
                              semester=state.info[InfoField.SEMESTER],
                          )
@@ -95,14 +94,14 @@ def check_marks_sheet(sec, group, marks_ids):
 def create_marks_worksheet(spreadsheet, sec):
     # now deal with worksheet
     try: # success -> sec worksheet already exists
-        sec_sheet = get_sheet_by_name(spreadsheet, get_marks_worksheet_name_from_sec(sec))
+        sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec))
     except WorksheetNotFound: 
         # fail -> sec worksheet does not exist
         print(FormatText.status('Creating new worksheet...'))
-        template_sheet = get_sheet_by_name(spreadsheet, get_marks_worksheet_name_from_sec(0))
+        template_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(0))
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
-        sec_sheet.title = get_marks_worksheet_name_from_sec(sec)
+        sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec)
     # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
     # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
     # TODO: populate with student ids and names

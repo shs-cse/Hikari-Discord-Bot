@@ -22,8 +22,9 @@ class FileName:
     SHEETS_CREDENTIALS = 'sheets.googleapis.com-python.json'
     INFO_JSON = 'info.jsonc'
     PASSED_JSON = 'passed.jsonc'
-    COMMANDS_FOLDER = 'commands'
-    ENROLMENT_SHEET = '{course_code} {semester} Enrolment Manager'
+    COMMANDS_FOLDER = 'bot_commands'
+    ENROLMENT_SPREADSHEET = '{course_code} {semester} Enrolment Manager'
+    SEC_MARKS_WORKSHEET = 'Sec {0:02d}'
 
 
 class TemplateLinks:

@@ -10,7 +10,7 @@ async def on_starting(event: hikari.StartingEvent) -> None:
     print(FormatText.wait("Bot is starting..."))
     # do stuff
     for i in range(5):
-        print(f"\t starting in {5-i}...")
+        print(FormatText.status(f"starting in {5-i} sec"))
         await asyncio.sleep(1)
     # Bot will now start
     
@@ -21,4 +21,4 @@ async def on_starting(event: hikari.StartingEvent) -> None:
 @crescent.event # after connecting to discord
 async def on_started(event: hikari.StartedEvent) -> None:
     print(FormatText.success(f"{FormatText.BOLD}Bot has started.{FormatText.DIM_BOLD_RESET}"))
-    await plugin.app.update_presence(status=hikari.Status.ONLINE)
+    # await plugin.app.update_presence(status=hikari.Status.ONLINE)
