@@ -60,10 +60,10 @@ def get_sheet_by_name(spreadsheet_obj_or_id, sheet_name):
         spreadsheet = spreadsheet_obj_or_id
     else:
         spreadsheet = get_spreadsheet(spreadsheet_obj_or_id)
-    print(FormatText.status(f'Worksheet/Tab Name: {FormatText.BOLD}{sheet_name}', +1))
+    print(FormatText.status(f'Worksheet/Tab Name: {FormatText.BOLD}{sheet_name}'))
     try:
         sheet = spreadsheet.worksheet_by_title(sheet_name)
-        print(FormatText.status(f'Worksheet/Tab Url: {FormatText.BOLD}{sheet.url}', -1)) 
+        print(FormatText.status(f'Worksheet/Tab Url: {FormatText.BOLD}{sheet.url}')) 
         return sheet
     except Exception as error:
         msg = FormatText.error(f"Could not find sheet named '{sheet_name}'!")

@@ -1,5 +1,4 @@
 class FormatText:
-    print_indentation_level = 0
     """
     Use ANSI color codes/graphics mode to emphasize changes
     reference: https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
@@ -24,17 +23,7 @@ class FormatText:
 
     # cyan
     def status(text, add_to_indentation_level=0):
-        # remove extra indentation from this point onward
-        if add_to_indentation_level < 0:
-            FormatText.print_indentation_level += add_to_indentation_level
-        if FormatText.print_indentation_level < 1:
-            FormatText.print_indentation_level = 1
-        indentation = '\t' * FormatText.print_indentation_level
-        msg = f"\n{FormatText.CYAN}{indentation}• {text}{FormatText.RESET}"
-        # add extra indentation after this point onward
-        if add_to_indentation_level >= 0:
-            FormatText.print_indentation_level += add_to_indentation_level
-        return msg
+        return f"\n{FormatText.CYAN}\t• {text}{FormatText.RESET}"
         
     # green
     def success(text):
