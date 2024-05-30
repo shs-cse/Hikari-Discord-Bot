@@ -127,8 +127,6 @@ def update_cells_from_fields(spreadsheet: pygsheets.Spreadsheet, sheet_cell_fiel
         update_sheet_values(cell_value_dict, sheet)    
 
     
-    
-
 # allow access shenanigans
 def allow_access(dest_sheet_id, src_sheet_id):
     print(FormatText.wait("Allowing sheet access..."))

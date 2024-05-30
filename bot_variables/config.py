@@ -1,3 +1,8 @@
+class ClassType:
+    THEORY = "theory"
+    LAB = "lab"
+    BOTH = [THEORY, LAB]
+
 class InfoField:
     COURSE_CODE = "course_code"
     COURSE_NAME = "course_name"
@@ -25,7 +30,7 @@ class FileName:
     COMMANDS_FOLDER = 'bot_commands'
     MARKS_SHEET_TITLE = '{course_code}-{sections} Marks Gradesheet {semester}'
     ENROLMENT_SHEET_TITLE = '{course_code} {semester} Enrolment Manager'
-    SEC_MARKS_WORKSHEET = 'Sec {sec:02d}'
+    SEC_MARKS_WORKSHEET = 'Sec {:02d}'
 
 
 class TemplateLinks:
@@ -83,7 +88,17 @@ class ChannelName:
 # all special role names in this guild
 class RoleName:
     BOT = "bot"
-    
+    FACULTY = "faculty"
+    THEORY_FACULTY = "theory-faculty"
+    LAB_FACULTY = "lab-faculty"
+    STUDENT_TUTOR = "student-tutor"
+    ADMIN = "admin"
+    BOT_ADMIN = "bot-admin"
+    STUDENT = "student"
+    SECTION = {
+        ClassType.THEORY: "sec-{:02d}",
+        ClassType.LAB: "sec-{:02d}-lab",
+    }
     
 # TODO: make it into class?
 info_row_dict = {'Helper Text': 4, 'Parent Column': 9, 'Self Column': 14, 'Depth': 23,

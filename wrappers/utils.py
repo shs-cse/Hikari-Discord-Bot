@@ -82,21 +82,36 @@ async def update_guild_cache(guild=None,members=True, roles=True, channels=True)
         await plugin.app.rest.fetch_roles(guild)
     if channels:
         await plugin.app.rest.fetch_guild_channels(guild)
-    print(FormatText.status(f"Cached: {FormatText.bold(guild)} guild's data"))
+    print(FormatText.success(f"Cache Updated: {FormatText.bold(guild)} guild's data"))
 
 
+# search in list of guild channels by name
 def get_channel_by_name(name: str):
     for _, channel in state.guild.get_channels().items():
         if channel.name == name:
-            print(FormatText.status(f"Fetched Channel: {name}"))
+            msg = FormatText.bold('#'+name)
+            print(FormatText.status(f"Fetched Channel: {msg}"))
             return channel
         
-        
-def get_role_by_name(roles: list[hikari.Role], name: str):
-    for role in roles:
+
+# search in list of guild roles by name
+def get_role_by_name(name: str):
+    for _, role in state.guild.get_roles().items():
         if role.name == name:
-            print(FormatText.status(f"Fetched Role: {name}"))
+            msg = FormatText.bold('@'+name)
+            print(FormatText.status(f"Fetched Role: {msg}"))
             return role
+
+# clone role with new name
+async def create_role_from_template(role_name: str, template_role: hikari.Role):
+    msg = FormatText.bold('@'+role_name)
+    print(FormatText.warning(f"Creating {msg} role..."))
+    new_role = await plugin.app.rest.create_role(state.guild, 
+                                                 name=role_name, 
+                                                 permissions=template_role.permissions, 
+                                                 color=template_role.color)
+    print(FormatText.success(f"Created {msg} role successfully."))
+    return new_role
 
 # async def fetch_member_by_id(guild: hikari.Guild, id_or_user: hikari.Snowflakeish):
 #     await plugin.app.rest.fetch_member(guild, id_or_user)

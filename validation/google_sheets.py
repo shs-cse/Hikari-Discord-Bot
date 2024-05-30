@@ -98,14 +98,14 @@ def check_marks_sheet(sec, group, marks_ids):
 # create a worksheet for the section marks in spreadsheet
 def create_marks_worksheet(spreadsheet, sec):
     try: # success -> sec worksheet already exists
-        sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec=sec))
+        sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec))
     except WorksheetNotFound: 
         # fail -> sec worksheet does not exist
         print(FormatText.status('Creating new worksheet...'))
-        template_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec=0))
+        template_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(0))
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
-        sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec=sec)
+        sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec)
         # TODO: populate with student ids and names
     # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
     # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 

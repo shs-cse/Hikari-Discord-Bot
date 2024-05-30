@@ -24,3 +24,4 @@ async def on_started(event: hikari.StartedEvent) -> None:
     # await plugin.app.update_presence(status=hikari.Status.ONLINE)
     # TODO: check if bot has MANAGE_ROLES permission
     await sync.init()
+    await sync.roles()

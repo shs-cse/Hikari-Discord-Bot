@@ -18,7 +18,7 @@ def has_info_passed_before():
         else:
             # mismatch -> needs checking each field
             print(FormatText.warning("Needs checking each json input field..."))
-            os.remove(FileName.INFO_JSON)
+            os.remove(FileName.VALID_JSON)
             return False
         
 # check and load the json
