@@ -22,7 +22,7 @@ class FormatText:
         return f"\n{FormatText.YELLOW}{FormatText.DIM} {text}{FormatText.RESET}"
 
     # cyan
-    def status(text, add_to_indentation_level=0):
+    def status(text):
         return f"\n{FormatText.CYAN}\t• {text}{FormatText.RESET}"
         
     # green
