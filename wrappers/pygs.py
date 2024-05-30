@@ -34,7 +34,7 @@ def get_google_client():
 def get_spreadsheet(spreadsheet_id):
     print(FormatText.wait("Fetching spreadsheet..."))
     url = get_link_from_sheet_id(spreadsheet_id)
-    msg = f"Url: {FormatText.BOLD}{url}"
+    msg = f"Url: {FormatText.bold(url)}"
     print(FormatText.status(msg))
     google_client = get_google_client()
     try:
@@ -60,10 +60,10 @@ def get_sheet_by_name(spreadsheet_obj_or_id, sheet_name):
         spreadsheet = spreadsheet_obj_or_id
     else:
         spreadsheet = get_spreadsheet(spreadsheet_obj_or_id)
-    print(FormatText.status(f'Worksheet/Tab Name: {FormatText.BOLD}{sheet_name}'))
+    print(FormatText.status(f'Worksheet/Tab Name: {FormatText.bold(sheet_name)}'))
     try:
         sheet = spreadsheet.worksheet_by_title(sheet_name)
-        print(FormatText.status(f'Worksheet/Tab Url: {FormatText.BOLD}{sheet.url}')) 
+        print(FormatText.status(f'Worksheet/Tab Url: {FormatText.bold(sheet.url)}')) 
         return sheet
     except Exception as error:
         msg = FormatText.error(f"Could not find sheet named '{sheet_name}'!")
@@ -79,20 +79,20 @@ def get_sheet_data(spreadsheet_id, sheet_name):
 # share spreadsheet publicly
 def share_with_anyone(spreadsheet: pygsheets.Spreadsheet):
     print(FormatText.wait('Sharing spreadsheet publicly...'))
-    print(FormatText.status(f'Url: {FormatText.BOLD}{spreadsheet.url}'))
+    print(FormatText.status(f'Url: {FormatText.bold(spreadsheet.url)}'))
     spreadsheet.share('', role='reader', type='anyone')
 
 
 # copy from a template spreadsheet and return a spreadsheet object
 def copy_spreadsheet(template_id, title, folder_id):
     print(FormatText.wait('Copying spreadsheet from a template...'))
-    print(FormatText.status(f'Template: {FormatText.BOLD}{get_link_from_sheet_id(template_id)}'))
-    print(FormatText.status(f"Spreadsheet Title: {FormatText.BOLD}{title}"))
-    print(FormatText.status(f"Drive Folder: {FormatText.BOLD}{get_link_from_folder_id(folder_id)}"))
+    print(FormatText.status(f'Template: {FormatText.bold(get_link_from_sheet_id(template_id))}'))
+    print(FormatText.status(f"Spreadsheet Title: {FormatText.bold(title)}"))
+    print(FormatText.status(f"Drive Folder: {FormatText.bold(get_link_from_folder_id(folder_id))}"))
     print(FormatText.status(f'Creating the new spreadsheet...'))
     spreadsheet = get_google_client().create(title=title, template=template_id, folder=folder_id)
     # finally return newly copied spreadsheet
-    print(FormatText.status(f'Done copying: {FormatText.BOLD}{get_link_from_sheet_id(spreadsheet.id)}'))
+    print(FormatText.status(f'Done copying: {FormatText.bold(get_link_from_sheet_id(spreadsheet.id))}'))
     return spreadsheet
 
 
@@ -106,9 +106,9 @@ def update_sheet_values(cell_value_dict, sheet_obj=None, *, sheet_id=None, sheet
     if not sheet_obj:
         sheet_obj = get_sheet_by_name(sheet_id, sheet_name)
     print(FormatText.wait(f'Editing spreadsheet cells...'))
-    print(FormatText.status(f'Sheet name: {FormatText.BOLD}{sheet_obj.title}'))
-    print(FormatText.status(f'Url: {FormatText.BOLD}{sheet_obj.url}'))
-    print(FormatText.status(f'Setting cell values: {FormatText.BOLD}{cell_value_dict}'))
+    print(FormatText.status(f'Sheet name: {FormatText.bold(sheet_obj.title)}'))
+    print(FormatText.status(f'Url: {FormatText.bold(sheet_obj.url)}'))
+    print(FormatText.status(f'Setting cell values: {FormatText.bold(cell_value_dict)}'))
     sheet_obj.update_values_batch(ranges, values)
 
 
@@ -132,8 +132,8 @@ def update_cells_from_fields(spreadsheet: pygsheets.Spreadsheet, sheet_cell_fiel
 # allow access shenanigans
 def allow_access(dest_sheet_id, src_sheet_id):
     print(FormatText.wait("Allowing sheet access..."))
-    print(FormatText.status(f"Pull from: {FormatText.BOLD}{get_link_from_sheet_id(src_sheet_id)}"))
-    print(FormatText.status(f"Push to: {FormatText.BOLD}{get_link_from_sheet_id(dest_sheet_id)}"))
+    print(FormatText.status(f"Pull from: {FormatText.bold(get_link_from_sheet_id(src_sheet_id))}"))
+    print(FormatText.status(f"Push to: {FormatText.bold(get_link_from_sheet_id(dest_sheet_id))}"))
     token = get_google_client().oauth.token
     url = get_allow_access_link_from_sheet_id(dest_sheet_id, src_sheet_id)
     requests.post(url, headers={'Authorization': f"Bearer {token}"})

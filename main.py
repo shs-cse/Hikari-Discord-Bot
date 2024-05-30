@@ -37,7 +37,8 @@ def log_message_view(message: hikari.Message, button_view, *args):
 
 
 def main():
-    check_and_load_info() # update state.info
+    # validate and update state.info
+    check_and_load_info()
     # hikari + crescent -> create bot and client 
     bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], 
                             intents=hikari.Intents.ALL,

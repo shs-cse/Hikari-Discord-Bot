@@ -79,7 +79,7 @@ def check_regex_patterns():
             raise ValueError(FormatText.error(msg))
         # update if not exact match (e.g full link -> id only)
         update_info_field(field, extracted[0])
-        msg += f'{FormatText.BOLD}{extracted[0]}'
+        msg += FormatText.bold(extracted[0])
         print(FormatText.status(msg))
     # validated all regex checks
     msg = f"Course details regex checks out in {FileName.INFO_JSON} file."

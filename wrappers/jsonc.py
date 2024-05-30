@@ -58,8 +58,8 @@ def update_info_field(field : InfoField, new_value):
     state.info[field] = new_value
     update_json(state.info, FileName.INFO_JSON)
     msg = f'{FileName.INFO_JSON} > "{field}": updated...\n' 
-    msg += f'\t{FormatText.DIM}- {"from:":>8}  {old_value}\n'
-    msg += f'\t{FormatText.DIM_BOLD_RESET}{FormatText.BOLD}+ {"to:":>8}  {new_value}'
+    msg += FormatText.dim(f'\t- {"from:":>8}  {old_value}\n')
+    msg += FormatText.bold(f'\t+ {"to:":>8}  {new_value}')
     print(FormatText.warning(msg))
 
 

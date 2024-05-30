@@ -19,11 +19,13 @@ async def init():
     # check if bot has @bot role
     bot_mem = state.guild.get_my_member()
     if bot_mem.get_top_role().name != RoleName.BOT:
-        msg = "Bot was not assigned @bot role. Please add @bot role to this bot before proceeding."
+        msg = "Bot was not assigned @bot role.\n  Please add"
+        msg += f" @bot role to {bot_mem} before proceeding."
         msg = FormatText.error(msg)
         raise Exception(msg)
     else:
-        msg = f"Bot Role: {FormatText.BOLD}@bot{FormatText.DIM_BOLD_RESET} has been added by admin."
+        msg = FormatText.bold("@bot")
+        msg = f"Bot Role: {msg} has been added by admin."
         print(FormatText.status(msg))
     # TODO: check if bot has bot role
     

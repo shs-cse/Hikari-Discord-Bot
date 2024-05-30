@@ -58,7 +58,7 @@ def check_marks_groups(enrolment_sheet):
     routine_wrksht = get_sheet_by_name(enrolment_sheet, PullMarksGroupsFrom.WRKSHT)
     marks_groups = routine_wrksht.get_value(PullMarksGroupsFrom.CELL)
     marks_groups = jsonc.loads(marks_groups)
-    print(FormatText.status(f'"{InfoField.MARKS_GROUPS}": {FormatText.BOLD}{marks_groups}'))
+    print(FormatText.status(f'"{InfoField.MARKS_GROUPS}": {FormatText.bold(marks_groups)}'))
     # check sections in range 
     available_secs = set(range(1,1+state.info[InfoField.NUM_SECTIONS]))
     available_secs -= set(state.info[InfoField.MISSING_SECTIONS])

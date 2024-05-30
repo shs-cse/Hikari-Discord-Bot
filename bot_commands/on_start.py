@@ -20,7 +20,7 @@ async def on_starting(event: hikari.StartingEvent) -> None:
 @plugin.include
 @crescent.event # after connecting to discord
 async def on_started(event: hikari.StartedEvent) -> None:
-    print(FormatText.success(f"{FormatText.BOLD}Bot has started.{FormatText.DIM_BOLD_RESET}"))
+    print(FormatText.success(FormatText.bold("Bot has started.")))
     # await plugin.app.update_presence(status=hikari.Status.ONLINE)
     # TODO: check if bot has MANAGE_ROLES permission
     await sync.init()
