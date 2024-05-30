@@ -23,8 +23,9 @@ class FileName:
     INFO_JSON = 'info.jsonc'
     VALID_JSON = 'valid_info.jsonc'
     COMMANDS_FOLDER = 'bot_commands'
+    MARKS_SHEET_TITLE = '{course_code}-{sections} Marks Gradesheet {semester}'
     ENROLMENT_SHEET_TITLE = '{course_code} {semester} Enrolment Manager'
-    SEC_MARKS_WORKSHEET = 'Sec {0:02d}'
+    SEC_MARKS_WORKSHEET = 'Sec {sec:02d}'
 
 
 class TemplateLinks:

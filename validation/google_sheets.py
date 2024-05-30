@@ -75,10 +75,14 @@ def check_marks_sheet(sec, group, marks_ids):
         spreadsheet = get_spreadsheet(marks_ids[str(sec)])
     # no spreadsheet in info for the followings
     elif sec == group[0]: # sec is the first member of the group 
-        print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...')) 
+        print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...'))
         spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
-                                        'Marks Spreadsheet for Sec ' + ','.join(f'{s:02d}' for s in group),
-                                        state.info[InfoField.MARKS_FOLDER_ID])
+                                       FileName.MARKS_SHEET_TITLE.format(
+                                           course_code=state.info[InfoField.COURSE_CODE],
+                                           sections=','.join(f'{s:02d}' for s in group),
+                                           semester=state.info[InfoField.SEMESTER]
+                                       ),
+                                       state.info[InfoField.MARKS_FOLDER_ID])
         update_cells_from_fields(spreadsheet, SheetCellToFieldDict.MARKS)
     else: 
         # first group member has spreadsheet
@@ -94,14 +98,14 @@ def check_marks_sheet(sec, group, marks_ids):
 # create a worksheet for the section marks in spreadsheet
 def create_marks_worksheet(spreadsheet, sec):
     try: # success -> sec worksheet already exists
-        sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec))
+        sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec=sec))
     except WorksheetNotFound: 
         # fail -> sec worksheet does not exist
         print(FormatText.status('Creating new worksheet...'))
-        template_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(0))
+        template_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec=0))
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
-        sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec)
+        sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec=sec)
         # TODO: populate with student ids and names
     # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
     # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 

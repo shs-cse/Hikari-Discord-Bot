@@ -20,14 +20,23 @@ def test_commands():
 
 
 def test_checks():
-    check_and_load_info() # update state.info
+    ...
     
 
 
 def main():
-    # test_checks()
-    # test_commands()
     check_and_load_info() # update state.info
+    bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], 
+                            intents=hikari.Intents.ALL)
+    guild_id = int(state.info[InfoField.GUILD_ID])
+    client = crescent.Client(bot, 
+                             tracked_guilds=[guild_id],
+                             default_guild=guild_id)
+    client.plugins.load_folder(FileName.COMMANDS_FOLDER)
+    bot.run(
+        asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
+        coroutine_tracking_depth=20, # enable coroutine tracking, makes some asyncio errors clearer.
+    )
 
 if __name__ == "__main__":
     main()
