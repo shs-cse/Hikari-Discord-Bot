@@ -33,8 +33,8 @@ async def init():
     print(FormatText.status(f"Available Sections: {FormatText.bold(state.available_sections)}"))
     # create invite link from welcome channel if not found
     if not state.info[InfoField.INVITE_LINK]:
-        welcome = get_channel_by_name(state.guild, ChannelName.WELCOME)
-        invite = await plugin.app.rest.create_invite(welcome)
+        welcome = get_channel_by_name(ChannelName.WELCOME)
+        invite = await plugin.app.rest.create_invite(welcome, max_age=0, max_uses=0)
         update_info_field(InfoField.INVITE_LINK, str(invite))
     msg = FormatText.bold(state.info[InfoField.INVITE_LINK])
     print(FormatText.status(f"Invite Link: {msg}"))
