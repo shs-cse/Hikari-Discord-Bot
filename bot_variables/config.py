@@ -74,6 +74,17 @@ class PullMarksGroupsFrom:
     CELL = 'L2'
     
     
+# aka ECT-BC server
+class EEEGuild:
+    Id = 815535685959811083
+# all special channel names in this guild
+class ChannelName:
+    WELCOME = "👏🏻welcome✌🏻"
+# all special role names in this guild
+class RoleName:
+    BOT = "bot"
+    
+    
 # TODO: make it into class?
 info_row_dict = {'Helper Text': 4, 'Parent Column': 9, 'Self Column': 14, 'Depth': 23,
                  'Total Marks': 5, 'Publish?': 1, 'Actual Marks?': 22, 'Children Columns': 17}

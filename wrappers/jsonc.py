@@ -1,6 +1,6 @@
 import json
 from bot_variables import state
-from bot_variables.config import FileName
+from bot_variables.config import FileName, InfoField
 from wrappers.utils import FormatText
 
 # decoder for json files with comments
@@ -51,24 +51,24 @@ def update_json(data, file):
 
 # TODO: update FormatText code
 # update specific field in info
-def update_info_field(field, new_value):
+def update_info_field(field : InfoField, new_value):
     old_value = state.info[field]
     if old_value == new_value:
         return
     state.info[field] = new_value
     update_json(state.info, FileName.INFO_JSON)
     msg = f'{FileName.INFO_JSON} > "{field}": updated...\n' 
-    msg += f'\t{FormatText.DIM}- {"from:":>8}\t{old_value}\n'
-    msg += f'\t{FormatText.DIM_BOLD_RESET}{FormatText.BOLD}+ {"to:":>8}\t{new_value}'
+    msg += f'\t{FormatText.DIM}- {"from:":>8}  {old_value}\n'
+    msg += f'\t{FormatText.DIM_BOLD_RESET}{FormatText.BOLD}+ {"to:":>8}  {new_value}'
     print(FormatText.warning(msg))
 
 
 # test reading and writing
-def test():
+def test_read_and_write():
     from pprint import pprint
     info = read_json(FileName.INFO_JSON)
     pprint(info, sort_dicts=False)
     update_json(info, FileName.INFO_JSON)
     
 if __name__ == "__main__":
-    test()
+    test_read_and_write()

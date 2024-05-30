@@ -11,8 +11,8 @@ def has_info_passed_before():
     if os.path.exists(FileName.VALID_JSON):
         passed = read_json(FileName.VALID_JSON)
         # matches all values with previously passed json (except buttons)
-        if all(state.info[key] == passed[key] for key in state.info.keys() if key != InfoField.BUTTONS):
-            print(FormatText.success("Check complete! Matches previously passed json."))
+        if all(state.info[key] == passed[key] for key in state.info if key != InfoField.BUTTONS):
+            print(FormatText.success("Check complete! Matches previously passed valid json."))
             update_json(state.info, FileName.VALID_JSON) # update valid json file
             return True
         else:

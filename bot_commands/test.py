@@ -1,4 +1,5 @@
 import hikari, crescent
+from wrappers.utils import FormatText
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
@@ -54,12 +55,12 @@ class Say:
 
 @plugin.load_hook
 def on_load() -> None:
-    print("LOADED")
+    print(FormatText.success("Commands (and plugins) were loaded successfully."))
 
     # The model attribute is accessible once the plugin is loaded.
-    print(plugin.model)
+    # print(plugin.model)
 
 
 @plugin.unload_hook
 def on_unload() -> None:
-    print("UNLOADED")
+    print(FormatText.warning("Commands (and plugins) were unloaded."))
