@@ -1,6 +1,5 @@
-import asyncio
-from wrappers.utils import FormatText
 import hikari, crescent
+from wrappers.utils import FormatText
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
@@ -8,9 +7,10 @@ plugin = crescent.Plugin[hikari.GatewayBot, None]()
 @crescent.event # before connecting to discord
 async def on_starting(event: hikari.StartingEvent) -> None:
     print(FormatText.wait("Bot is starting..."))
-    # do stuff
+    # TODO: do stuff
     for i in range(5):
         print(FormatText.status(f"starting in {5-i} sec"))
+        import asyncio
         await asyncio.sleep(1)
     # Bot will now start
     

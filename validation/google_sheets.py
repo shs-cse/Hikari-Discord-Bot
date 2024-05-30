@@ -1,12 +1,12 @@
 from os import path
 from bot_variables import state
 from bot_variables.config import InfoField, TemplateLinks, SheetCellToFieldDict, PullMarksGroupsFrom
+from wrappers import jsonc
 from wrappers.pygs import FileName, AuthenticationError, WorksheetNotFound
 from wrappers.pygs import update_cells_from_fields, get_google_client
 from wrappers.pygs import get_spreadsheet, get_sheet_by_name, copy_spreadsheet
 from wrappers.pygs import allow_access, share_with_anyone
 from wrappers.utils import FormatText
-from wrappers import jsonc
 
 
 def check_google_credentials():

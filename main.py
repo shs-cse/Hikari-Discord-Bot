@@ -1,9 +1,8 @@
+import hikari, crescent
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
-from wrappers.jsonc import read_json, update_json
-from validation.google_sheets import *
+from wrappers.jsonc import read_json
 from validation.json_inputs import check_and_load_info
-import hikari, crescent
 
 def test_commands():
     state.info = read_json(FileName.INFO_JSON)
@@ -26,8 +25,9 @@ def test_checks():
 
 
 def main():
-    test_checks()
+    # test_checks()
     # test_commands()
+    check_and_load_info() # update state.info
 
 if __name__ == "__main__":
     main()

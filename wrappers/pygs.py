@@ -2,7 +2,6 @@ import requests, pygsheets, re
 from pygsheets.exceptions import *
 from bot_variables.config import RegexPattern
 from wrappers.utils import FormatText
-# from wrappers.pygs import get_link_from_sheet_id, get_link_from_folder_id, get_allow_access_link_from_sheet_id
 from bot_variables.config import FileName
 from bot_variables import state
 
