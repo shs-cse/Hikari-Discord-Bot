@@ -1,14 +1,9 @@
-import os
-
-# from hikari.presences import Status
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
-from wrappers.json import read_json, update_json
+from wrappers.jsonc import read_json, update_json
 from validation.google_sheets import *
 from validation.json_inputs import *
-
 import hikari, crescent
-
 
 def test_commands():
     state.info = read_json(FileName.INFO_JSON)
@@ -28,11 +23,11 @@ def test_commands():
 def test_checks():
     check_google_credentials()
     state.info = read_json(FileName.INFO_JSON)
-    if not has_json_passed_before():
+    if not has_info_passed_before():
         check_info_fields()
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], state.info[InfoField.MISSING_SECTIONS])
-        check_spreadsheet_id(state.info[InfoField.ROUTINE_SHEET_ID])
+        check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
         ... # TODO: check sheets and stuff
         enrolment_sheet = check_enrolment_sheet()
         check_marks_groups(enrolment_sheet)

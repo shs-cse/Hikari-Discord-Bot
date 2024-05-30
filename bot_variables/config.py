@@ -21,9 +21,9 @@ class FileName:
     GOOGLE_CREDENTIALS = 'credentials.json'
     SHEETS_CREDENTIALS = 'sheets.googleapis.com-python.json'
     INFO_JSON = 'info.jsonc'
-    PASSED_JSON = 'passed.jsonc'
+    VALID_JSON = 'valid_info.jsonc'
     COMMANDS_FOLDER = 'bot_commands'
-    ENROLMENT_SPREADSHEET = '{course_code} {semester} Enrolment Manager'
+    ENROLMENT_SHEET_TITLE = '{course_code} {semester} Enrolment Manager'
     SEC_MARKS_WORKSHEET = 'Sec {0:02d}'
 
 

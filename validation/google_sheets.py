@@ -6,7 +6,7 @@ from wrappers.pygs import update_cells_from_fields, get_google_client
 from wrappers.pygs import get_spreadsheet, get_sheet_by_name, copy_spreadsheet
 from wrappers.pygs import allow_access, share_with_anyone
 from wrappers.utils import FormatText
-from wrappers import json
+from wrappers import jsonc
 
 
 def check_google_credentials():
@@ -24,7 +24,7 @@ def check_google_credentials():
         raise AuthenticationError(msg) from error
 
 
-def check_spreadsheet_id(spreadsheet_id):
+def check_spreadsheet_from_id(spreadsheet_id):
     get_spreadsheet(spreadsheet_id)
 
 # TODO: split into multiple function
@@ -37,7 +37,7 @@ def check_enrolment_sheet():
         msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
         msg += ' Creating a new spreadsheet...'
         print(FormatText.warning(msg))
-        file_name = FileName.ENROLMENT_SPREADSHEET.format(
+        file_name = FileName.ENROLMENT_SHEET_TITLE.format(
                              course_code=state.info[InfoField.COURSE_CODE],
                              semester=state.info[InfoField.SEMESTER],
                          )
@@ -45,7 +45,7 @@ def check_enrolment_sheet():
                                            file_name,
                                            state.info[InfoField.MARKS_FOLDER_ID])
     # finally update info file
-    json.update_info_field(InfoField.ENROLMENT_SHEET_ID, enrolment_sheet.id)
+    jsonc.update_info_field(InfoField.ENROLMENT_SHEET_ID, enrolment_sheet.id)
     # update routines and stuff (for both new and old enrolment sheet)
     update_cells_from_fields(enrolment_sheet, SheetCellToFieldDict.ENROLMENT)
     allow_access(enrolment_sheet.id, state.info[InfoField.ROUTINE_SHEET_ID])
@@ -57,7 +57,7 @@ def check_marks_groups(enrolment_sheet):
     print(FormatText.wait(f'Fetching "{InfoField.MARKS_GROUPS}" from spreadsheet...'))
     routine_wrksht = get_sheet_by_name(enrolment_sheet, PullMarksGroupsFrom.WRKSHT)
     marks_groups = routine_wrksht.get_value(PullMarksGroupsFrom.CELL)
-    marks_groups = json.loads(marks_groups)
+    marks_groups = jsonc.loads(marks_groups)
     print(FormatText.status(f'"{InfoField.MARKS_GROUPS}": {FormatText.BOLD}{marks_groups}'))
     # check sections in range 
     available_secs = set(range(1,1+state.info[InfoField.NUM_SECTIONS]))
@@ -67,7 +67,7 @@ def check_marks_groups(enrolment_sheet):
         msg += f' {routine_wrksht.url}&range={PullMarksGroupsFrom.CELL}'
         raise ValueError(FormatText.error(msg))
     # update info json
-    json.update_info_field(InfoField.MARKS_GROUPS, marks_groups)
+    jsonc.update_info_field(InfoField.MARKS_GROUPS, marks_groups)
     
 
 def check_marks_sheet(sec, group, marks_ids):
@@ -84,15 +84,15 @@ def check_marks_sheet(sec, group, marks_ids):
         # first group member has spreadsheet
         spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
     marks_ids[str(sec)] = spreadsheet.id
-    json.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
+    jsonc.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
     create_marks_worksheet(spreadsheet, sec)
     # TODO: move all fixed strings to config.py
     
+
 # create a worksheet for the section marks in spreadsheet
 def create_marks_worksheet(spreadsheet, sec):
-    # now deal with worksheet
     try: # success -> sec worksheet already exists
         sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec))
     except WorksheetNotFound: 
@@ -102,9 +102,9 @@ def create_marks_worksheet(spreadsheet, sec):
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
         sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec)
+        # TODO: populate with student ids and names
     # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
     # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
-    # TODO: populate with student ids and names
     # TODO: move all fixed strings to config.py
 
     
