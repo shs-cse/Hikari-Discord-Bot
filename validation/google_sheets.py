@@ -49,7 +49,7 @@ def check_enrolment_sheet():
     # update routines and stuff (for both new and old enrolment sheet)
     update_cells_from_fields(enrolment_sheet, SheetCellToFieldDict.ENROLMENT)
     allow_access(enrolment_sheet.id, state.info[InfoField.ROUTINE_SHEET_ID])
-    share_with_anyone(enrolment_sheet) # also give it some time to fetch marks groups
+    share_with_anyone(enrolment_sheet) # also gives it some time to fetch marks groups
     return enrolment_sheet
     
     

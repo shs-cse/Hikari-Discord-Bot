@@ -1,4 +1,5 @@
-import hikari, crescent, sync
+import hikari, crescent
+import sync.init, sync.roles
 from wrappers.utils import FormatText
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
@@ -22,7 +23,7 @@ async def on_starting(event: hikari.StartingEvent) -> None:
 async def on_started(event: hikari.StartedEvent) -> None:
     print(FormatText.success(FormatText.bold("Bot has started.")))
     # TODO: check if bot has MANAGE_ROLES permission
-    await sync.init()
-    await sync.roles()
+    await sync.init.now()
+    await sync.roles.now()
     await plugin.app.update_presence(status=hikari.Status.ONLINE)
     

@@ -1,15 +1,14 @@
 import hikari, crescent
 from bot_variables.config import InfoField
 from wrappers.utils import FormatText
-from wrappers.discord import fetch_guild_from_id, update_guild_cache, get_channel_by_name, get_role_by_name
+from wrappers.discord import fetch_guild_from_id, update_guild_cache, get_channel_by_name
 from bot_variables import state
-from bot_variables.config import EEEGuild, ChannelName, RoleName, ClassType
-from validation.discord_sec import check_discord_sec
+from bot_variables.config import EEEGuild, ChannelName, RoleName
 from validation.json_inputs import update_info_field
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
-async def init():
+async def now():
     print(FormatText.wait("Syncing initialization..."))
     # fetch course server
     this_guild_id = int(state.info[InfoField.GUILD_ID])
@@ -41,20 +40,3 @@ async def init():
     msg = FormatText.bold(state.info[InfoField.INVITE_LINK])
     print(FormatText.status(f"Invite Link: {msg}"))
     print(FormatText.success("Syncing initialization complete."))
-
-
-async def roles():
-    print(FormatText.wait("Syncing roles..."))
-    state.admin_role = get_role_by_name(RoleName.ADMIN)
-    state.bot_admin_role = get_role_by_name(RoleName.BOT_ADMIN)
-    state.faculty_role = get_role_by_name(RoleName.FACULTY)
-    state.faculty_sub_roles[ClassType.THEORY] = get_role_by_name(RoleName.THEORY_FACULTY)
-    state.faculty_sub_roles[ClassType.LAB] = get_role_by_name(RoleName.LAB_FACULTY)
-    state.st_role = get_role_by_name(RoleName.STUDENT_TUTOR)
-    state.student_role = get_role_by_name(RoleName.STUDENT)
-    await check_discord_sec()
-    state.all_sec_roles = {roles[class_type] 
-                           for roles in state.sec_roles.values()
-                           for class_type in ClassType.BOTH}
-    print(FormatText.success("Syncing roles complete."))
-    

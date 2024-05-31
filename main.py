@@ -49,7 +49,7 @@ def main():
     # load commands and pluins
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     # client.plugins.unload("bot_commands.bulk_delete")
-    client.plugins.load("sync")
+    client.plugins.load("sync.init")
     client.plugins.load("validation.discord_sec")
     client.plugins.load("wrappers.discord")
     # run the bot
