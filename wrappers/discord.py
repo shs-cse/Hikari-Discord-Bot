@@ -9,13 +9,25 @@ def get_sec_role_name(section: int, class_type: ClassType):
     return RoleName.SECTION[class_type].format(section)
 
 def get_sec_role(section: int, class_type: ClassType):
-    return get_role_by_name(get_sec_role_name(section, class_type))
+    name = get_sec_role_name(section, class_type)
+    role = get_role_by_name(name)
+    if section == 1 and not role:
+        msg = FormatText.bold('@'+name)
+        msg = FormatText.error(f"Template role {msg} was not found.")
+        raise Exception(msg)
+    return role
 
 def get_sec_category_name(section: int, class_type: ClassType):
     return ChannelName.SECTION[class_type].format(section)
 
 def get_sec_category(section: int, class_type: ClassType):
-    return get_channel_by_name(get_sec_category_name(section, class_type))
+    name = get_sec_category_name(section, class_type)
+    category = get_channel_by_name(name)
+    if section == 1 and not category:
+        msg = FormatText.bold('#'+name)
+        msg = FormatText.error(f"Template category {msg} was not found.")
+        raise Exception(msg)
+    return category
 
 
 async def fetch_guild_from_id(guild_id: hikari.Snowflakeish) -> hikari.Guild | None:

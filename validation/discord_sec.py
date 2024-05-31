@@ -8,21 +8,22 @@ plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 # check if all sections' roles and channels are in server
 async def check_discord_sec():
-    # TODO: confirm sec-01 and sec-01-lab roles work
-    # iterate over available theory & lab sections (except sec 01)
+    # iterate over available theory & lab sections
     for class_type in ClassType.BOTH:
-        for sec in state.available_sections[1:]:
+        for sec in state.available_sections:
             role = get_sec_role(sec, class_type)
+            state.sec_roles[sec][class_type] = role
+            if sec == 1: # skip on section 01 (template)
+                continue
             if not role:
                 role = await create_sec_role(sec, class_type)
             category: hikari.GuildCategory = get_sec_category(sec, class_type)
             if not category:
                 category = await create_sec_category(sec, class_type, role)
-            # TODO: check all channels under category
         # reorder sec 01 lab after all theories
         if class_type == ClassType.THEORY:
             last_theory_category = category
-    await get_sec_category(1,ClassType.LAB).edit(position=last_theory_category.position+1)
+        await get_sec_category(1,ClassType.LAB).edit(position=last_theory_category.position+1)
 
 
 async def create_sec_role(section: int, class_type: ClassType):
@@ -80,15 +81,18 @@ async def create_sec_category(section: int, class_type: ClassType, new_role: hik
     return new_category
 
 # clone category with new name
-async def create_channel_from_template(new_channel_name: str, 
-                                       new_role: hikari.Role,
+async def create_channel_from_template(new_channel_name: str, new_role: hikari.Role,
                                        template_channel: hikari.PermissibleGuildChannel,
                                        template_role: hikari.Role,
-                                       parent_category: hikari.GuildCategory = None
-                                       ):
+                                       parent_category: hikari.GuildCategory = None):
     msg = FormatText.bold('#'+new_channel_name)
-    msg += f" {template_channel.type}"
-    print(FormatText.warning(f"Creating {msg}..."))
+    if template_channel.type == hikari.ChannelType.GUILD_CATEGORY:
+        msg += " category"
+        print(FormatText.warning(f"Creating {msg}..."))
+    else:
+        msg += " channel"
+        print(FormatText.status(f"Creating {msg}..."))
+    # create channel in server
     create_channel_dict = {
         hikari.ChannelType.GUILD_CATEGORY: state.guild.create_category,
         hikari.ChannelType.GUILD_VOICE: state.guild.create_voice_channel,
@@ -105,5 +109,6 @@ async def create_channel_from_template(new_channel_name: str,
     await new_channel.edit_overwrite(new_role, 
                                      allow=permission_overwrite.allow,
                                      deny=permission_overwrite.deny)
-    print(FormatText.success(f"Created {msg} successfully."))
+    if template_channel.type == hikari.ChannelType.GUILD_CATEGORY:
+        print(FormatText.success(f"Created {msg} successfully."))
     return new_channel

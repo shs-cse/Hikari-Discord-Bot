@@ -52,7 +52,9 @@ async def roles():
     state.faculty_sub_roles[ClassType.LAB] = get_role_by_name(RoleName.LAB_FACULTY)
     state.st_role = get_role_by_name(RoleName.STUDENT_TUTOR)
     state.student_role = get_role_by_name(RoleName.STUDENT)
-    # TODO: check all available discord sections (except 1)
     await check_discord_sec()
+    state.all_sec_roles = {roles[class_type] 
+                           for roles in state.sec_roles.values()
+                           for class_type in ClassType.BOTH}
     print(FormatText.success("Syncing roles complete."))
     
