@@ -48,12 +48,14 @@ def main():
                              default_guild=this_guild_id)
     # load commands and pluins
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
+    client.plugins.unload("bot_commands.bulk_delete")
     client.plugins.load("sync")
     client.plugins.load("wrappers.utils")
     # run the bot
     bot.run(
         asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
         coroutine_tracking_depth=20, # enable coroutine tracking, makes some asyncio errors clearer.
+        status=hikari.Status.IDLE    # initial status
     )
 
 if __name__ == "__main__":
