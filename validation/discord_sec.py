@@ -1,8 +1,9 @@
-import hikari
+import hikari, crescent
 from bot_variables import state
 from bot_variables.config import ClassType, RoleName, ChannelName
-from wrappers.utils import FormatText, get_role_by_name, create_role_from_template, get_channel_by_name, create_channel_from_template
+from wrappers.utils import FormatText, get_role_by_name, get_channel_by_name
 
+plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 def get_sec_role_name(section: int, class_type: ClassType):
     return RoleName.SECTION[class_type].format(section)
@@ -16,8 +17,10 @@ def get_sec_category_name(section: int, class_type: ClassType):
 def get_sec_category(section: int, class_type: ClassType):
     return get_channel_by_name(get_sec_category_name(section, class_type))
 
-# check if all sections' (except sec 01) roles and channels are in server
+# check if all sections' roles and channels are in server
 async def check_discord_sec():
+    # TODO: confirm sec-01 and sec-01-lab roles work
+    # iterate over available theory & lab sections (except sec 01)
     for class_type in ClassType.BOTH:
         for sec in state.available_sections[1:]:
             role = get_sec_role(sec, class_type)
@@ -26,6 +29,7 @@ async def check_discord_sec():
             category: hikari.GuildCategory = get_sec_category(sec, class_type)
             if not category:
                 category = await create_sec_category(sec, class_type, role)
+            # TODO: check all channels under category
         # reorder sec 01 lab after all theories
         if class_type == ClassType.THEORY:
             last_theory_category = category
@@ -38,8 +42,21 @@ async def create_sec_role(section: int, class_type: ClassType):
     new_role = await create_role_from_template(role_name, template_role)
     return new_role
 
+# clone role with new name
+async def create_role_from_template(role_name: str, template_role: hikari.Role):
+    msg = FormatText.bold('@'+role_name)
+    print(FormatText.warning(f"Creating {msg} role..."))
+    new_role = await plugin.app.rest.create_role(
+        state.guild, 
+        name=role_name, 
+        permissions=template_role.permissions, 
+        color=template_role.color)
+    print(FormatText.success(f"Created {msg} role successfully."))
+    return new_role
+
 
 def load_sec_template(class_type: ClassType):
+    # skip if templated fetched earlier
     if state.sec_template[class_type]:
         return
     # fetch template
@@ -54,7 +71,6 @@ def load_sec_template(class_type: ClassType):
                 if channel.parent_id == template_category.id
         ]
     }
-
 
 async def create_sec_category(section: int, class_type: ClassType, new_role: hikari.Role):
     # fetch template from section 01
@@ -73,3 +89,32 @@ async def create_sec_category(section: int, class_type: ClassType, new_role: hik
                                            state.sec_template[class_type]['role'], 
                                            new_category)
     return new_category
+
+# clone category with new name
+async def create_channel_from_template(new_channel_name: str, 
+                                       new_role: hikari.Role,
+                                       template_channel: hikari.PermissibleGuildChannel,
+                                       template_role: hikari.Role,
+                                       parent_category: hikari.GuildCategory = None
+                                       ):
+    msg = FormatText.bold('#'+new_channel_name)
+    msg += f" {template_channel.type}"
+    print(FormatText.warning(f"Creating {msg}..."))
+    create_channel_dict = {
+        hikari.ChannelType.GUILD_CATEGORY: state.guild.create_category,
+        hikari.ChannelType.GUILD_VOICE: state.guild.create_voice_channel,
+        hikari.ChannelType.GUILD_TEXT: state.guild.create_text_channel,
+    }
+    create_channel = create_channel_dict[template_channel.type]
+    new_channel : hikari.PermissibleGuildChannel = await create_channel(
+                name=new_channel_name, 
+                permission_overwrites=template_channel.permission_overwrites.values())
+    await new_channel.edit(parent_category=parent_category)
+    # copy permission overwrite from template to new role
+    permission_overwrite = new_channel.permission_overwrites[template_role.id]
+    await new_channel.remove_overwrite(template_role.id)
+    await new_channel.edit_overwrite(new_role, 
+                                     allow=permission_overwrite.allow,
+                                     deny=permission_overwrite.deny)
+    print(FormatText.success(f"Created {msg} successfully."))
+    return new_channel
