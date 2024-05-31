@@ -86,6 +86,11 @@ class EEEGuild:
 class ChannelName:
     WELCOME = '👏🏻welcome✌🏻'
     SEC_CATEGORY = 'Section {sec:02d} {class_type}'
+    SECTION = {
+        ClassType.THEORY: 'SECTION {:02d} THEORY',
+        ClassType.LAB: 'SECTION {:02d} LAB',
+    }
+    
 # all special role names in this guild
 class RoleName:
     BOT = 'bot'

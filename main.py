@@ -48,7 +48,7 @@ def main():
                              default_guild=this_guild_id)
     # load commands and pluins
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
-    client.plugins.unload("bot_commands.bulk_delete")
+    # client.plugins.unload("bot_commands.bulk_delete")
     client.plugins.load("sync")
     client.plugins.load("wrappers.utils")
     # run the bot

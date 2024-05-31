@@ -88,16 +88,45 @@ async def update_guild_cache(guild=None,members=True, roles=True, channels=True)
 # search in list of guild channels by name
 def get_channel_by_name(name: str):
     for _, channel in state.guild.get_channels().items():
-        if channel.name == name:
+        if channel.name.lower() == name.lower():
             msg = FormatText.bold('#'+name)
             print(FormatText.status(f"Fetched Channel: {msg}"))
             return channel
+        
+# clone category with new name
+async def create_channel_from_template(new_channel_name: str, 
+                                       new_role: hikari.Role,
+                                       template_channel: hikari.PermissibleGuildChannel,
+                                       template_role: hikari.Role,
+                                       parent_category: hikari.GuildCategory = None
+                                       ):
+    msg = FormatText.bold('#'+new_channel_name)
+    msg += f" {template_channel.type}"
+    print(FormatText.warning(f"Creating {msg}..."))
+    create_channel_dict = {
+        hikari.ChannelType.GUILD_CATEGORY: state.guild.create_category,
+        hikari.ChannelType.GUILD_VOICE: state.guild.create_voice_channel,
+        hikari.ChannelType.GUILD_TEXT: state.guild.create_text_channel,
+    }
+    create_channel = create_channel_dict[template_channel.type]
+    new_channel : hikari.PermissibleGuildChannel = await create_channel(
+                name=new_channel_name, 
+                permission_overwrites=template_channel.permission_overwrites.values())
+    await new_channel.edit(parent_category=parent_category)
+    # copy permission overwrite from template to new role
+    permission_overwrite = new_channel.permission_overwrites[template_role.id]
+    await new_channel.remove_overwrite(template_role.id)
+    await new_channel.edit_overwrite(new_role, 
+                                     allow=permission_overwrite.allow,
+                                     deny=permission_overwrite.deny)
+    print(FormatText.success(f"Created {msg} category successfully."))
+    return new_channel
         
 
 # search in list of guild roles by name
 def get_role_by_name(name: str):
     for _, role in state.guild.get_roles().items():
-        if role.name == name:
+        if role.name.lower() == name.lower():
             msg = FormatText.bold('@'+name)
             print(FormatText.status(f"Fetched Role: {msg}"))
             return role
@@ -106,10 +135,11 @@ def get_role_by_name(name: str):
 async def create_role_from_template(role_name: str, template_role: hikari.Role):
     msg = FormatText.bold('@'+role_name)
     print(FormatText.warning(f"Creating {msg} role..."))
-    new_role = await plugin.app.rest.create_role(state.guild, 
-                                                 name=role_name, 
-                                                 permissions=template_role.permissions, 
-                                                 color=template_role.color)
+    new_role = await plugin.app.rest.create_role(
+        state.guild, 
+        name=role_name, 
+        permissions=template_role.permissions, 
+        color=template_role.color)
     print(FormatText.success(f"Created {msg} role successfully."))
     return new_role
 

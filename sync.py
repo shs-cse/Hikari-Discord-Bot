@@ -4,7 +4,7 @@ from wrappers.utils import FormatText
 from wrappers.utils import fetch_guild_from_id, update_guild_cache, get_channel_by_name, get_role_by_name
 from bot_variables import state
 from bot_variables.config import EEEGuild, ChannelName, RoleName, ClassType
-from validation.discord import check_discord_sec
+from validation.discord_sec import check_discord_sec
 from validation.json_inputs import update_info_field
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
