@@ -1,7 +1,7 @@
 import hikari, crescent, re
 from bot_variables import state
 from bot_variables.config import ClassType, ChannelName
-from wrappers.utils import get_channel_by_name
+# from wrappers.discord import get_channel_by_name
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 # admin ang higher level access only

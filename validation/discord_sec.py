@@ -1,21 +1,10 @@
 import hikari, crescent
 from bot_variables import state
-from bot_variables.config import ClassType, RoleName, ChannelName
-from wrappers.utils import FormatText, get_role_by_name, get_channel_by_name
+from bot_variables.config import ClassType
+from wrappers.utils import FormatText
+from wrappers.discord import get_sec_role_name, get_sec_role, get_sec_category_name, get_sec_category
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
-
-def get_sec_role_name(section: int, class_type: ClassType):
-    return RoleName.SECTION[class_type].format(section)
-
-def get_sec_role(section: int, class_type: ClassType):
-    return get_role_by_name(get_sec_role_name(section, class_type))
-
-def get_sec_category_name(section: int, class_type: ClassType):
-    return ChannelName.SECTION[class_type].format(section)
-
-def get_sec_category(section: int, class_type: ClassType):
-    return get_channel_by_name(get_sec_category_name(section, class_type))
 
 # check if all sections' roles and channels are in server
 async def check_discord_sec():

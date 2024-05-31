@@ -11,7 +11,7 @@ bot_admin_group = crescent.Group("admin",
 @crescent.command
 async def ping(ctx: crescent.Context) -> None:
     await ctx.defer(True)
-    from wrappers.utils import get_channel_by_name, get_role_by_name
+    from wrappers.discord import get_channel_by_name, get_role_by_name
     role = get_role_by_name("faculty")
     print(f"{role.mention} {role}")
     channel = get_channel_by_name("faculty-chat")

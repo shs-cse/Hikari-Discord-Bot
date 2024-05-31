@@ -1,7 +1,7 @@
 import hikari, crescent
 from bot_variables.config import InfoField
 from wrappers.utils import FormatText
-from wrappers.utils import fetch_guild_from_id, update_guild_cache, get_channel_by_name, get_role_by_name
+from wrappers.discord import fetch_guild_from_id, update_guild_cache, get_channel_by_name, get_role_by_name
 from bot_variables import state
 from bot_variables.config import EEEGuild, ChannelName, RoleName, ClassType
 from validation.discord_sec import check_discord_sec

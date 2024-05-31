@@ -50,7 +50,8 @@ def main():
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     # client.plugins.unload("bot_commands.bulk_delete")
     client.plugins.load("sync")
-    client.plugins.load("wrappers.utils")
+    client.plugins.load("validation.discord_sec")
+    client.plugins.load("wrappers.discord")
     # run the bot
     bot.run(
         asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
