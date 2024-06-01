@@ -28,9 +28,6 @@ class FileName:
     INFO_JSON = 'info.jsonc'
     VALID_JSON = 'valid_info.jsonc'
     COMMANDS_FOLDER = 'bot_commands'
-    MARKS_SHEET_TITLE = '{course_code}-{sections} Marks Gradesheet {semester}'
-    # ENROLMENT_SHEET_TITLE = '{course_code} {semester} Enrolment Manager'
-    SEC_MARKS_WORKSHEET = 'Sec {:02d}'
 
 
 class TemplateLinks:
@@ -54,26 +51,6 @@ class RegexPattern:
     # discord id
     DISCORD_ID = r'[0-9]{17,19}'
     DISCORD_BOT_TOKEN = r'[\w-]{24}\.[\w-]{6}\.[\w-]{38}'
-    
-    
-class SheetCellToFieldDict:
-    # TODO: replace with EnrolmentSheet.DICT_WRKSHT_CELL_TO_INFOFIELD
-    ENROLMENT = {
-        'Course Info': {
-            'B2': InfoField.COURSE_CODE,
-            'B3': InfoField.COURSE_NAME,
-            'B6': InfoField.SEMESTER,
-            'B4': InfoField.NUM_SECTIONS,
-            'B5': InfoField.MISSING_SECTIONS,
-            'B16': InfoField.ROUTINE_SHEET_ID
-        }
-    }
-    # TODO: replace with MarksSheet.DICT_WRKSHT_CELL_TO_INFOFIELD
-    MARKS = {
-        'Meta': {
-            'K2': InfoField.ENROLMENT_SHEET_ID
-        }
-    }
     
 
 class PullMarksGroupsFrom:
@@ -108,22 +85,30 @@ class RoleName:
     }
     
 
-class EnrolmentSheet:
+class EnrolmentSprdsht:
     TITLE = '{course_code} {semester} Enrolment Manager'
     
-    STUDENT_LIST_WRKSHT = 'StudentList'
-    ROUTINE_WRKSHT = 'Routine'
-    USIS_BEFORE_WRKSHT = 'USIS (before)'
-    DISCORD_WRKSHT = 'Discord'
+    class StudentList:
+        TITLE = 'StudentList'
+        STUDENT_ID_COL = 'Student ID'
+        DISCORD_ID_COL = 'Discord ID'
+        VIRTUAL_MARKS_SEC_COL = 'Marks Section'
+        
+    class Routine:
+        TITLE = 'Routine'
+        
+    class UsisBefore:
+        TITLE = 'USIS (before)'
+        RANGE = 'B2:D'
+        SECTION_COL = 'Section'
     
-    DISCORD_SHEET_RANGE = 'C2:H'
-    
-    STUDENT_ID_COL = 'Student ID'
-    DISCORD_ID_COL = 'Discord ID'
-    MARKS_SEC_COL = 'Marks Section'
-    
-    DICT_WRKSHT_CELL_TO_INFOFIELD =  {
-        'Course Info': {
+    class Discord:
+        TITLE = 'Discord'
+        RANGE = 'C2:H'
+        
+    class CourseInfo:
+        TITLE = 'Course Info'
+        CELL_TO_FILED_DICT = {
             'B2': InfoField.COURSE_CODE,
             'B3': InfoField.COURSE_NAME,
             'B6': InfoField.SEMESTER,
@@ -131,7 +116,19 @@ class EnrolmentSheet:
             'B5': InfoField.MISSING_SECTIONS,
             'B16': InfoField.ROUTINE_SHEET_ID
         }
-    }
+    
+
+class MarksSprdsht:
+    TITLE = '{course_code}-{sections} Marks Gradesheet {semester}'
+    
+    class Meta:
+        TITLE = 'Meta'
+        CELL_TO_FILED_DICT = {
+            'K2': InfoField.ENROLMENT_SHEET_ID
+        }
+        
+    class SecXX:
+        TITLE = 'Sec {:02d}'
 
     
 # TODO: make it into class?

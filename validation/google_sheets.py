@@ -1,6 +1,6 @@
 from os import path
 from bot_variables import state
-from bot_variables.config import InfoField, TemplateLinks, SheetCellToFieldDict, PullMarksGroupsFrom, EnrolmentSheet
+from bot_variables.config import InfoField, TemplateLinks, PullMarksGroupsFrom, EnrolmentSprdsht, MarksSprdsht
 from wrappers import jsonc
 from wrappers.pygs import FileName, AuthenticationError, WorksheetNotFound
 from wrappers.pygs import update_cells_from_fields, get_google_client
@@ -37,7 +37,7 @@ def check_enrolment_sheet():
         msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
         msg += ' Creating a new spreadsheet...'
         print(FormatText.warning(msg))
-        spreadsheet_name = EnrolmentSheet.TITLE.format(
+        spreadsheet_name = EnrolmentSprdsht.TITLE.format(
                              course_code=state.info[InfoField.COURSE_CODE],
                              semester=state.info[InfoField.SEMESTER])
         enrolment_sheet = copy_spreadsheet(TemplateLinks.ENROLMENT_SHEET, 
@@ -46,7 +46,9 @@ def check_enrolment_sheet():
     # finally update info file
     jsonc.update_info_field(InfoField.ENROLMENT_SHEET_ID, enrolment_sheet.id)
     # update routines and stuff (for both new and old enrolment sheet)
-    update_cells_from_fields(enrolment_sheet, SheetCellToFieldDict.ENROLMENT)
+    update_cells_from_fields(enrolment_sheet, 
+                             {EnrolmentSprdsht.CourseInfo.TITLE : 
+                                 EnrolmentSprdsht.CourseInfo.CELL_TO_FILED_DICT})
     allow_access(enrolment_sheet.id, state.info[InfoField.ROUTINE_SHEET_ID])
     share_with_anyone(enrolment_sheet) # also gives it some time to fetch marks groups
     return enrolment_sheet
@@ -76,12 +78,14 @@ def check_marks_sheet(sec, group, marks_ids):
     elif sec == group[0]: # sec is the first member of the group 
         print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...'))
         spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
-                                       FileName.MARKS_SHEET_TITLE.format(
+                                       MarksSprdsht.TITLE.format(
                                            course_code=state.info[InfoField.COURSE_CODE],
                                            sections=','.join(f'{s:02d}' for s in group),
                                            semester=state.info[InfoField.SEMESTER]),
                                        state.info[InfoField.MARKS_FOLDER_ID])
-        update_cells_from_fields(spreadsheet, SheetCellToFieldDict.MARKS)
+        update_cells_from_fields(spreadsheet, 
+                                 {MarksSprdsht.Meta.TITLE : 
+                                     MarksSprdsht.Meta.CELL_TO_FILED_DICT})
     else: 
         # first group member has spreadsheet
         spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
@@ -96,14 +100,14 @@ def check_marks_sheet(sec, group, marks_ids):
 # create a worksheet for the section marks in spreadsheet
 def create_marks_sheet(spreadsheet, sec):
     try: # success -> sec worksheet already exists
-        sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec))
+        sec_sheet = get_sheet_by_name(spreadsheet, MarksSprdsht.SecXX.TITLE.format(sec))
     except WorksheetNotFound: 
         # fail -> sec worksheet does not exist
         print(FormatText.status('Creating new worksheet...'))
-        template_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(0))
+        template_sheet = get_sheet_by_name(spreadsheet, MarksSprdsht.SecXX.TITLE.format(0))
         sec_sheet = template_sheet.copy_to(spreadsheet.id)
         sec_sheet.hidden = False
-        sec_sheet.title = FileName.SEC_MARKS_WORKSHEET.format(sec)
+        sec_sheet.title = MarksSprdsht.SecXX.TITLE.format(sec)
         # TODO: populate with student ids and names
     # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
     # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
