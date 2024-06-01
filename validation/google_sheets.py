@@ -1,6 +1,6 @@
 from os import path
 from bot_variables import state
-from bot_variables.config import InfoField, TemplateLinks, SheetCellToFieldDict, PullMarksGroupsFrom
+from bot_variables.config import InfoField, TemplateLinks, SheetCellToFieldDict, PullMarksGroupsFrom, EnrolmentSheet
 from wrappers import jsonc
 from wrappers.pygs import FileName, AuthenticationError, WorksheetNotFound
 from wrappers.pygs import update_cells_from_fields, get_google_client
@@ -27,7 +27,7 @@ def check_google_credentials():
 def check_spreadsheet_from_id(spreadsheet_id):
     get_spreadsheet(spreadsheet_id)
 
-# TODO: split into multiple function
+# TODO: done? split into multiple function
 def check_enrolment_sheet():
     # enrolment id may be empty
     if enrolment_id := state.info[InfoField.ENROLMENT_SHEET_ID]:
@@ -37,12 +37,11 @@ def check_enrolment_sheet():
         msg = f'Enrolment sheet ID is not specified {FileName.INFO_JSON} file.'
         msg += ' Creating a new spreadsheet...'
         print(FormatText.warning(msg))
-        file_name = FileName.ENROLMENT_SHEET_TITLE.format(
+        spreadsheet_name = EnrolmentSheet.TITLE.format(
                              course_code=state.info[InfoField.COURSE_CODE],
-                             semester=state.info[InfoField.SEMESTER],
-                         )
+                             semester=state.info[InfoField.SEMESTER])
         enrolment_sheet = copy_spreadsheet(TemplateLinks.ENROLMENT_SHEET, 
-                                           file_name,
+                                           spreadsheet_name,
                                            state.info[InfoField.MARKS_FOLDER_ID])
     # finally update info file
     jsonc.update_info_field(InfoField.ENROLMENT_SHEET_ID, enrolment_sheet.id)
@@ -80,8 +79,7 @@ def check_marks_sheet(sec, group, marks_ids):
                                        FileName.MARKS_SHEET_TITLE.format(
                                            course_code=state.info[InfoField.COURSE_CODE],
                                            sections=','.join(f'{s:02d}' for s in group),
-                                           semester=state.info[InfoField.SEMESTER]
-                                       ),
+                                           semester=state.info[InfoField.SEMESTER]),
                                        state.info[InfoField.MARKS_FOLDER_ID])
         update_cells_from_fields(spreadsheet, SheetCellToFieldDict.MARKS)
     else: 
@@ -91,12 +89,12 @@ def check_marks_sheet(sec, group, marks_ids):
     jsonc.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
-    create_marks_worksheet(spreadsheet, sec)
+    create_marks_sheet(spreadsheet, sec)
     # TODO: move all fixed strings to config.py
     
 
 # create a worksheet for the section marks in spreadsheet
-def create_marks_worksheet(spreadsheet, sec):
+def create_marks_sheet(spreadsheet, sec):
     try: # success -> sec worksheet already exists
         sec_sheet = get_sheet_by_name(spreadsheet, FileName.SEC_MARKS_WORKSHEET.format(sec))
     except WorksheetNotFound: 

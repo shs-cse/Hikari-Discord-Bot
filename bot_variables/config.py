@@ -29,7 +29,7 @@ class FileName:
     VALID_JSON = 'valid_info.jsonc'
     COMMANDS_FOLDER = 'bot_commands'
     MARKS_SHEET_TITLE = '{course_code}-{sections} Marks Gradesheet {semester}'
-    ENROLMENT_SHEET_TITLE = '{course_code} {semester} Enrolment Manager'
+    # ENROLMENT_SHEET_TITLE = '{course_code} {semester} Enrolment Manager'
     SEC_MARKS_WORKSHEET = 'Sec {:02d}'
 
 
@@ -57,6 +57,7 @@ class RegexPattern:
     
     
 class SheetCellToFieldDict:
+    # TODO: replace with EnrolmentSheet.DICT_WRKSHT_CELL_TO_INFOFIELD
     ENROLMENT = {
         'Course Info': {
             'B2': InfoField.COURSE_CODE,
@@ -67,6 +68,7 @@ class SheetCellToFieldDict:
             'B16': InfoField.ROUTINE_SHEET_ID
         }
     }
+    # TODO: replace with MarksSheet.DICT_WRKSHT_CELL_TO_INFOFIELD
     MARKS = {
         'Meta': {
             'K2': InfoField.ENROLMENT_SHEET_ID
@@ -90,7 +92,6 @@ class ChannelName:
         ClassType.THEORY: 'SECTION {:02d} THEORY',
         ClassType.LAB: 'SECTION {:02d} LAB',
     }
-    
 # all special role names in this guild
 class RoleName:
     BOT = 'bot'
@@ -105,6 +106,32 @@ class RoleName:
         ClassType.THEORY: 'sec-{:02d}',
         ClassType.LAB: 'sec-{:02d}-lab',
     }
+    
+
+class EnrolmentSheet:
+    TITLE = '{course_code} {semester} Enrolment Manager'
+    
+    STUDENT_LIST_WRKSHT = 'StudentList'
+    ROUTINE_WRKSHT = 'Routine'
+    DISCORD_SHEET = 'Discord'
+    
+    DISCORD_SHEET_RANGE = 'C2:H'
+    
+    STUDENT_ID_COL = 'Student ID'
+    DISCORD_ID_COL = 'Discord ID'
+    MARKS_SEC_COL = 'Marks Section'
+    
+    DICT_WRKSHT_CELL_TO_INFOFIELD =  {
+        'Course Info': {
+            'B2': InfoField.COURSE_CODE,
+            'B3': InfoField.COURSE_NAME,
+            'B6': InfoField.SEMESTER,
+            'B4': InfoField.NUM_SECTIONS,
+            'B5': InfoField.MISSING_SECTIONS,
+            'B16': InfoField.ROUTINE_SHEET_ID
+        }
+    }
+
     
 # TODO: make it into class?
 info_row_dict = {'Helper Text': 4, 'Parent Column': 9, 'Self Column': 14, 'Depth': 23,

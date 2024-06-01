@@ -1,4 +1,4 @@
-import hikari, crescent
+import sys, hikari, crescent
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
 from wrappers.jsonc import read_json, update_info_field
@@ -37,12 +37,14 @@ def log_message_view(message: hikari.Message, button_view, *args):
 
 
 def main():
+    # check if `-d` flag was used `python -dO main.py`
+    state.is_debug = 'd' in sys.orig_argv[1]
     # validate and update state.info
     check_and_load_info()
     # hikari + crescent -> create bot and client 
     bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], 
                             intents=hikari.Intents.ALL,
-                            logs=None)  # turn off default logs from hikari
+                            logs="INFO" if state.is_debug else None)
     this_guild_id = int(state.info[InfoField.GUILD_ID])
     client = crescent.Client(bot, 
                              default_guild=this_guild_id)
@@ -54,9 +56,12 @@ def main():
     client.plugins.load("wrappers.discord")
     # run the bot
     bot.run(
-        asyncio_debug=True,          # enable asyncio debug to detect blocking and slow code.
-        coroutine_tracking_depth=20, # enable coroutine tracking, makes some asyncio errors clearer.
-        status=hikari.Status.IDLE    # initial status
+        # enable asyncio debug to detect blocking and slow code.
+        asyncio_debug=state.is_debug,
+        # enable coroutine tracking, makes some asyncio errors clearer.
+        coroutine_tracking_depth=20 if state.is_debug else None, 
+        # initial discord status of the bot
+        status=hikari.Status.IDLE    
     )
 
 if __name__ == "__main__":
