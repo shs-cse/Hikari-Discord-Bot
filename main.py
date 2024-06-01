@@ -44,14 +44,15 @@ def main():
     # hikari + crescent -> create bot and client 
     bot = hikari.GatewayBot(state.info[InfoField.BOT_TOKEN], 
                             intents=hikari.Intents.ALL,
-                            logs="INFO" if state.is_debug else None)
+                            logs="INFO" if state.is_debug else "WARNING")
     this_guild_id = int(state.info[InfoField.GUILD_ID])
     client = crescent.Client(bot, 
                              default_guild=this_guild_id)
     # load commands and pluins
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
-    # client.plugins.unload("bot_commands.bulk_delete")
-    client.plugins.load("sync.init")
+    if not state.is_debug:
+        client.plugins.unload("bot_commands.bulk_delete")
+    # client.plugins.load("sync.init")
     client.plugins.load("validation.discord_sec")
     client.plugins.load("wrappers.discord")
     # run the bot

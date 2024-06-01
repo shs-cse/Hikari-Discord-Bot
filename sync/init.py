@@ -1,12 +1,10 @@
-import hikari, crescent
+import hikari
 from bot_variables.config import InfoField
 from wrappers.utils import FormatText
-from wrappers.discord import fetch_guild_from_id, update_guild_cache, get_channel_by_name
+from wrappers.discord import fetch_guild_from_id, update_guild_cache, get_channel_by_name, fetch_invite_link
 from bot_variables import state
 from bot_variables.config import EEEGuild, ChannelName, RoleName
 from validation.json_inputs import update_info_field
-
-plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 async def now():
     print(FormatText.wait("Syncing initialization..."))
@@ -35,7 +33,7 @@ async def now():
     # create invite link from welcome channel if not found
     if not state.info[InfoField.INVITE_LINK]:
         welcome = get_channel_by_name(ChannelName.WELCOME)
-        invite = await plugin.app.rest.create_invite(welcome, max_age=0, max_uses=0)
+        invite = await fetch_invite_link(welcome)
         update_info_field(InfoField.INVITE_LINK, str(invite))
     msg = FormatText.bold(state.info[InfoField.INVITE_LINK])
     print(FormatText.status(f"Invite Link: {msg}"))

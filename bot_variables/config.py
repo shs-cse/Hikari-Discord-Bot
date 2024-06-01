@@ -113,7 +113,8 @@ class EnrolmentSheet:
     
     STUDENT_LIST_WRKSHT = 'StudentList'
     ROUTINE_WRKSHT = 'Routine'
-    DISCORD_SHEET = 'Discord'
+    USIS_BEFORE_WRKSHT = 'USIS (before)'
+    DISCORD_WRKSHT = 'Discord'
     
     DISCORD_SHEET_RANGE = 'C2:H'
     

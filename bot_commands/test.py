@@ -11,15 +11,22 @@ bot_admin_group = crescent.Group("admin",
 @crescent.command
 async def ping(ctx: crescent.Context) -> None:
     await ctx.defer(True)
-    from wrappers.discord import get_channel_by_name, get_role_by_name
-    role = get_role_by_name("faculty")
-    print(f"{role.mention} {role}")
-    channel = get_channel_by_name("faculty-chat")
-    # for id,po in channel.permission_overwrites.items():
-    #     print(id,po)
-    print(type(channel.permission_overwrites.values()), channel.permission_overwrites.values())
-    # from bot_variables import state
-    # await state.guild.create_category("TEST", position=0)
+    from wrappers.discord import get_channel_by_name
+    from bot_variables.config import ChannelName
+    channel = get_channel_by_name(ChannelName.WELCOME)
+    invites = await plugin.app.rest.fetch_channel_invites(channel)
+    for invite in invites:
+        if invite.max_age is None and invite.max_uses is None:
+            print(str(invite))
+    # from wrappers.discord import get_channel_by_name, get_role_by_name
+    # role = get_role_by_name("faculty")
+    # print(f"{role.mention} {role}")
+    # channel = get_channel_by_name("faculty-chat")
+    # # for id,po in channel.permission_overwrites.items():
+    # #     print(id,po)
+    # print(type(channel.permission_overwrites.values()), channel.permission_overwrites.values())
+    # # from bot_variables import state
+    # # await state.guild.create_category("TEST", position=0)
     await ctx.respond("Pong!")
     
 

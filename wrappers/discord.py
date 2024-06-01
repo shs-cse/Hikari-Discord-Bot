@@ -5,6 +5,14 @@ from wrappers.utils import FormatText
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
+async def fetch_invite_link(channel: hikari.GuildTextChannel):
+    invites = await plugin.app.rest.fetch_channel_invites(channel)
+    for invite in invites:
+        if not invite.max_age and not invite.max_uses:
+            return str(invite)
+    new_invite = await plugin.app.rest.create_invite(channel, max_age=0, max_uses=0)
+    return str(new_invite)
+
 def get_sec_role_name(section: int, class_type: ClassType):
     return RoleName.SECTION[class_type].format(section)
 

@@ -28,7 +28,7 @@ def push():
     print(FormatText.wait("Pushing discord data to sheets..."))
     # clear old discord data
     discord_sheet = get_sheet_by_name(state.info[InfoField.ENROLMENT_SHEET_ID], 
-                                      EnrolmentSheet.DISCORD_SHEET)
+                                      EnrolmentSheet.DISCORD_WRKSHT)
     discord_sheet.clear(EnrolmentSheet.DISCORD_SHEET_RANGE)
     # extract member roles
     # TODO: cleanup. is it necessaary?
@@ -46,5 +46,5 @@ def push():
     starting_cell = EnrolmentSheet.DISCORD_SHEET_RANGE.split(":")[0]
     update_sheet_values({starting_cell: arr_updated},
                         sheet_id=state.info[InfoField.ENROLMENT_SHEET_ID], 
-                        sheet_name=EnrolmentSheet.DISCORD_SHEET)
+                        sheet_name=EnrolmentSheet.DISCORD_WRKSHT)
     print(FormatText.success("Pushing discord data to sheets complete."))
