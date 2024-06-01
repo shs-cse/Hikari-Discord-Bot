@@ -1,4 +1,6 @@
+import pygsheets.client
 import requests, pygsheets, re
+import pandas as pd
 from pygsheets.exceptions import *
 from bot_variables.config import RegexPattern
 from wrappers.utils import FormatText
@@ -9,29 +11,30 @@ from bot_variables import state
 # TODO: check if file in trash
 
 # folder id -> link
-def get_link_from_folder_id(folder_id):
+def get_link_from_folder_id(folder_id: str) -> str:
     return f"https://drive.google.com/drive/folders/{folder_id}"
     
 # sheet id -> link
-def get_link_from_sheet_id(sheet_id):
+def get_link_from_sheet_id(sheet_id: str) -> str:
     return f"https://docs.google.com/spreadsheets/d/{sheet_id}"
 
 # destination sheet id + source sheet id -> allow access link
-def get_allow_access_link_from_sheet_id(dest_sheet_id, src_sheet_id):
+def get_allow_access_link_from_sheet_id(dest_sheet_id: str, 
+                                        src_sheet_id: str) -> str:
     dest_sheet_url = get_link_from_sheet_id(dest_sheet_id)
     return f"{dest_sheet_url}/externaldata/addimportrangepermissions?donorDocId={src_sheet_id}"
 
 # link -> sheets/folder id
-def get_drive_id_from_link(link):
+def get_drive_id_from_link(link: str) -> str:
     return re.search(RegexPattern.GOOGLE_DRIVE_LINK_ID, link).group()
 
 # authorization
-def get_google_client():
+def get_google_client() -> pygsheets.client.Client:
     return pygsheets.authorize(client_secret = FileName.GOOGLE_CREDENTIALS)
 
 
 # get a spreadsheet object
-def get_spreadsheet(spreadsheet_id):
+def get_spreadsheet(spreadsheet_id: str) -> pygsheets.Spreadsheet:
     print(FormatText.wait("Fetching spreadsheet..."))
     url = get_link_from_sheet_id(spreadsheet_id)
     msg = f"Url: {FormatText.bold(url)}"
@@ -55,7 +58,8 @@ def get_spreadsheet(spreadsheet_id):
 
 
 # get a specific sheet (tab) by name from a spreadsheet
-def get_sheet_by_name(spreadsheet_obj_or_id, sheet_name):
+def get_sheet_by_name(spreadsheet_obj_or_id: pygsheets.Spreadsheet | str, 
+                      sheet_name: str) -> pygsheets.Worksheet:
     if isinstance(spreadsheet_obj_or_id, pygsheets.Spreadsheet):
         spreadsheet = spreadsheet_obj_or_id
     else:
@@ -71,8 +75,9 @@ def get_sheet_by_name(spreadsheet_obj_or_id, sheet_name):
 
 
 # get complete sheet data as pandas dataframe
-def get_sheet_data(spreadsheet_id, sheet_name):
-    sheet = get_sheet_by_name(spreadsheet_id, sheet_name)
+def get_sheet_data(spreadsheet_obj_or_id: pygsheets.Spreadsheet | str, 
+                   sheet_name : str) -> pd.DataFrame:
+    sheet = get_sheet_by_name(spreadsheet_obj_or_id, sheet_name)
     return sheet.get_as_df()
 
 
@@ -84,7 +89,7 @@ def share_with_anyone(spreadsheet: pygsheets.Spreadsheet):
 
 
 # copy from a template spreadsheet and return a spreadsheet object
-def copy_spreadsheet(template_id, title, folder_id):
+def copy_spreadsheet(template_id: str, title: str, folder_id: str) -> pygsheets.Spreadsheet:
     print(FormatText.wait('Copying spreadsheet from a template...'))
     print(FormatText.status(f'Template: {FormatText.bold(get_link_from_sheet_id(template_id))}'))
     print(FormatText.status(f"Spreadsheet Title: {FormatText.bold(title)}"))
@@ -95,9 +100,12 @@ def copy_spreadsheet(template_id, title, folder_id):
     print(FormatText.status(f'Done copying: {FormatText.bold(get_link_from_sheet_id(spreadsheet.id))}'))
     return spreadsheet
 
-
 # update cell values from dictionary in a sheet
-def update_sheet_values(cell_value_dict, sheet_obj=None, *, sheet_id=None, sheet_name=None):
+def update_sheet_values(cell_value_dict: dict, 
+                        sheet_obj: pygsheets.Worksheet | None = None, 
+                        *, 
+                        sheet_id: str | None = None, 
+                        sheet_name: str | None = None) -> None:
     ranges = list(cell_value_dict.keys())
     # pygsheet require the values to be a list of list, i.e., matrix
     values = [val if type(val) is list else [[val]]
@@ -114,7 +122,8 @@ def update_sheet_values(cell_value_dict, sheet_obj=None, *, sheet_id=None, sheet
 
 
 # directly update cells, no need to check
-def update_cells_from_fields(spreadsheet: pygsheets.Spreadsheet, sheet_cell_fields_dict: dict):
+def update_cells_from_fields(spreadsheet: pygsheets.Spreadsheet, 
+                             sheet_cell_fields_dict: dict) -> None:
     for sheet_name, cell_field_dict in sheet_cell_fields_dict.items():
         sheet = spreadsheet.worksheet_by_title(sheet_name)
         # map info field to their actual values for updating sheets
@@ -128,7 +137,7 @@ def update_cells_from_fields(spreadsheet: pygsheets.Spreadsheet, sheet_cell_fiel
 
     
 # allow access shenanigans
-def allow_access(dest_sheet_id, src_sheet_id):
+def allow_access(dest_sheet_id: str, src_sheet_id: str) -> None:
     print(FormatText.wait("Allowing sheet access..."))
     print(FormatText.status(f"Pull from: {FormatText.bold(get_link_from_sheet_id(src_sheet_id))}"))
     print(FormatText.status(f"Push to: {FormatText.bold(get_link_from_sheet_id(dest_sheet_id))}"))
