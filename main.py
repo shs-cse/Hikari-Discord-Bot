@@ -1,4 +1,5 @@
-import sys, hikari, crescent
+import sys, warnings
+import hikari, crescent
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
 from wrappers.jsonc import read_json, update_info_field
@@ -39,6 +40,7 @@ def log_message_view(message: hikari.Message, button_view, *args):
 def main():
     # check if `-d` flag was used `python -dO main.py`
     state.is_debug = 'd' in sys.orig_argv[1]
+    warnings.simplefilter("ignore") # ignore pygsheets warnings
     # validate and update state.info
     check_and_load_info()
     # hikari + crescent -> create bot and client 

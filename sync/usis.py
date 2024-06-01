@@ -8,12 +8,11 @@ from wrappers.utils import FormatText
 def before(filenames : list[str]) -> None:
     print(FormatText.wait("Updating enrolment sheet from attedance sheet files..."))
     # read Enrolment sheet > USIS (before)
-    range = EnrolmentSprdsht.UsisBefore.RANGE.split(':')
-    print(f"{range = }")
+    range_start,range_end = EnrolmentSprdsht.UsisBefore.RANGE.split(':')
     usis_sheet = get_sheet_by_name(state.info[InfoField.ENROLMENT_SHEET_ID], 
                                    EnrolmentSprdsht.UsisBefore.TITLE)
-    usis_data = usis_sheet.get_as_df(start=range[0][:-1], 
-                                     end=range[1], 
+    usis_data = usis_sheet.get_as_df(start=range_start[:-1], 
+                                     end=range_end, 
                                      include_tailing_empty_rows=False)
     usis_data = usis_data.rename(columns={usis_data.columns[0]: 
                                             EnrolmentSprdsht.UsisBefore.SECTION_COL})
@@ -22,8 +21,8 @@ def before(filenames : list[str]) -> None:
         usis_data = update_usis_dataframe_from_file(usis_data, filename)
     # update Enrolment sheet > USIS (before)
     end_row = str(usis_sheet.rows)
-    usis_sheet.clear(start=range[0],
-                     end=range[1]+end_row)
+    usis_sheet.clear(start=range_start,
+                     end=range_end+end_row)
     update_sheet_values({EnrolmentSprdsht.UsisBefore.RANGE+end_row :
                             usis_data.values.tolist()}, usis_sheet)
     update_student_list_and_routine()
