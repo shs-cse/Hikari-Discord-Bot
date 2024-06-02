@@ -1,8 +1,8 @@
 import re, hikari
 from bot_variables.config import RegexPattern
-from member_management.response import VerificationFailure
-from member_management.student_verification.sucess import verify_student
-from member_management.student_verification.failure import (check_retyped_user_input, 
+from member_verification.response import VerificationFailure
+from member_verification.student.sucess import verify_student
+from member_verification.student.failure import (check_retyped_user_input, 
                                                             check_if_input_is_a_valid_id,
                                                             check_if_student_id_is_in_database,
                                                             check_if_student_id_is_already_taken,

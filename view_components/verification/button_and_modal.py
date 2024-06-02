@@ -1,7 +1,7 @@
 import hikari.emojis
 import hikari, miru
-from member_management.response import build_response
-from member_management.student_verification.check import check_student_verification
+from member_verification.response import build_response
+from member_verification.student.check import check_student_verification
 from wrappers.utils import FormatText
 
 

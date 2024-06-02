@@ -1,5 +1,5 @@
 import hikari
-from member_management.response import build_response
+from member_verification.response import build_response
 from bot_variables import state
 from bot_variables.config import EnrolmentSprdsht, ClassType
 from wrappers.utils import FormatText
