@@ -2,7 +2,7 @@ import hikari, crescent
 import sync.init, sync.roles, sync.sheets
 from bot_variables import state
 from wrappers.utils import FormatText
-from view_components.student_verification_modal import VerificationButtonView
+from view_components.verification.button_and_modal import VerificationButtonView
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 

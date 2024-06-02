@@ -1,7 +1,8 @@
-import hikari, collections, miru
+import hikari, collections
+import miru as _miru
 import pandas as pd
 from bot_variables.config import ClassType
-miru_client:  miru.Client= None
+miru_client:  _miru.Client= None
 # debug?
 is_debug = False
 # everything passed to info json file

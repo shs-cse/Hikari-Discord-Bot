@@ -1,19 +1,30 @@
+import hikari.emojis
 import hikari, miru
 from member_verification.response import build_response
 from member_verification.student.check import check_student
 from wrappers.utils import FormatText
 
 
-# TODO: persistent view?
 class VerificationButtonView(miru.View):
     timeout = None
+        
+    @miru.button(label="I'm an S.T.",
+                 emoji='🧑‍🏫', 
+                 custom_id="st_verification_button",
+                 style=hikari.ButtonStyle.SECONDARY)
+    async def st_verification_button(self, ctx: miru.ViewContext, button: miru.Button):
+        # await ctx.respond_with_modal(StudentIdModalView())
+        from bot_variables import state
+        await ctx.respond(f"Report to {state.admin_role.mention}s.", flags=hikari.MessageFlag.EPHEMERAL)
     
-    @miru.button(label="Verify Me!", style=hikari.ButtonStyle.PRIMARY, custom_id="student_verification_button")
+    @miru.button(label="I'm a Student", 
+                 emoji='🙋',
+                 custom_id="student_verification_button",
+                 style=hikari.ButtonStyle.SUCCESS)
     async def student_verification_button(self, ctx: miru.ViewContext, button: miru.Button):
         await ctx.respond_with_modal(StudentIdModalView())
         
-        
-# TODO: persistent view?
+
 class StudentIdModalView(miru.Modal):
     def __init__(self):
         super().__init__(title="Student Verification Form", timeout=None,

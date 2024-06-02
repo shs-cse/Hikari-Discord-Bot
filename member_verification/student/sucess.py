@@ -32,7 +32,7 @@ async def verify_student(member: hikari.Member, student_id: int):
     if state.student_role not in member.get_roles():
         await member.add_role(state.student_role)
 
-    comment = f"You have been successfully verified as {student_name}"
+    comment = f"### You have been successfully verified as {student_name}"
     comment += f" (ID: {student_id}) from section {section}."
     comment += f" If this is not you, you may leave the server and try again."
     response = build_response(comment, success_level=1, 
