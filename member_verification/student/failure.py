@@ -1,9 +1,9 @@
 import hikari
 from bot_variables import state
 from bot_variables.config import EnrolmentSprdsht, ClassType
-from member_verification.response import VerificationFailure, build_response_for_students
+from member_verification.response import VerificationFailure, build_response
 from wrappers.utils import FormatText
-from view_components.student_verification import YesNoButtonsView
+from view_components.student_verification_yes_no import YesNoButtonsView
 
 # Case 0: retyped input does not match
 def check_retyped_user_input(input_text:str, reinput_text:str):
@@ -11,14 +11,14 @@ def check_retyped_user_input(input_text:str, reinput_text:str):
         comment = "Please try again. Your inputs"
         comment += f" `{input_text}` and `{reinput_text}` does not match."
         print(FormatText.warning(f"Student Verification: Someone's input `{input_text}` doesn't match retyped input `{reinput_text}`."))
-        raise VerificationFailure(build_response_for_students(comment))
+        raise VerificationFailure(build_response(comment))
     
 # Case 1: id is not a valid student id
 def check_if_input_is_a_valid_id(extracted: str, input_text: str = "Your input"):
     if not extracted:
         comment = f"Please try again. `{input_text}` is not a valid student ID."
         print(FormatText.warning(f"Student Verification: Someone's input `{input_text}` doesn't match student id regex."))
-        raise VerificationFailure(build_response_for_students(comment))
+        raise VerificationFailure(build_response(comment))
 
 # Case 2: id is valid but not in the sheet
 def check_if_student_id_is_in_database(student_id:int):
@@ -26,7 +26,7 @@ def check_if_student_id_is_in_database(student_id:int):
         comment = f"`{student_id}` is not in our database."
         comment += " Please double check your student ID and try again."
         print(FormatText.warning(f"Student Verification: Student ({student_id}) not in database."))
-        raise VerificationFailure(build_response_for_students(comment))
+        raise VerificationFailure(build_response(comment))
     
 # Case 3: id is valid and in the sheet, but already taken (by another student/their old id)
 def check_if_student_id_is_already_taken(member: hikari.Member, student_id:int):
@@ -44,7 +44,7 @@ def check_if_student_id_is_already_taken(member: hikari.Member, student_id:int):
         comment += " Then try again with your new account."
         comment += " If someone else took your ID, Please report to admins ASAP."
         print(FormatText.warning(f"Student Verification: {mem.mention} tried to take {student_id}; but {existing_member.mention} already took it."))
-        raise VerificationFailure(build_response_for_students(comment))
+        raise VerificationFailure(build_response(comment))
     
 
 # Case 4: id is valid and in the sheet, but discord does not match with advising server acc (you sure?)
@@ -61,14 +61,14 @@ def check_if_matches_advising_server(member:hikari.Member, student_id:int):
             comment += f" However, you are trying to get verified as `[{student_id}] {student_name.title()[:21]}`."
             comment += "If you think this is an error, please contact admins with proper proof."
             print(FormatText.warning(f"Student Verification: {member.mention} tried to take {student_id}; but advising server points to <@{advising_id}>."))
-            raise VerificationFailure(build_response_for_students(comment))
+            raise VerificationFailure(build_response(comment))
         # member probably has alt account -> sure?
         else:
             comment = f"`{student_id}` was used by account with discord account <@{advising_id}> in the advising server."
             comment += "We recommend using the same discord account for both servers."
             comment += f" Are you sure you want to use this account ({member.mention}) with student id `{student_id}` for this server?"
             print(FormatText.warning(f"Student Verification: {member.mention} tried to take {student_id}, alt account?"))
-            raise VerificationFailure(build_response_for_students(comment, success_level=0.5, 
+            raise VerificationFailure(build_response(comment, success_level=0.5, 
                                             components=YesNoButtonsView(member,student_id)))
 
         

@@ -1,6 +1,8 @@
 import hikari, crescent
 import sync.init, sync.roles, sync.sheets
+from bot_variables import state
 from wrappers.utils import FormatText
+from view_components.student_verification_modal import VerificationButtonView
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
@@ -26,5 +28,7 @@ async def on_started(event: hikari.StartedEvent) -> None:
     sync.sheets.pull()
     sync.sheets.push()
     await plugin.app.update_presence(status=hikari.Status.ONLINE)
+    student_verification_button_view = VerificationButtonView()
+    state.miru_client.start_view(student_verification_button_view)
     print(FormatText.success(FormatText.bold("Bot has started.")))
     

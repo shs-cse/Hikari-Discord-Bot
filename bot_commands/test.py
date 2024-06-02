@@ -10,15 +10,17 @@ bot_admin_group = crescent.Group("admin",
 @bot_admin_group.child
 @crescent.command
 async def ping(ctx: crescent.Context) -> None:
-    await ctx.defer(True)
-    from member_verification.student import check_student
-    from bot_variables import state
-    member = state.guild.get_member(733029094660374612)
-    student_id = "21101033"
-    response = await check_student(member, student_id)
-    await ctx.respond(**response)
-    if view := response['components']:
-        state.miru_client.start_view(view)
+    await ctx.defer()
+    from view_components.student_verification_modal import VerificationButtonView
+    await ctx.respond("Please click me!", components=VerificationButtonView())
+    # from member_verification.student.check import check_student
+    # from bot_variables import state
+    # member = state.guild.get_member(733029094660374612)
+    # student_id = "21101033"
+    # response = await check_student(member, student_id)
+    # await ctx.respond(**response)
+    # if view := response['components']:
+    #     state.miru_client.start_view(view)
     # view = YesNoButtonsView(member, )
     # await ctx.respond(embed=hikari.Embed(title="Yes, or no?"),
     #                   components=view,ephemeral=True)
