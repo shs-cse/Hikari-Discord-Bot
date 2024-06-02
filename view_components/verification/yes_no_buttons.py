@@ -1,6 +1,6 @@
 import hikari, miru
-from member_verification.response import build_response
-from member_verification.student.sucess import verify_student
+from member_management.response import build_response
+from member_management.student_verification.sucess import verify_student
 from wrappers.utils import FormatText
 
 

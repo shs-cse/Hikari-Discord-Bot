@@ -1,7 +1,7 @@
 import hikari.emojis
 import hikari, miru
-from member_verification.response import build_response
-from member_verification.student.check import check_student
+from member_management.response import build_response
+from member_management.student_verification.check import check_student_verification
 from wrappers.utils import FormatText
 
 
@@ -45,7 +45,7 @@ class StudentIdModalView(miru.Modal):
         await ctx.defer(hikari.ResponseType.DEFERRED_MESSAGE_CREATE, 
                         flags=hikari.MessageFlag.EPHEMERAL)
         try:
-            response = await check_student(ctx.member, self.student_id.value, 
+            response = await check_student_verification(ctx.member, self.student_id.value, 
                                               self.retyped_id.value)
         except Exception as error:
             response = get_response_for_error(error, 'check_student')

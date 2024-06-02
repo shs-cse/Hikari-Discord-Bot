@@ -22,18 +22,18 @@ from validation.json_inputs import check_and_load_info
 #     )
 
 
-# change name to save_button_info
-def log_message_view(message: hikari.Message, button_view, *args):
-    print(FormatText.success(f"Added button to post: {message.make_link(state.guild)}"))
-    buttons : dict = state.info[InfoField.BUTTONS]
-    update_info_field(InfoField.BUTTONS, {
-        **buttons,
-        str(message.id) : {
-            'channel_id' : message.channel_id,
-            'view_class': button_view.__class__.__name__,
-            'view_args': [*args]
-        }
-    })
+# # change name to save_button_info
+# def log_message_view(message: hikari.Message, button_view, *args):
+#     print(FormatText.success(f"Added button to post: {message.make_link(state.guild)}"))
+#     buttons : dict = state.info[InfoField.BUTTONS]
+#     update_info_field(InfoField.BUTTONS, {
+#         **buttons,
+#         str(message.id) : {
+#             'channel_id' : message.channel_id,
+#             'view_class': button_view.__class__.__name__,
+#             'view_args': [*args]
+#         }
+#     })
     
 
 

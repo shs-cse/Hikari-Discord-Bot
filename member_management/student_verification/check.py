@@ -1,15 +1,17 @@
 import re, hikari
 from bot_variables.config import RegexPattern
-from member_verification.response import VerificationFailure
-from member_verification.student.sucess import verify_student
-from member_verification.student.failure import (check_retyped_user_input, 
-                                                check_if_input_is_a_valid_id,
-                                                check_if_student_id_is_in_database,
-                                                check_if_student_id_is_already_taken,
-                                                check_if_matches_advising_server)
+from member_management.response import VerificationFailure
+from member_management.student_verification.sucess import verify_student
+from member_management.student_verification.failure import (check_retyped_user_input, 
+                                                            check_if_input_is_a_valid_id,
+                                                            check_if_student_id_is_in_database,
+                                                            check_if_student_id_is_already_taken,
+                                                            check_if_matches_advising_server)
 
 # check if a member can be verified with a student id    
-async def check_student(member: hikari.Member, input_text: str, reinput_text: str=None):
+async def check_student_verification(member: hikari.Member, 
+                                     input_text: str, 
+                                     reinput_text: str=None):
     try:# possible cases of VerificationFailure:
         # 0. retyped input does not match
         if reinput_text:
