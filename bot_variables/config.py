@@ -90,9 +90,12 @@ class EnrolmentSprdsht:
     
     class StudentList:
         TITLE = 'StudentList'
+        SECTION_COL = 'Section'
         STUDENT_ID_COL = 'Student ID'
+        NAME_COL = 'Name'
         DISCORD_ID_COL = 'Discord ID'
         VIRTUAL_MARKS_SEC_COL = 'Marks Section'
+        ADVISING_DISCORD_ID_COL = 'Discord ID (Adv. Verified)'
         
     class Routine:
         TITLE = 'Routine'

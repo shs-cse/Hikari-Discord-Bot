@@ -42,7 +42,8 @@ def get_spreadsheet(spreadsheet_id: str) -> pygsheets.Spreadsheet:
     google_client = get_google_client()
     try:
         spreadsheet = google_client.open_by_key(spreadsheet_id)
-        print(FormatText.success(f'Fetched "{spreadsheet.title}" spreadsheet successfully.'))
+        msg = FormatText.bold(spreadsheet.title)
+        print(FormatText.success(f'Fetched "{msg}" spreadsheet successfully.'))
     except Exception as error:
         msg = "Could not access this sheet. Is this link correct?"
         msg += " And accessible with your GSUITE accout?\n" 

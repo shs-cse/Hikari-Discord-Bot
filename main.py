@@ -1,4 +1,4 @@
-import sys, warnings
+import sys, warnings, miru
 import hikari, crescent
 from bot_variables import state
 from bot_variables.config import FileName, InfoField
@@ -48,7 +48,7 @@ def main():
                             intents=hikari.Intents.ALL,
                             logs="INFO" if state.is_debug else "WARNING")
     this_guild_id = int(state.info[InfoField.GUILD_ID])
-    client = crescent.Client(bot, 
+    client = crescent.Client(bot,
                              default_guild=this_guild_id)
     # load commands and pluins
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
@@ -57,6 +57,8 @@ def main():
     # client.plugins.load("sync.init")
     client.plugins.load("validation.discord_sec")
     client.plugins.load("wrappers.discord")
+    # initialize miru
+    state.miru_client = miru.Client(bot)
     # run the bot
     bot.run(
         # enable asyncio debug to detect blocking and slow code.
@@ -64,8 +66,7 @@ def main():
         # enable coroutine tracking, makes some asyncio errors clearer.
         coroutine_tracking_depth=20 if state.is_debug else None, 
         # initial discord status of the bot
-        status=hikari.Status.IDLE    
-    )
+        status=hikari.Status.IDLE)
 
 if __name__ == "__main__":
     main()
