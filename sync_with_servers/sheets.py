@@ -2,7 +2,7 @@ from bot_variables import state
 from bot_variables.config import InfoField, EnrolmentSprdsht
 from wrappers.utils import FormatText
 from wrappers.pygs import get_sheet_by_name, update_sheet_values
-from sync.usis import update_student_list_and_routine
+from sync_with_servers.usis import update_student_list_and_routine
 
 def pull_from_enrolment():
     print(FormatText.wait("Pulling data from google sheets..."))

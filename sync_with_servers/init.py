@@ -4,7 +4,7 @@ from wrappers.utils import FormatText
 from wrappers.discord import fetch_guild_from_id, update_guild_cache, get_channel_by_name, fetch_invite_link
 from bot_variables import state
 from bot_variables.config import EEEGuild, ChannelName, RoleName
-from validation.json_inputs import update_info_field
+from setup_validation.json_inputs import update_info_field
 
 async def now():
     print(FormatText.wait("Syncing initialization..."))

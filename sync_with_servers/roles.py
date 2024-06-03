@@ -2,7 +2,7 @@ from wrappers.utils import FormatText
 from wrappers.discord import get_role_by_name
 from bot_variables import state
 from bot_variables.config import RoleName, ClassType
-from validation.discord_sec import check_discord_sec
+from setup_validation.discord_sec import check_discord_sec
 
 
 async def now():
