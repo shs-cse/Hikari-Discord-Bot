@@ -4,7 +4,7 @@ from bot_variables.config import EnrolmentSprdsht
 from member_verification.response import VerificationFailure, build_response
 from member_verification.student.sucess import verify_student
 from wrappers.utils import FormatText
-from view_components.verification.yes_no_buttons import YesNoButtonsView
+from view_components.student_verification.yes_no_buttons import YesNoButtonsView
 
 # Case 0: retyped input does not match
 def check_retyped_user_input(input_text:str, reinput_text:str):
