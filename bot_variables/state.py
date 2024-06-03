@@ -14,7 +14,7 @@ eee_guild : hikari.Guild = None
 available_sections : list = []
 
 sec_template = {ClassType.THEORY: {}, ClassType.LAB: {}}
-sec_roles = collections.defaultdict(dict) # dict of dict
+sec_roles = collections.defaultdict(dict[str, hikari.Role]) # dict of dict
 all_sec_roles : set = {}
 
 faculty_role : hikari.Role = None

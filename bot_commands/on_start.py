@@ -25,8 +25,8 @@ async def on_starting(event: hikari.StartingEvent) -> None:
 async def on_started(event: hikari.StartedEvent) -> None:
     await sync.init.now()
     await sync.roles.now()
-    sync.sheets.pull()
-    sync.sheets.push()
+    sync.sheets.pull_from_enrolment()
+    sync.sheets.push_to_enrolment()
     await plugin.app.update_presence(status=hikari.Status.ONLINE)
     student_verification_button_view = VerificationButtonView()
     state.miru_client.start_view(student_verification_button_view)

@@ -4,7 +4,7 @@ from wrappers.utils import FormatText
 from wrappers.pygs import get_sheet_by_name, update_sheet_values
 from sync.usis import update_student_list_and_routine
 
-def pull():
+def pull_from_enrolment():
     print(FormatText.wait("Pulling data from google sheets..."))
     update_student_list_and_routine()
     # for tracking which student's mark is in which section's sheet
@@ -17,13 +17,13 @@ def pull():
     print(FormatText.success("Pulling data from google sheets complete."))
     
 
-def push():
+def push_to_enrolment():
     print(FormatText.wait("Pushing discord data to sheets..."))
     # clear old discord data
     discord_sheet = get_sheet_by_name(state.info[InfoField.ENROLMENT_SHEET_ID], 
                                       EnrolmentSprdsht.Discord.TITLE)
     discord_sheet.clear(EnrolmentSprdsht.Discord.RANGE)
-    # extract member roles. not sure if needed anymore
+    # extract member roles. not sure if needed anymore # TODO: old code logic
     arr_updated = []
     for k, mem in enumerate(state.guild.get_members().values()):
         arr_updated.append([])

@@ -99,6 +99,7 @@ class EnrolmentSprdsht:
         
     class Routine:
         TITLE = 'Routine'
+        SECTION_COL = 'Section'
         
     class UsisBefore:
         TITLE = 'USIS (before)'

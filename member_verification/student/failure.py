@@ -15,19 +15,21 @@ def check_retyped_user_input(input_text:str, reinput_text:str):
         raise VerificationFailure(build_response(comment))
     
 # Case 1: id is not a valid student id
-def check_if_input_is_a_valid_id(extracted: str, input_text: str):
-    if not extracted:
-        comment = f"### Input is Not Valid\nPlease try again. Your input `{input_text}` is not a valid student ID."
-        print(FormatText.warning(f"Student Verification: Someone's input <{input_text}> is not a valid student ID."))
-        raise VerificationFailure(build_response(comment))
+def check_if_input_is_a_valid_id(input_text: str, extracted: str):
+    if extracted:
+        return # fall through to next check
+    comment = f"### Input is Not Valid\nPlease try again. Your input `{input_text}` is not a valid student ID."
+    print(FormatText.warning(f"Student Verification: Someone's input <{input_text}> is not a valid student ID."))
+    raise VerificationFailure(build_response(comment))
 
 # Case 2: id is valid but not in the sheet
 def check_if_student_id_is_in_database(student_id:int):
-    if student_id not in state.df_student.index:
-        comment = f"### ID Not in Database\n`{student_id}` is not in our database."
-        comment += " Please double check your student ID and try again."
-        print(FormatText.warning(f"Student Verification: Student <{student_id}> not in course enrolment."))
-        raise VerificationFailure(build_response(comment))
+    if student_id in state.df_student.index:
+        return # fall through to next check
+    comment = f"### ID Not in Database\n`{student_id}` is not in our database."
+    comment += " Please double check your student ID and try again."
+    print(FormatText.warning(f"Student Verification: Student <{student_id}> not in course enrolment."))
+    raise VerificationFailure(build_response(comment))
     
 # Case 3: id is valid and in the sheet, but already taken (by another student/their old id)
 def check_if_student_id_is_already_taken(member: hikari.Member, student_id:int):

@@ -3,10 +3,10 @@ from bot_variables.config import RegexPattern
 from member_verification.response import VerificationFailure
 from member_verification.student.sucess import verify_student
 from member_verification.student.failure import (check_retyped_user_input, 
-                                                            check_if_input_is_a_valid_id,
-                                                            check_if_student_id_is_in_database,
-                                                            check_if_student_id_is_already_taken,
-                                                            check_if_matches_advising_server)
+                                                 check_if_input_is_a_valid_id, 
+                                                 check_if_student_id_is_in_database,
+                                                 check_if_student_id_is_already_taken,
+                                                 check_if_matches_advising_server)
 
 # check if a member can be verified with a student id    
 async def check_student_verification(member: hikari.Member, 
@@ -18,7 +18,7 @@ async def check_student_verification(member: hikari.Member,
             check_retyped_user_input(input_text, reinput_text)
         # 1. id is not a valid student id
         extracted_id_ish = re.search(RegexPattern.STUDENT_ID, input_text)
-        check_if_input_is_a_valid_id(extracted_id_ish, input_text)
+        check_if_input_is_a_valid_id(input_text, extracted_id_ish)
         # 2. id is valid but not in the sheet
         student_id = int(extracted_id_ish.group())
         check_if_student_id_is_in_database(student_id)
