@@ -1,12 +1,17 @@
+from datetime import timedelta
 import hikari.emojis
 import hikari, miru
-from member_verification.response import build_response
+from member_verification.response import get_generic_response_for_verification_error
 from member_verification.student.check import check_student_verification
 from wrappers.utils import FormatText
 
 
 class VerificationButtonView(miru.View):
-    timeout = None
+    def __init__(self) -> None:
+        self.post_content = "## Please click to *verify* yourself!!\n"
+        self.post_content += "Otherwise you **won't** be able to see much of the server,"
+        self.post_content += " including your own *section announcements* and *study-materials*."
+        super().__init__(timeout=None)
         
     @miru.button(label="I'm an S.T.",
                  emoji='🧑‍🏫', 
@@ -48,14 +53,6 @@ class StudentIdModalView(miru.Modal):
             response = await check_student_verification(ctx.member, self.student_id.value, 
                                               self.retyped_id.value)
         except Exception as error:
-            response = get_response_for_error(error, 'check_student')
+            response = get_generic_response_for_verification_error(error, check_student_verification)
             print(FormatText.error(f"Student Verification: raised an error while trying to submit a modal for {self.student_id.value}/{self.retyped_id.value}."))
         await ctx.respond(**response, flags=hikari.MessageFlag.EPHEMERAL)
-
-
-def get_response_for_error(error: Exception, function_name: str):
-    comment = "Something went wrong while verifying you." 
-    comment += " Please show this message to admins."
-    comment += f"\nEncountered error while calling `{function_name}(...)`:"
-    comment += f"\n```py\n{type(error).__name__}\n{error}```"
-    return build_response(comment)

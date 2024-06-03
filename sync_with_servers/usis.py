@@ -25,7 +25,7 @@ def before(filenames : list[str]) -> None:
                      end=range_end+end_row)
     update_sheet_values({EnrolmentSprdsht.UsisBefore.RANGE+end_row :
                             usis_data.values.tolist()}, usis_sheet)
-    update_student_list_and_routine()
+    update_student_list()
     print(FormatText.success("Updated enrolment sheet from attedance sheet files."))
     
     
@@ -61,15 +61,23 @@ def update_usis_dataframe_from_file(usis_data: pd.DataFrame, filename: str) -> p
     
     
 # TODO: why not update df_marks_section? like sync.sheets.pull?
-def update_student_list_and_routine() -> None:
-    enrolment_id = state.info[InfoField.ENROLMENT_SHEET_ID]
-    # fetch student list
+def update_student_list() -> None:
+    # fetch student list from 
     print(FormatText.wait("Updating enrolled student list dataframe..."))
-    state.df_student = get_sheet_data(enrolment_id, EnrolmentSprdsht.StudentList.TITLE)
+    state.df_student = get_sheet_data(state.info[InfoField.ENROLMENT_SHEET_ID], 
+                                      EnrolmentSprdsht.StudentList.TITLE)
     state.df_student = state.df_student.set_index(EnrolmentSprdsht.StudentList.STUDENT_ID_COL)
     state.df_student = state.df_student[state.df_student.index != '']
     print(FormatText.success("Updated enrolled student list dataframe."))
-    # fetch routine data
-    print(FormatText.wait("Updating routine dataframe..."))
-    state.df_routine = get_sheet_data(enrolment_id, EnrolmentSprdsht.Routine.TITLE)
-    print(FormatText.wait("Updated routine dataframe."))
+    
+    # for tracking which student's mark is in which section's sheet
+    state.df_marks_section = state.df_student[[EnrolmentSprdsht.StudentList.DISCORD_ID_COL]]
+    # add a new column to track which section contains that student's marks
+    state.df_marks_section.insert(1, EnrolmentSprdsht.StudentList.VIRTUAL_MARKS_SEC_COL, 0) 
+    state.df_marks_section.set_index(
+        [state.df_marks_section.index, EnrolmentSprdsht.StudentList.DISCORD_ID_COL], 
+        inplace=True)
+    # # fetch routine data
+    # print(FormatText.wait("Updating routine dataframe..."))
+    # state.df_routine = get_sheet_data(enrolment_id, EnrolmentSprdsht.Routine.TITLE)
+    # print(FormatText.wait("Updated routine dataframe."))

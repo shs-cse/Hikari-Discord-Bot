@@ -1,3 +1,5 @@
+import hikari
+
 class ClassType:
     THEORY = 'theory'
     LAB = 'lab'
@@ -20,6 +22,13 @@ class InfoField:
     ENROLMENT_SHEET_ID = 'enrolment'
     MARKS_SHEET_IDS = 'marks'
     BUTTONS = 'buttons'
+    
+    
+class RolePermissions:
+    STUDENT_TUTOR = hikari.Permissions.PRIORITY_SPEAKER
+    FACULTY = STUDENT_TUTOR | hikari.Permissions.MANAGE_MESSAGES | hikari.Permissions.MODERATE_MEMBERS
+    BOT_ADMIN = FACULTY | hikari.Permissions.MANAGE_GUILD
+    ADMIN = BOT_ADMIN | hikari.Permissions.ADMINISTRATOR
 
 
 class FileName:
@@ -28,6 +37,10 @@ class FileName:
     INFO_JSON = 'info.jsonc'
     VALID_JSON = 'valid_info.jsonc'
     COMMANDS_FOLDER = 'bot_commands'
+    EVENTS_FOLDER = 'bot_events'
+    BULK_DELETE = f'{COMMANDS_FOLDER}.bulk_delete'
+    DISCORD_WRAPPER = 'wrappers.discord'
+    DISCORD_SECTION_VALIDATION = 'setup_validation.discord_sec'
 
 
 class TemplateLinks:

@@ -21,11 +21,11 @@ def main():
                              default_guild=this_guild_id)
     # load commands and pluins
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
+    client.plugins.load_folder(FileName.EVENTS_FOLDER)
     if not state.is_debug:
-        client.plugins.unload("bot_commands.bulk_delete")
-    # client.plugins.load("sync.init")
-    client.plugins.load("setup_validation.discord_sec")
-    client.plugins.load("wrappers.discord")
+        client.plugins.unload(FileName.BULK_DELETE)
+    client.plugins.load(FileName.DISCORD_WRAPPER)
+    client.plugins.load(FileName.DISCORD_SECTION_VALIDATION)
     # initialize miru
     state.miru_client = miru.Client(bot)
     # run the bot

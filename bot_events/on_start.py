@@ -3,19 +3,20 @@ import sync_with_servers.init, sync_with_servers.roles, sync_with_servers.sheets
 from bot_variables import state
 from wrappers.utils import FormatText
 from view_components.student_verification.modal_and_button import VerificationButtonView
+from view_components.faculty_verification.assign_sec_button import AssignSectionsButtonView
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
-@plugin.include
-@crescent.event # before connecting to discord
-async def on_starting(event: hikari.StartingEvent) -> None:
-    print(FormatText.wait("Bot is starting..."))
-    # TODO: do stuff
-    # for i in range(5):
-    #     print(FormatText.status(f"starting in {5-i} sec"))
-    #     import asyncio
-    #     await asyncio.sleep(1)
-    # Bot will now start
+# @plugin.include
+# @crescent.event # before connecting to discord
+# async def on_starting(event: hikari.StartingEvent) -> None:
+#     print(FormatText.wait("Bot is starting..."))
+#     # TODO: do stuff
+#     # for i in range(5):
+#     #     print(FormatText.status(f"starting in {5-i} sec"))
+#     #     import asyncio
+#     #     await asyncio.sleep(1)
+#     # Bot will now start
     
     
 
@@ -28,7 +29,8 @@ async def on_started(event: hikari.StartedEvent) -> None:
     sync_with_servers.sheets.pull_from_enrolment()
     sync_with_servers.sheets.push_to_enrolment()
     await plugin.app.update_presence(status=hikari.Status.ONLINE)
-    student_verification_button_view = VerificationButtonView()
-    state.miru_client.start_view(student_verification_button_view)
+    button_views = [VerificationButtonView(), AssignSectionsButtonView()]
+    for button_view in button_views:
+        state.miru_client.start_view(button_view, bind_to=None)
     print(FormatText.success(FormatText.bold("Bot has started.")))
     

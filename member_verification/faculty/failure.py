@@ -6,6 +6,7 @@ from member_verification.response import build_response, VerificationFailure
 
 
 async def check_if_member_is_a_faculty(member: hikari.Member):
+    # may have hard-assigned faculty role
     if state.faculty_role.id in member.get_roles():
         return # fall through to next check
     if member.id in state.eee_guild.get_members():

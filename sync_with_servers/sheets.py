@@ -1,19 +1,20 @@
 from bot_variables import state
 from bot_variables.config import InfoField, EnrolmentSprdsht
 from wrappers.utils import FormatText
-from wrappers.pygs import get_sheet_by_name, update_sheet_values
-from sync_with_servers.usis import update_student_list_and_routine
+from wrappers.pygs import get_sheet_by_name, update_sheet_values, get_sheet_data
+from sync_with_servers.usis import update_student_list
+    
+# fetch routine data from enrolment sheet
+def update_routine():
+    print(FormatText.wait("Updating routine dataframe..."))
+    state.df_routine = get_sheet_data(state.info[InfoField.ENROLMENT_SHEET_ID], 
+                                      EnrolmentSprdsht.Routine.TITLE)
+    print(FormatText.wait("Updated routine dataframe."))
 
 def pull_from_enrolment():
     print(FormatText.wait("Pulling data from google sheets..."))
-    update_student_list_and_routine()
-    # for tracking which student's mark is in which section's sheet
-    state.df_marks_section = state.df_student[[EnrolmentSprdsht.StudentList.DISCORD_ID_COL]]
-    # add a new column to track which section contains that student's marks
-    state.df_marks_section.insert(1, EnrolmentSprdsht.StudentList.VIRTUAL_MARKS_SEC_COL, 0) 
-    state.df_marks_section.set_index(
-        [state.df_marks_section.index, EnrolmentSprdsht.StudentList.DISCORD_ID_COL], 
-        inplace=True)
+    update_routine()
+    update_student_list()
     print(FormatText.success("Pulling data from google sheets complete."))
     
 

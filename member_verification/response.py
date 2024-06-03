@@ -8,6 +8,7 @@ class VerificationFailure(Exception):
         self.response = response
         
 
+# build response from comment and embed fields
 def build_response(comment: str, 
                    success_level: float = 0, # 0: fail, 0.5: warn, 1: success
                    inline_embed_fields: list[hikari.EmbedField] = None,
@@ -27,3 +28,12 @@ def build_response(comment: str,
     if components:
         state.miru_client.start_view(components)
     return {'embed': embed, 'components': components}
+
+
+
+def get_generic_response_for_verification_error(error: Exception, func):
+    comment = "Something went wrong while verifying you." 
+    comment += " Please show this message to admins."
+    comment += f"\nEncountered error while calling `{func.__name__}(...)`:"
+    comment += f"\n```py\n{type(error).__name__}\n{error}```"
+    return build_response(comment)

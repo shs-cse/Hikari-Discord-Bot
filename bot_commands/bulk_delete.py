@@ -1,12 +1,11 @@
 import hikari, crescent, re
 from bot_variables import state
-from bot_variables.config import ClassType, ChannelName
+from bot_variables.config import ClassType, ChannelName, RolePermissions
 # from wrappers.discord import get_channel_by_name
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 # admin ang higher level access only
-delete_group = crescent.Group("delete",
-                              default_member_permissions=hikari.Permissions.ADMINISTRATOR)
+delete_group = crescent.Group("delete", default_member_permissions=RolePermissions.ADMIN)
 # bulk subgroup
 bulk_subgroup = delete_group.sub_group("bulk")
     
