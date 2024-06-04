@@ -1,9 +1,8 @@
-from datetime import timedelta
 import hikari.emojis
 import hikari, miru
 from sync_with_servers.sheets import update_routine
-from member_verification.response import get_generic_response_for_verification_error
-from member_verification.faculty.check import check_faculty_verification
+from member_verification.response import get_generic_error_response_while_verifying
+from member_verification.faculty.check import try_faculty_verification
 from wrappers.utils import FormatText
 
 
@@ -15,7 +14,7 @@ class AssignSectionsButtonView(miru.View):
         super().__init__(timeout=None)
     
     
-    @miru.button(label="Assign Me Sections (Again)", 
+    @miru.button(label="Assign Me Sections (again...)", 
                  emoji='🧑‍🏫',
                  custom_id="faculty_assign_sections_button",
                  style=hikari.ButtonStyle.SUCCESS)
@@ -24,9 +23,9 @@ class AssignSectionsButtonView(miru.View):
                         flags=hikari.MessageFlag.EPHEMERAL)
         try:
             update_routine()
-            response = await check_faculty_verification(ctx.member)
+            response = await try_faculty_verification(ctx.member)
         except Exception as error:
-            response = get_generic_response_for_verification_error(error, check_faculty_verification)
+            response = get_generic_error_response_while_verifying(error, try_faculty_verification)
             msg = f"Faculty Verification: raised an error while trying to assgin sections to {ctx.member.display_name} {ctx.member.mention}."
             print(FormatText.error(msg))
-        await ctx.respond(**response, flags=hikari.MessageFlag.EPHEMERAL)
+        await ctx.respond(**response)

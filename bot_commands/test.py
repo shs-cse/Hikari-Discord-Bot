@@ -14,8 +14,8 @@ class Ping:
     
     async def callback(self, ctx: crescent.Context) -> None:
         await ctx.defer(True)
-        from member_verification.faculty.check import check_faculty_verification
-        response = await check_faculty_verification(self.member)
+        from member_verification.faculty.check import try_faculty_verification
+        response = await try_faculty_verification(self.member)
         await ctx.respond(**response, flags=hikari.MessageFlag.EPHEMERAL)
         # from view_components.verification.button_and_modal import VerificationButtonView
         # view = VerificationButtonView()

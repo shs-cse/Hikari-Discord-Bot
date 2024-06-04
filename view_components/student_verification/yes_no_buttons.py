@@ -1,5 +1,5 @@
 import hikari, miru
-from member_verification.response import build_response
+from member_verification.response import Response
 from member_verification.student.sucess import verify_student
 from wrappers.utils import FormatText
 
@@ -26,7 +26,7 @@ class YesNoButtonsView(miru.View):
         self.stop()
         comment = "You selected **\"NO\"**. Please try again with your **advising server account**."
         print(FormatText.success(FormatText.dim(f"Student Verification: {self.member.mention} chose to take {self.student_id} with advising server account.")))
-        response = build_response(comment)
+        response = Response(comment)
         await ctx.edit_response(**response)
         
         
@@ -35,5 +35,5 @@ def get_response_for_error(error: Exception, function_name: str):
     comment += " Please show this message to admins."
     comment += f"\nEncountered error while calling `{function_name}(...)`:"
     comment += f"\n```py\n{type(error).__name__}\n{error}```"
-    return build_response(comment)
+    return Response(comment)
     

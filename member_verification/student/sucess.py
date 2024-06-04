@@ -1,5 +1,5 @@
 import hikari
-from member_verification.response import build_response
+from member_verification.response import Response
 from bot_variables import state
 from bot_variables.config import EnrolmentSprdsht, ClassType
 from wrappers.utils import FormatText
@@ -62,10 +62,11 @@ async def verify_student(student: hikari.Member, student_id: int):
     comment = f"### You have been successfully verified as {student_name}"
     comment += f" (ID: {student_id}) from section {section}."
     comment += f" If this is not you, you may leave the server and try again."
-    response = build_response(comment, success_level=1, 
-                              inline_embed_fields=[
-                                  hikari.EmbedField(name="Student ID", value=f"{student_id}"),
-                                  hikari.EmbedField(name="Student Name", value=student_name),
-                                  hikari.EmbedField(name="Section", value=f"{section:02d}")
-                              ])
+    response = Response(comment, 
+                        kind=Response.Kind.SUCCESSFUL, 
+                        inline_embed_fields=[
+                            hikari.EmbedField(name="Student ID", value=f"{student_id}"),
+                            hikari.EmbedField(name="Student Name", value=student_name),
+                            hikari.EmbedField(name="Section", value=f"{section:02d}")
+                        ])
     return response

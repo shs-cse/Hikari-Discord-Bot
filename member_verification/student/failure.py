@@ -1,8 +1,7 @@
 import hikari
 from bot_variables import state
 from bot_variables.config import EnrolmentSprdsht
-from member_verification.response import VerificationFailure, build_response
-from member_verification.student.sucess import verify_student
+from member_verification.response import VerificationFailure, Response
 from wrappers.utils import FormatText
 from view_components.student_verification.yes_no_buttons import YesNoButtonsView
 
@@ -11,25 +10,25 @@ def check_retyped_user_input(input_text:str, reinput_text:str):
     if reinput_text != input_text:
         comment = "### Inputs Don't Match\nPlease try again. Your inputs"
         comment += f" `{input_text}` and `{reinput_text}` does not match."
-        print(FormatText.warning(f"Student Verification: Someone's input doesn't match retyped input ({input_text}/{reinput_text})."))
-        raise VerificationFailure(build_response(comment))
+        print(FormatText.warning(f"Student Verification: Someone's entered input ({input_text}) doesn't match retyped input ({reinput_text})."))
+        raise VerificationFailure(Response(comment))
     
 # Case 1: id is not a valid student id
 def check_if_input_is_a_valid_id(input_text: str, extracted: str):
     if extracted:
-        return # fall through to next check
+        return # silently fall through to next check
     comment = f"### Input is Not Valid\nPlease try again. Your input `{input_text}` is not a valid student ID."
     print(FormatText.warning(f"Student Verification: Someone's input <{input_text}> is not a valid student ID."))
-    raise VerificationFailure(build_response(comment))
+    raise VerificationFailure(Response(comment))
 
 # Case 2: id is valid but not in the sheet
 def check_if_student_id_is_in_database(student_id:int):
     if student_id in state.df_student.index:
-        return # fall through to next check
+        return # silently fall through to next check
     comment = f"### ID Not in Database\n`{student_id}` is not in our database."
     comment += " Please double check your student ID and try again."
     print(FormatText.warning(f"Student Verification: Student <{student_id}> not in course enrolment."))
-    raise VerificationFailure(build_response(comment))
+    raise VerificationFailure(Response(comment))
     
 # Case 3: id is valid and in the sheet, but already taken (by another student/their old id)
 def check_if_student_id_is_already_taken(member: hikari.Member, student_id:int):
@@ -47,7 +46,7 @@ def check_if_student_id_is_already_taken(member: hikari.Member, student_id:int):
         comment += " Then try again with your new account."
         comment += " If someone else took your ID, Please report to admins ASAP."
         print(FormatText.warning(f"Student Verification: {mem.mention} tried to take <{student_id}>; but {existing_member.mention} already took it."))
-        raise VerificationFailure(build_response(comment))
+        raise VerificationFailure(Response(comment))
     
 
 # Case 4: id is valid and in the sheet, but discord does not match with advising server acc (you sure?)
@@ -58,8 +57,9 @@ async def check_if_matches_advising_server(member:hikari.Member, student_id:int)
     advising_id = state.df_student.loc[student_id, ADVISING_DISCORD_ID_COL]
     if advising_id == "": # not in our advising database
         return
-    if advising_id == member.id: # same person, auto-verify
-        return
+    # TODO: won't work. has to supply student_id anyway
+    # if advising_id == member.id: # same person, auto-verify
+    #     return
     # member's account exists in enrolment sheet with a different student id (conflict_id)
     if member.id in state.df_student[ADVISING_DISCORD_ID_COL]:
         conflict_id = state.df_student[state.df_student[ADVISING_DISCORD_ID_COL] == member.id]
@@ -69,12 +69,12 @@ async def check_if_matches_advising_server(member:hikari.Member, student_id:int)
         comment += f" However, you are trying to get verified as `[{student_id}] {student_name.title()[:21]}`."
         comment += "If you think this is an error, please contact admins with proper proof."
         print(FormatText.warning(f"Student Verification: {member.mention} tried to take <{student_id}>; but advising server points to <@{advising_id}>."))
-        raise VerificationFailure(build_response(comment))
+        raise VerificationFailure(Response(comment))
     # member probably has alt account -> sure?
     else:
         comment = f"### Alt Account?\n`{student_id}` was used by account with discord account <@{advising_id}> in the advising server."
         comment += "We recommend using the same discord account for both servers."
         comment += f" Are you sure you want to use this account ({member.mention}) with student id `{student_id}` for this server?"
         print(FormatText.warning(f"Student Verification: {member.mention} tried to take <{student_id}>, alt account?"))
-        raise VerificationFailure(build_response(comment, success_level=0.5, 
+        raise VerificationFailure(Response(comment, kind=Response.Kind.WAITING, 
                                         components=YesNoButtonsView(member,student_id)))

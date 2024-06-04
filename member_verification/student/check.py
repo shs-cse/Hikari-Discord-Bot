@@ -9,7 +9,7 @@ from member_verification.student.failure import (check_retyped_user_input,
                                                  check_if_matches_advising_server)
 
 # check if a member can be verified with a student id    
-async def check_student_verification(member: hikari.Member, 
+async def try_student_verification(member: hikari.Member, 
                                      input_text: str, 
                                      reinput_text: str=None):
     try:# possible cases of VerificationFailure:

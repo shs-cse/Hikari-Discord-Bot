@@ -9,7 +9,7 @@ def update_routine():
     print(FormatText.wait("Updating routine dataframe..."))
     state.df_routine = get_sheet_data(state.info[InfoField.ENROLMENT_SHEET_ID], 
                                       EnrolmentSprdsht.Routine.TITLE)
-    print(FormatText.wait("Updated routine dataframe."))
+    print(FormatText.success("Updated routine dataframe."))
 
 def pull_from_enrolment():
     print(FormatText.wait("Pulling data from google sheets..."))

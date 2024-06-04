@@ -1,5 +1,12 @@
 import hikari
 
+# aka ECT-BC server
+class EEEGuild:
+    Id = 815535685959811083
+    
+class SpecialChars:
+    ZERO_WIDTH_SPACE = '\u200b'
+
 class ClassType:
     THEORY = 'theory'
     LAB = 'lab'
@@ -71,26 +78,24 @@ class PullMarksGroupsFrom:
     CELL = 'L2'
     
     
-# aka ECT-BC server
-class EEEGuild:
-    Id = 815535685959811083
 # all special channel names in this guild
 class ChannelName:
     WELCOME = '👏🏻welcome✌🏻'
-    SEC_CATEGORY = 'Section {sec:02d} {class_type}'
-    SECTION = {
+    ADMIN_HELP = '💁🏻admin-help'
+    # SEC_CATEGORY = 'Section {sec:02d} {class_type}'
+    SECTION_CATEGORY = {
         ClassType.THEORY: 'SECTION {:02d} THEORY',
         ClassType.LAB: 'SECTION {:02d} LAB',
     }
 # all special role names in this guild
 class RoleName:
+    ADMIN = 'admin'
+    BOT_ADMIN = 'bot-admin'
     BOT = 'bot'
     FACULTY = 'faculty'
     THEORY_FACULTY = 'theory-faculty'
     LAB_FACULTY = 'lab-faculty'
     STUDENT_TUTOR = 'student-tutor'
-    ADMIN = 'admin'
-    BOT_ADMIN = 'bot-admin'
     STUDENT = 'student'
     SECTION = {
         ClassType.THEORY: 'sec-{:02d}',
@@ -113,6 +118,10 @@ class EnrolmentSprdsht:
     class Routine:
         TITLE = 'Routine'
         SECTION_COL = 'Section'
+        CLASS_TYPE_FACULTY_COL = {
+            ClassType.THEORY: 'Theory Teacher',
+            ClassType.LAB: 'Lab Teacher'
+        }
         
     class UsisBefore:
         TITLE = 'USIS (before)'

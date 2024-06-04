@@ -26,7 +26,7 @@ def get_sec_role(section: int, class_type: ClassType):
     return role
 
 def get_sec_category_name(section: int, class_type: ClassType):
-    return ChannelName.SECTION[class_type].format(section)
+    return ChannelName.SECTION_CATEGORY[class_type].format(section)
 
 def get_sec_category(section: int, class_type: ClassType):
     name = get_sec_category_name(section, class_type)
