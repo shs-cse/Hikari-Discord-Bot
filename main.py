@@ -20,9 +20,9 @@ def main():
     client = crescent.Client(bot,
                              default_guild=this_guild_id)
     # load commands and pluins
-    client.plugins.load_folder(FileName.COMMANDS_FOLDER)
     client.plugins.load_folder(FileName.EVENTS_FOLDER)
-    if not state.is_debug:
+    client.plugins.load_folder(FileName.COMMANDS_FOLDER)
+    if not state.is_debug: # remove bulk delete
         client.plugins.unload(FileName.BULK_DELETE)
     client.plugins.load(FileName.DISCORD_WRAPPER)
     client.plugins.load(FileName.DISCORD_SECTION_VALIDATION)
