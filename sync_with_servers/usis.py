@@ -30,9 +30,10 @@ def before(filenames : list[str]) -> None:
     
     
 def extract_section_from_xls_file(filename:str) -> int:
-    if filename[-4:].lower() != '.xls':
+    if not filename.lower().endswith('.xls'):
         msg = FormatText.error(f'File "{filename}" is not an xls file.')
-        raise Exception(msg)
+        print(msg)
+        return
     print(FormatText.status(f"Attendance Sheet: {FormatText.bold(filename)}"))
     metadata = pd.read_excel(filename).iloc[0, 1]
     section_num = int(re.search(r"\nSection :  ([0-9]{2})\n", metadata)[1])
@@ -59,7 +60,8 @@ def update_usis_dataframe_from_file(usis_data: pd.DataFrame, filename: str) -> p
             EnrolmentSprdsht.StudentList.STUDENT_ID_COL], ignore_index=True)
     return usis_data
     
-    
+
+# TODO: move it to sync.sheets files
 # TODO: why not update df_marks_section? like sync.sheets.pull?
 def update_student_list() -> None:
     # fetch student list from 

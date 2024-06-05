@@ -43,6 +43,7 @@ class FileName:
     SHEETS_CREDENTIALS = 'sheets.googleapis.com-python.json'
     INFO_JSON = 'info.jsonc'
     VALID_JSON = 'valid_info.jsonc'
+    ATTENDANCE_FOLDER = 'attendance_sheets'
     COMMANDS_FOLDER = 'bot_commands'
     EVENTS_FOLDER = 'bot_events'
     BULK_DELETE = f'{COMMANDS_FOLDER}.bulk_delete'
