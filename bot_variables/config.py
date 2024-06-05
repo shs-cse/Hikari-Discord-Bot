@@ -28,7 +28,7 @@ class InfoField:
     INVITE_LINK = 'invite'
     ENROLMENT_SHEET_ID = 'enrolment'
     MARKS_SHEET_IDS = 'marks'
-    BUTTONS = 'buttons'
+    # BUTTONS = 'buttons'
     
     
 class RolePermissions:
