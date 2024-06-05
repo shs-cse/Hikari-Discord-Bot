@@ -3,6 +3,16 @@ This code is meant for maintaining official discord servers of CSE250, CSE251, C
 
 # Instructions for Bot Setup
 - The very first time...
+    - ubuntu 24.04 (lts)
+    - `sudo apt install python3-full`
+    - `git clone https://github.com/shs-cse/hikari-discord-bot.git . && git update-index --skip-worktree info.jsonc`
+    - `python3 -m venv .venv`
+    - `source .venv/bin/activate`
+    - `pip install xlrd pandas pygsheets`
+    - `pip install -U hikari[speedups]`
+    - `pip install hikari-crescent`
+    - `pip install -U hikari-miru`
+    - `python -dO main.py`
 - Rerun the bot for a new semester...
 - Dev Notes
 
