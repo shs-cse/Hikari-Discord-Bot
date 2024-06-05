@@ -4,20 +4,58 @@ This code is meant for maintaining official discord servers of CSE250, CSE251, C
 # Instructions for Bot Setup
 - The very first time...
     - ubuntu 24.04 (lts)
-    - `git clone https://github.com/shs-cse/hikari-discord-bot.git . && git update-index --skip-worktree info.jsonc`
-    - `sudo apt install python3-full`
-    - `python3 -m venv .venv`
-    - `source .venv/bin/activate`
+    ```sh
+    sudo apt install python3-full
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install xlrd pandas pygsheets
+    pip install -U hikari[speedups]
+    pip install hikari-crescent
+    pip install -U hikari-miru
+    deactivate
+    ```
+    <!-- ```sh
+    git clone https://github.com/shs-cse/hikari-discord-bot.git . && git update-index --skip-worktree info.jsonc
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install xlrd pandas pygsheets
+    pip install -U hikari[speedups]
+    pip install hikari-crescent
+    pip install -U hikari-miru
+    ```
+    - ``
     - `pip install xlrd pandas pygsheets`
     - `pip install -U hikari[speedups]`
     - `pip install hikari-crescent`
     - `pip install -U hikari-miru`
-    - `python -dO main.py`
+    - `python -dO main.py` -->
 - Rerun the bot for a new semester...
+    - download code
+    ```sh
+    mkdir summer_2024
+    cd summer_2024
+    git clone https://github.com/shs-cse/hikari-discord-bot.git . && git update-index --skip-worktree info.jsonc
+    ```
+    - edit json files
+    ```sh
+    nano credentials.json
+    nano info.jsonc
+    ```
+    - run code
+    ```sh
+    source ../.venv/bin/activate
+    python -O main.py
+    ```
+    <!-- python3 -m venv .venv
+    source .venv/bin/activate
+    pip install xlrd pandas pygsheets
+    pip install -U hikari[speedups]
+    pip install hikari-crescent
+    pip install -U hikari-miru -->
 - Dev Notes
 
 # Dev Notes
-## How to update [`info.jsonc`](./info.jsonc) file
+## How to update [`info.jsonc`](./info.jsonc) file pattern in `git`
 - Don't track changes in the file:
     ```bash
     git update-index --skip-worktree info.jsonc
