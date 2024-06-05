@@ -54,7 +54,7 @@ class FileName:
 class TemplateLinks:
     GUILD = 'https://discord.new/RVh3qBrGcsxA'
     ENROLMENT_SHEET = '1HzCwb68D3L2sC4WFEBYajz4co5sQvtgSpp2fIf8aMqc'
-    MARKS_SHEET = '1wfamZfPPXvYxHegBEngxonPtBmJBiFT5D0WAvwLchY0'
+    MARKS_SHEET = '1wfamZfPPXvYxHegBEngxonPtBmJBiFT5D0WAvwLchY0' # TODO: change to latest file
     
 
 class RegexPattern:

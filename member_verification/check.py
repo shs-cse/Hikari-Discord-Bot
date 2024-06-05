@@ -7,7 +7,7 @@ from member_verification.student.sucess import verify_student
 from member_verification.response import Response, VerificationFailure
 from wrappers.utils import FormatText
 
-async def try_auto_member_verification(member: hikari.Member):
+async def try_member_auto_verification(member: hikari.Member):
     response = await try_faculty_verification(member)
     if response.kind == Response.Kind.SUCCESSFUL:
         return response

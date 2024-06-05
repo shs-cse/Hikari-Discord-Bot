@@ -6,3 +6,4 @@
 # TODO: remove enrolment_sheet.py
 # TODO: create new config.py class/variable for BOT_ADMIN_PERMISSION = hikari.Permissions.MANAGE_GUILD
 # TODO: change main.py load parameters to config.py constants
+# TODO: autocomplete student id
