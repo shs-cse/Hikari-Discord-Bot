@@ -83,11 +83,13 @@ class PullMarksGroupsFrom:
 class ChannelName:
     WELCOME = '👏🏻welcome✌🏻'
     ADMIN_HELP = '💁🏻admin-help'
+    GENERAL_ANNOUNCEMENT = '📣general-announcements'
     # SEC_CATEGORY = 'Section {sec:02d} {class_type}'
     SECTION_CATEGORY = {
         ClassType.THEORY: 'SECTION {:02d} THEORY',
         ClassType.LAB: 'SECTION {:02d} LAB',
     }
+    
 # all special role names in this guild
 class RoleName:
     ADMIN = 'admin'

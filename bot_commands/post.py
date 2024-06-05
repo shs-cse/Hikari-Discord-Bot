@@ -8,6 +8,7 @@ plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 bot_admin_post_group = crescent.Group("post", default_member_permissions=RolePermissions.BOT_ADMIN)
 bot_admin_post_button_sub_group =  bot_admin_post_group.sub_group("button")
+bot_admin_post_message_as_bot_sub_group =  bot_admin_post_group.sub_group("message-as-bot")
 
 
 @plugin.include
@@ -28,3 +29,48 @@ async def post_faculty_section_assignment_button(ctx: crescent.Context) -> None:
     view = AssignSectionsButtonView()
     await ctx.respond(view.post_content, components=view)
     state.miru_client.start_view(view, bind_to=None)
+    
+    
+@plugin.include
+@bot_admin_post_message_as_bot_sub_group.child
+@crescent.command(name="copy-from-message-link")
+class PostAsBotFromMessageLink:
+    to_channel = crescent.option(hikari.PartialChannel, name="channel-to-post-in", description="Channel to post your message in.")
+    from_message_link = crescent.option(str, name="message-link", description="Link to message to copy post from.")
+    
+    async def callback(self, ctx: crescent.Context) -> None:
+        await ctx.defer()
+        snowflake_ids = self.from_message_link.split('/')
+        from_message_id = snowflake_ids[-1]
+        from_channel_id = snowflake_ids[-2]
+        from_message = await plugin.app.rest.fetch_message(from_channel_id, from_message_id)
+        new_message = await plugin.app.rest.create_message(
+                                channel=self.to_channel,
+                                content=from_message.content,
+                                attachments=from_message.attachments,
+                                components=from_message.components,
+                                embeds=from_message.embeds,
+                                stickers=from_message.stickers,
+                                tts=from_message.is_tts,
+                                mentions_everyone=from_message.mentions_everyone,
+                                user_mentions=from_message.user_mentions_ids,
+                                role_mentions=from_message.role_mention_ids)
+        await ctx.respond(f"Your message has been posted to {self.to_channel.mention}: {new_message.make_link(state.guild)}", ephemeral=True)
+        
+        
+@plugin.include
+@bot_admin_post_message_as_bot_sub_group.child
+@crescent.command(name="new-post")
+class PostAsBotFromMessageLink:
+    to_channel : hikari.GuildTextChannel = crescent.option(hikari.PartialChannel, 
+                                                           name="channel-to-post-in", 
+                                                           description="Channel to post your message in.")
+    message_content = crescent.option(str, name="content", 
+                                      description="Link to message to copy post from.")
+    
+    async def callback(self, ctx: crescent.Context) -> None:
+        await ctx.defer(True)
+        new_message = await plugin.app.rest.create_message(
+                                channel=self.to_channel,
+                                content=self.message_content)
+        await ctx.respond(f"Your message has been posted to {self.to_channel.mention}: {new_message.make_link(state.guild)}")

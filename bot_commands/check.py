@@ -18,7 +18,7 @@ reassign_sections_sub_group =  reassign_group.sub_group("sections")
 @reassign_sections_sub_group.child
 @crescent.command(name="to")
 class CheckFacultySections:
-    faculty : hikari.Member = crescent.option(hikari.User, name="faculty", description="must have faculty role.")
+    faculty : hikari.Member = crescent.option(hikari.User, name="faculty", description="Must have faculty role.")
     
     async def callback(self, ctx: crescent.Context) -> None:
         await ctx.defer(True)
