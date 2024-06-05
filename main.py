@@ -22,7 +22,7 @@ def main():
     # load commands and pluins
     client.plugins.load_folder(FileName.EVENTS_FOLDER)
     client.plugins.load_folder(FileName.COMMANDS_FOLDER)
-    if not state.is_debug: # remove bulk delete
+    if not state.is_debug: # remove bulk delete from commands folder
         client.plugins.unload(FileName.BULK_DELETE)
     client.plugins.load(FileName.DISCORD_WRAPPER)
     client.plugins.load(FileName.DISCORD_SECTION_VALIDATION)

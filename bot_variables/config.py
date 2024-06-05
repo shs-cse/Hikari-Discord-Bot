@@ -28,7 +28,6 @@ class InfoField:
     INVITE_LINK = 'invite'
     ENROLMENT_SHEET_ID = 'enrolment'
     MARKS_SHEET_IDS = 'marks'
-    # BUTTONS = 'buttons'
     
     
 class RolePermissions:
@@ -84,7 +83,6 @@ class ChannelName:
     WELCOME = '👏🏻welcome✌🏻'
     ADMIN_HELP = '💁🏻admin-help'
     GENERAL_ANNOUNCEMENT = '📣general-announcements'
-    # SEC_CATEGORY = 'Section {sec:02d} {class_type}'
     SECTION_CATEGORY = {
         ClassType.THEORY: 'SECTION {:02d} THEORY',
         ClassType.LAB: 'SECTION {:02d} LAB',

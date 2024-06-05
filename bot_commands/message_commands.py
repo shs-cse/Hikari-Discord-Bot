@@ -26,7 +26,7 @@ async def update_attendacne_sheet(ctx: crescent.Context, message=hikari.Message)
     
     
 @plugin.include
-@crescent.message_command(name="Copy this Post to General Announcement as Bot", 
+@crescent.message_command(name="Post to General Announcement", 
                           default_member_permissions=RolePermissions.BOT_ADMIN)
 async def post_to_general_announcement(ctx: crescent.Context, from_message=hikari.Message):
     await ctx.defer(True)

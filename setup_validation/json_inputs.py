@@ -11,7 +11,7 @@ def has_info_passed_before():
     if os.path.exists(FileName.VALID_JSON):
         passed = read_json(FileName.VALID_JSON)
         # matches all values with previously passed json (except buttons)
-        if all(state.info[key] == passed[key] for key in state.info if key != InfoField.BUTTONS):
+        if all(state.info[key] == passed[key] for key in state.info):
             print(FormatText.success("Check complete! Matches previously passed valid json."))
             update_json(state.info, FileName.VALID_JSON) # update valid json file
             return True
@@ -31,15 +31,13 @@ def check_and_load_info():
         check_sections(state.info[InfoField.NUM_SECTIONS], 
                        state.info[InfoField.MISSING_SECTIONS])
         check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
-        ... # TODO: Done? check sheets and stuff
         enrolment_sheet = check_enrolment_sheet()
-        check_marks_groups(enrolment_sheet)
-        # TODO: Done? marks sheets
-        for marks_group in state.info[InfoField.MARKS_GROUPS]:
-            for section in marks_group:
-                check_marks_sheet(section, marks_group, 
-                                  state.info[InfoField.MARKS_SHEET_IDS].copy())
-        # TODO: Done? check_marks_sheets()
+        if state.is_marks_enabled:
+            check_marks_groups(enrolment_sheet)
+            for marks_group in state.info[InfoField.MARKS_GROUPS]:
+                for section in marks_group:
+                    check_marks_sheet(section, marks_group, 
+                                    state.info[InfoField.MARKS_SHEET_IDS].copy())
         # create valid json file
         update_json(state.info, FileName.VALID_JSON)
         

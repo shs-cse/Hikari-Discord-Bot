@@ -117,8 +117,7 @@ def update_sheet_values(cell_value_dict: dict,
     print(FormatText.wait(f'Editing spreadsheet cells...'))
     print(FormatText.status(f'Sheet name: {FormatText.bold(sheet_obj.title)}'))
     print(FormatText.status(f'Url: {FormatText.bold(sheet_obj.url)}'))
-    count_cell = sum(sum(len(cols) for cols in rows) for rows in cell_value_dict.values())
-    if count_cell <= 30:
+    if len(str(cell_value_dict)) <= 100:
         print(FormatText.status(f'Setting cell values: {FormatText.bold(cell_value_dict)}'))
     else:
         print(FormatText.status(f'Setting range values: {FormatText.bold(cell_value_dict.keys())}'))
