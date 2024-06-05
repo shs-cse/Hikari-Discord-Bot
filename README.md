@@ -4,8 +4,8 @@ This code is meant for maintaining official discord servers of CSE250, CSE251, C
 # Instructions for Bot Setup
 - The very first time...
     - ubuntu 24.04 (lts)
-    - `sudo apt install python3-full`
     - `git clone https://github.com/shs-cse/hikari-discord-bot.git . && git update-index --skip-worktree info.jsonc`
+    - `sudo apt install python3-full`
     - `python3 -m venv .venv`
     - `source .venv/bin/activate`
     - `pip install xlrd pandas pygsheets`
