@@ -18,14 +18,14 @@ class VerificationButtonView(miru.View):
         self.post_content += f" by posting on the {admin_help_channel.mention} channel."
         super().__init__(timeout=None)
         
-    @miru.button(label="I'm an S.T.",
-                 emoji='🧑‍🏫', 
-                 custom_id="st_verification_button",
-                 style=hikari.ButtonStyle.SECONDARY)
-    async def st_verification_button(self, ctx: miru.ViewContext, button: miru.Button):
-        # TODO: code...
-        from bot_variables import state
-        await ctx.respond(f"Report to {state.admin_role.mention}s.", flags=hikari.MessageFlag.EPHEMERAL)
+    # @miru.button(label="I'm an S.T.",
+    #              emoji='🧑‍🏫', 
+    #              custom_id="st_verification_button",
+    #              style=hikari.ButtonStyle.SECONDARY)
+    # async def st_verification_button(self, ctx: miru.ViewContext, button: miru.Button):
+    #     # TODO: code...
+    #     from bot_variables import state
+    #     await ctx.respond(f"Report to {state.admin_role.mention}s.", flags=hikari.MessageFlag.EPHEMERAL)
     
     @miru.button(label="I'm a Student", 
                  emoji='🙋',
