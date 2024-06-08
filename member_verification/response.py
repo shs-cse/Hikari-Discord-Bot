@@ -21,7 +21,7 @@ class Response:
             embed = hikari.Embed(title=":x: Your account could not be verified",
                                 description=comment, color=0xF04747)
         else:
-            embed = hikari.Embed(title=":warning: Waiting for your response (Timer: 30 sec)",
+            embed = hikari.Embed(title=":warning: Waiting for your Yes/No response",
                                 description=comment, color=0xFFC72B)
         if inline_embed_fields:
             for field in inline_embed_fields:
@@ -47,29 +47,6 @@ class Response:
 class VerificationFailure(Exception):
     def __init__(self, response: Response) -> None:
         self.response = response
-
-
-# build response from comment and embed fields
-def build_response(comment: str, 
-                   success_level: float = 0, # 0: fail, 0.5: warn, 1: success
-                   inline_embed_fields: list[hikari.EmbedField] = None,
-                   components: miru.View = None):
-    if success_level >= 1:
-        embed = hikari.Embed(title=":white_check_mark: Your account has been verified",
-                                description=comment, color=0x43B581)
-    elif success_level <= 0:
-        embed = hikari.Embed(title=":x: Your account could not be verified",
-                                description=comment, color=0xF04747)
-    else:
-        embed = hikari.Embed(title=":warning: Waiting for your response (Timer: 30 sec)",
-                                description=comment, color=0xFFC72B)
-    if inline_embed_fields:
-        for field in inline_embed_fields:
-            embed.add_field(field.name, field.value, inline=True)
-    if components:
-        state.miru_client.start_view(components)
-    return {'embed': embed, 'components': components}
-
 
 
 def get_generic_error_response_while_verifying(error: Exception, func):

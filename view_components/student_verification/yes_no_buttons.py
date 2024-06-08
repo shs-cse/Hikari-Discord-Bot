@@ -8,8 +8,7 @@ class YesNoButtonsView(miru.View):
     def __init__(self, member: hikari.Member, student_id: int) -> None:
         self.member = member
         self.student_id = student_id
-        # set a timeout of 30 seconds
-        super().__init__(timeout=30)
+        super().__init__(timeout=None)
     
     @miru.button(label="YES, Use This Alt Account!", style=hikari.ButtonStyle.DANGER)
     async def yes_button(self, ctx: miru.ViewContext, button: miru.Button) -> None:
