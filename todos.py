@@ -9,4 +9,8 @@
 # TODO: autocomplete student id
 # TODO: attendance_sheets folder
 # TODO: get-links protection if student list in enrolment sheet is empty
-# TODO: 
+# TODO: shift to toml files
+# TODO: slash command to disable Yes-No option
+# TODO: slash command to update timer
+# TODO: figure out why Purbayan's bot token didn't work
+# TODO: bash script
