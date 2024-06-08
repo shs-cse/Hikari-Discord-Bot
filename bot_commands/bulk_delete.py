@@ -14,7 +14,7 @@ bulk_subgroup = delete_group.sub_group("bulk")
 
 @plugin.include
 @delete_group.child
-@crescent.command(name="role",)
+@crescent.command(name="role")
 class DeleteRole:
     role = crescent.option(hikari.Role)
     async def callback(self, ctx: crescent.Context) -> None:

@@ -38,26 +38,12 @@ async def verify_student(student: hikari.Member, student_id: int):
 
     await update_student_nickname(student, student_id, student_name)
     await assign_student_section_roles(student, section)
-    # # add @student role
-    # if state.student_role not in student.get_roles():
-    #     await student.add_role(state.student_role)
-    
-    # # handle section role
-    # sec_roles_to_add = set(state.sec_roles[section].values())
-    # existing_sec_roles = state.all_sec_roles & set(student.get_roles())
-    # if not existing_sec_roles:
-    #     for role in sec_roles_to_add:
-    #         await student.add_role(role)
-    # elif (len(existing_sec_roles) != 2 or # may have manually assigned roles
-    #       state.sec_roles[section][ClassType.THEORY] not in existing_sec_roles):
-    #     for role in existing_sec_roles:
-    #         await student.remove_role(role)
-    #     for role in sec_roles_to_add:
-    #         await student.add_role(role)
 
     # print information about the change
-    msg = f"Student Verification: {student.mention} was verified with id"
-    msg += f" {student_id} and roles: " + ','.join('@'+role.name for role in student.get_roles())
+    msg = f"Student Verification: {student.mention} was verified"
+    msg += f" with id {student_id} and roles for section {section}"
+    student_roles = await student.fetch_roles()
+    msg += ": " + ','.join('@'+role.name for role in student_roles)
     print(FormatText.success(msg))
     comment = f"### You have been successfully verified as {student_name}"
     comment += f" (ID: {student_id}) from section {section}."
