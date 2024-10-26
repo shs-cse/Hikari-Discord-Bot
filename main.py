@@ -10,7 +10,9 @@ from setup_validation.json_inputs import check_and_load_info
 def main():
     # check if `-d` flag was used `python -dO main.py`
     state.is_debug = 'd' in sys.orig_argv[1]
-    warnings.simplefilter("ignore") # ignore pygsheets warnings
+    # ignore pygsheets warnings in normal mode
+    if not state.is_debug:
+        warnings.simplefilter("ignore")
     # validate and update state.info
     check_and_load_info()
     # hikari + crescent -> create bot and client 
