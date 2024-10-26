@@ -70,7 +70,7 @@ class RegexPattern:
     GOOGLE_DRIVE_LINK_ID = r'(?<=/)[\w_-]{15,}|^[\w_-]{15,}'
     # discord id
     DISCORD_ID = r'[0-9]{17,19}'
-    DISCORD_BOT_TOKEN = r'^([MN][\w-]{23,25})\.([\w-]{6})\.([\w-]{27,39})$'
+    # DISCORD_BOT_TOKEN = r'^([MN][\w-]{23,25})\.([\w-]{6})\.([\w-]{27,39})$' # discord keeps changing this
     
 
 class PullMarksGroupsFrom:

@@ -1,3 +1,4 @@
+import hikari.errors
 import sys, warnings, miru
 import hikari, crescent
 from bot_variables import state
@@ -26,16 +27,21 @@ def main():
         client.plugins.unload(FileName.BULK_DELETE)
     client.plugins.load(FileName.DISCORD_WRAPPER)
     client.plugins.load(FileName.DISCORD_SECTION_VALIDATION)
-    # initialize miru
+    # initialize miru for managing buttons and forms
     state.miru_client = miru.Client(bot)
     # run the bot
-    bot.run(
-        # enable asyncio debug to detect blocking and slow code.
-        asyncio_debug=state.is_debug,
-        # enable coroutine tracking, makes some asyncio errors clearer.
-        coroutine_tracking_depth=20 if state.is_debug else None, 
-        # initial discord status of the bot
-        status=hikari.Status.IDLE)
+    try:
+        bot.run(
+            # enable asyncio debug to detect blocking and slow code.
+            asyncio_debug=state.is_debug,
+            # enable coroutine tracking, makes some asyncio errors clearer.
+            coroutine_tracking_depth=20 if state.is_debug else None, 
+            # initial discord status of the bot
+            status=hikari.Status.IDLE)
+    except hikari.errors.UnauthorizedError as autherror:
+        msg = FormatText.error(f"Bot authorization failed." +
+                               f" Please check {FileName.INFO_JSON} > '{InfoField.BOT_TOKEN}'")
+        raise Exception(msg) from autherror
 
 if __name__ == "__main__":
     main()

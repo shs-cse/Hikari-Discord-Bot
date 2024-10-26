@@ -66,7 +66,7 @@ def check_regex_patterns():
         InfoField.ROUTINE_SHEET_ID: RegexPattern.GOOGLE_DRIVE_LINK_ID,
         InfoField.MARKS_FOLDER_ID: RegexPattern.GOOGLE_DRIVE_LINK_ID,
         InfoField.GUILD_ID: RegexPattern.DISCORD_ID,
-        InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN,
+        # InfoField.BOT_TOKEN: RegexPattern.DISCORD_BOT_TOKEN,
     }
     # check each of the fields in a loop
     for field,pattern in fields_and_patterns.items():
