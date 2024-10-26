@@ -48,7 +48,7 @@ This code is meant for maintaining official discord servers of CSE250, CSE251, C
         ```
     - run code
         ```sh
-        tmux attach || tmux discord
+        tmux attach || tmux
         source ../.venv/bin/activate
         python -O main.py
         ```
