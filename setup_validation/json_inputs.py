@@ -34,7 +34,7 @@ def check_and_load_info():
         check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
         enrolment_sheet = check_enrolment_sheet()
         if state.info[InfoField.MARKS_ENABLED]:
-            check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
+            check_marks_groups(enrolment_sheet)
             for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
                 for section in marks_group:
                     check_marks_sheet(section, email, marks_group, 

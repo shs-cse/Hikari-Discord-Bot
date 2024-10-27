@@ -71,6 +71,7 @@ def check_marks_groups(enrolment_sheet):
     jsonc.update_info_field(InfoField.MARKS_GROUPS, marks_groups)
     
 
+# TODO: fix why it doesn't check on first run
 def check_marks_sheet(sec, email, group, marks_ids):
     if marks_ids.get(str(sec), ""): # key may not exist or value may be ""
         spreadsheet = get_spreadsheet(marks_ids[str(sec)])
@@ -95,7 +96,6 @@ def check_marks_sheet(sec, email, group, marks_ids):
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
     create_marks_sheet(spreadsheet, sec)
-    # TODO: move all fixed strings to config.py
     
 
 # create a worksheet for the section marks in spreadsheet
@@ -110,9 +110,6 @@ def create_marks_sheet(spreadsheet, sec):
         sec_sheet.hidden = False
         sec_sheet.title = MarksSprdsht.SecXX.TITLE.format(sec)
         # TODO: populate with student ids and names
-    # print(FormatText.status(f'Worksheet Name: {FormatText.BOLD}{sec_sheet.title}'))
-    # print(FormatText.status(f'Worksheet Url: {FormatText.BOLD}{sec_sheet.url}')) 
-    # TODO: move all fixed strings to config.py
 
     
 # # TODO: check marks sheets

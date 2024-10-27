@@ -6,28 +6,35 @@ from wrappers import jsonc
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
+bot_admin_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.BOT_ADMIN) 
 # faculty_post_group = crescent.Group("publish", default_member_permissions=RolePermissions.FACULTY)
 
 @plugin.include
-@crescent.command(name='marks', default_member_permissions=RolePermissions.BOT_ADMIN)
-class EnableMarks:
-    set_to = crescent.option(int, name='set-to',
-                             choices=[('enable',1),('disable',0)], 
-                             description="Enables or disables marks")
-    
-    async def callback(self, ctx: crescent.Context) -> None:
+@bot_admin_marks_group.child
+@crescent.command(name='enable')
+async def enable_marks(ctx: crescent.Context) -> None:
         await ctx.defer()
-        jsonc.update_info_field(InfoField.MARKS_ENABLED, bool(self.set_to))
+        jsonc.update_info_field(InfoField.MARKS_ENABLED, True)
         ... # TODO: init/delete marks things
-        if state.info[InfoField.MARKS_ENABLED]:
-            check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
-            for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
-                for section in marks_group:
-                    check_marks_sheet(section, email, marks_group, 
-                                    state.info[InfoField.MARKS_SHEET_IDS].copy())
+        check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
+        for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
+            for section in marks_group:
+                check_marks_sheet(section, email, marks_group, 
+                                state.info[InfoField.MARKS_SHEET_IDS].copy())
         ...
-        msg = 'enabled' if state.info[InfoField.MARKS_ENABLED] else 'disabled'
-        await ctx.respond(f"Marks spreadsheets are {msg} for all sections.")
+        await ctx.respond("Marks spreadsheets are enabled for all sections.")
+        
+        
+# @plugin.include
+# @bot_admin_marks_group.child
+# @crescent.command(name='disable')
+# async def disable_marks(ctx: crescent.Context) -> None:
+#         await ctx.defer()
+#         jsonc.update_info_field(InfoField.MARKS_ENABLED, False)
+#         ... # TODO: init/delete marks things
+#         await ctx.respond("Marks spreadsheets are disabled for all sections.")
+        
+        
 
 # @plugin.include
 # @faculty_post_group.child

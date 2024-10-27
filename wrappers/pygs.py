@@ -92,7 +92,11 @@ def share_with_anyone(spreadsheet: pygsheets.Spreadsheet):
 def transfer_ownership(spreadsheet: pygsheets.Spreadsheet, faculty_email: str):
     print(FormatText.wait(f'Sharing spreadsheet with {FormatText.bold(faculty_email)}...'))
     print(FormatText.status(f'Url: {FormatText.bold(spreadsheet.url)}'))
-    # spreadsheet.share(faculty_email, role='owner', transferOwnership=True) # TODO: uncomment this line
+    if re.search(RegexPattern.EMAIL_ADDRESS, faculty_email):
+        spreadsheet.share(faculty_email, role='owner', transferOwnership=True)
+        print(FormatText.success(f'Spreadsheet shared with email: {FormatText.bold(faculty_email)}'))
+    else:
+        print(FormatText.error(f'Email {FormatText.bold(faculty_email)} is not in proper format.'))
 
 
 # copy from a template spreadsheet and return a spreadsheet object
