@@ -40,10 +40,10 @@ def main():
             coroutine_tracking_depth=20 if state.is_debug else None, 
             # initial discord status of the bot
             status=hikari.Status.IDLE)
-    except hikari.errors.UnauthorizedError as autherror:
+    except hikari.errors.UnauthorizedError as auth_error:
         msg = FormatText.error(f"Bot authorization failed." +
                                f" Please check {FileName.INFO_JSON} > '{InfoField.BOT_TOKEN}'")
-        raise Exception(msg) from autherror
+        raise Exception(msg) from auth_error
 
 if __name__ == "__main__":
     main()

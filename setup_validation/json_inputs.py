@@ -30,13 +30,14 @@ def check_and_load_info():
         check_regex_patterns()
         check_sections(state.info[InfoField.NUM_SECTIONS], 
                        state.info[InfoField.MISSING_SECTIONS])
+        check_marks_enabled()
         check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
         enrolment_sheet = check_enrolment_sheet()
-        if state.is_marks_enabled:
-            check_marks_groups(enrolment_sheet)
-            for marks_group in state.info[InfoField.MARKS_GROUPS]:
+        if state.info[InfoField.MARKS_ENABLED]:
+            check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
+            for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
                 for section in marks_group:
-                    check_marks_sheet(section, marks_group, 
+                    check_marks_sheet(section, email, marks_group, 
                                     state.info[InfoField.MARKS_SHEET_IDS].copy())
         # create valid json file
         update_json(state.info, FileName.VALID_JSON)
@@ -102,4 +103,12 @@ def check_sections(num_sec, missing_secs):
     msg = "Number of sections and missing sections seems ok."
     print(FormatText.success(msg))
     
-    
+
+# check if marks_enabled has boolean values or not
+def check_marks_enabled():
+    if not isinstance(state.info[InfoField.MARKS_ENABLED], bool):
+        msg = "Marks enabled must be a boolean value"
+        raise TypeError(FormatText.error(msg))
+    # validated marks enabled
+    msg = 'enabled' if state.info[InfoField.MARKS_ENABLED] else 'disabled'
+    print(FormatText.success(f"Marks spreadsheets are {msg} for all sections."))

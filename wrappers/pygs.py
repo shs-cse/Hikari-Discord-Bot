@@ -87,6 +87,12 @@ def share_with_anyone(spreadsheet: pygsheets.Spreadsheet):
     print(FormatText.wait('Sharing spreadsheet publicly...'))
     print(FormatText.status(f'Url: {FormatText.bold(spreadsheet.url)}'))
     spreadsheet.share('', role='reader', type='anyone')
+    
+
+def transfer_ownership(spreadsheet: pygsheets.Spreadsheet, faculty_email: str):
+    print(FormatText.wait(f'Sharing spreadsheet with {FormatText.bold(faculty_email)}...'))
+    print(FormatText.status(f'Url: {FormatText.bold(spreadsheet.url)}'))
+    # spreadsheet.share(faculty_email, role='owner', transferOwnership=True) # TODO: uncomment this line
 
 
 # copy from a template spreadsheet and return a spreadsheet object

@@ -5,7 +5,7 @@ from wrappers import jsonc
 from wrappers.pygs import FileName, AuthenticationError, WorksheetNotFound
 from wrappers.pygs import update_cells_from_fields, get_google_client
 from wrappers.pygs import get_spreadsheet, get_sheet_by_name, copy_spreadsheet
-from wrappers.pygs import allow_access, share_with_anyone
+from wrappers.pygs import allow_access, share_with_anyone, transfer_ownership
 from wrappers.utils import FormatText
 
 
@@ -63,7 +63,7 @@ def check_marks_groups(enrolment_sheet):
     # check sections in range 
     available_secs = set(range(1,1+state.info[InfoField.NUM_SECTIONS]))
     available_secs -= set(state.info[InfoField.MISSING_SECTIONS])
-    if available_secs != {sec for group in marks_groups for sec in group}:
+    if available_secs != {sec for group in marks_groups.values() for sec in group}:
         msg = 'Marks groups contain sections that does not exist in'
         msg += f' {routine_wrksht.url}&range={PullMarksGroupsFrom.CELL}'
         raise ValueError(FormatText.error(msg))
@@ -71,7 +71,7 @@ def check_marks_groups(enrolment_sheet):
     jsonc.update_info_field(InfoField.MARKS_GROUPS, marks_groups)
     
 
-def check_marks_sheet(sec, group, marks_ids):
+def check_marks_sheet(sec, email, group, marks_ids):
     if marks_ids.get(str(sec), ""): # key may not exist or value may be ""
         spreadsheet = get_spreadsheet(marks_ids[str(sec)])
     # no spreadsheet in info for the followings
@@ -83,6 +83,7 @@ def check_marks_sheet(sec, group, marks_ids):
                                            sections=','.join(f'{s:02d}' for s in group),
                                            semester=state.info[InfoField.SEMESTER]),
                                        state.info[InfoField.MARKS_FOLDER_ID])
+        transfer_ownership(spreadsheet, email)
         update_cells_from_fields(spreadsheet, 
                                  {MarksSprdsht.Meta.TITLE : 
                                      MarksSprdsht.Meta.CELL_TO_FILED_DICT})

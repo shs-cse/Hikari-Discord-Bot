@@ -5,7 +5,6 @@ from bot_variables.config import ClassType
 miru_client:  _miru.Client= None
 # debug?
 is_debug = False
-is_marks_enabled = False # TODO: Turn on for marks
 # everything passed to info json file
 info : dict = {}
 # guild related objects

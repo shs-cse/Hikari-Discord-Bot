@@ -28,6 +28,7 @@ class InfoField:
     INVITE_LINK = 'invite'
     ENROLMENT_SHEET_ID = 'enrolment'
     MARKS_SHEET_IDS = 'marks'
+    MARKS_ENABLED = 'marks_enabled'
     
     
 class RolePermissions:
