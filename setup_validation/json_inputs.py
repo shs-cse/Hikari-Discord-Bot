@@ -4,7 +4,7 @@ from bot_variables.config import FileName, RegexPattern, InfoField
 from wrappers.jsonc import read_json, update_json, update_info_field
 from wrappers.utils import FormatText
 from setup_validation.google_sheets import check_google_credentials, check_spreadsheet_from_id
-from setup_validation.google_sheets import check_enrolment_sheet, check_marks_groups, check_marks_sheet
+from setup_validation.google_sheets import check_enrolment_sheet, check_marks_groups_and_sheets
 
 # match state.info with the valid json file to skip checking all the fields
 def has_info_passed_before():
@@ -31,13 +31,9 @@ def check_and_load_info():
         check_sections(state.info[InfoField.NUM_SECTIONS], 
                        state.info[InfoField.MISSING_SECTIONS])
         check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
-        enrolment_sheet = check_enrolment_sheet()
+        check_enrolment_sheet()
         if state.is_marks_enabled:
-            check_marks_groups(enrolment_sheet)
-            for marks_group in state.info[InfoField.MARKS_GROUPS]:
-                for section in marks_group:
-                    check_marks_sheet(section, marks_group, 
-                                    state.info[InfoField.MARKS_SHEET_IDS].copy())
+            check_marks_groups_and_sheets()
         # create valid json file
         update_json(state.info, FileName.VALID_JSON)
         

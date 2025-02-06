@@ -17,6 +17,7 @@
     // Please do not change anything unless you know what you are doing.
     
     // [Auto-generated] Mark sheets are grouped by theory faculties
+    "marks_enabled": false,
     "marks_groups": [],
 
     // [Auto-generated] Links

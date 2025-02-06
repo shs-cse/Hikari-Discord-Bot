@@ -96,6 +96,13 @@ def check_marks_sheet(sec, group, marks_ids):
     create_marks_sheet(spreadsheet, sec)
     # TODO: move all fixed strings to config.py
     
+def check_marks_groups_and_sheets():
+    check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
+    for marks_group in state.info[InfoField.MARKS_GROUPS]:
+        for section in marks_group:
+            check_marks_sheet(section, marks_group, 
+                              state.info[InfoField.MARKS_SHEET_IDS].copy())
+    
 
 # create a worksheet for the section marks in spreadsheet
 def create_marks_sheet(spreadsheet, sec):
