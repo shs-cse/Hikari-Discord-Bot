@@ -92,7 +92,9 @@ def check_sections(num_sec, missing_secs):
             msg = "Section 1 is used as template, can't be a missing section."
             raise ValueError(FormatText.error(msg))
         if not set(missing_secs).issubset(range(1, num_sec)): 
-            msg = "Missing sections that don't exist"
+            msg = "Missing sections that don't exist."
+            msg += " Keep in mind, the last section cannot be missing."
+            msg += " Reduce number of sections instead."
             raise ValueError(FormatText.error(msg))
     # passed all checks
     msg = "Number of sections and missing sections seems ok."
