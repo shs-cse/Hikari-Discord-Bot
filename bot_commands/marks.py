@@ -4,7 +4,7 @@ plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 # @admin enable marks -> check and be ready to load marks.
 # @admin disable marks -> turn off all button, notify students on marks button press that it's disabled, clear variables to save memory.
-# @faculty publish marks -> posts marks button
+# @faculty publish marks -> print and post error if marks not enabled, else post marks button
 
 # faculty_post_group = crescent.Group("publish", default_member_permissions=RolePermissions.FACULTY)
 

@@ -32,7 +32,7 @@ def check_and_load_info():
                        state.info[InfoField.MISSING_SECTIONS])
         check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
         check_enrolment_sheet()
-        if state.is_marks_enabled:
+        if state.info[InfoField.MARKS_ENABLED]:
             check_marks_groups_and_sheets()
         # create valid json file
         update_json(state.info, FileName.VALID_JSON)
