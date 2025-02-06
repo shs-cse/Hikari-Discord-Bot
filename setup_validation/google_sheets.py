@@ -77,25 +77,14 @@ def check_marks_sheet(sec, email, group, marks_ids):
         spreadsheet = get_spreadsheet(marks_ids[str(sec)])
     # no spreadsheet in info for the followings
     elif sec == group[0]: # sec is the first member of the group 
-        print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...'))
-        spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
-                                       MarksSprdsht.TITLE.format(
-                                           course_code=state.info[InfoField.COURSE_CODE],
-                                           sections=','.join(f'{s:02d}' for s in group),
-                                           semester=state.info[InfoField.SEMESTER]),
-                                       state.info[InfoField.MARKS_FOLDER_ID])
-        share_with_faculty_as_editor(spreadsheet, email)
-        update_cells_from_fields(spreadsheet, 
-                                 {MarksSprdsht.Meta.TITLE : 
-                                     MarksSprdsht.Meta.CELL_TO_FILED_DICT})
-    else: 
-        # first group member has spreadsheet
+        spreadsheet = create_marks_spreadsheet(sec,group,email)
+    else: # first group member has spreadsheet
         spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
     marks_ids[str(sec)] = spreadsheet.id
     jsonc.update_info_field(InfoField.MARKS_SHEET_IDS, marks_ids)
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
-    create_marks_sheet(spreadsheet, sec)
+    create_marks_worksheet(spreadsheet, sec)
     
     
 def check_marks_groups_and_sheets():
@@ -108,10 +97,24 @@ def check_marks_groups_and_sheets():
             for section in marks_group:
                 check_marks_sheet(section, email, marks_group, 
                                   state.info[InfoField.MARKS_SHEET_IDS].copy())
+                
+def create_marks_spreadsheet(sec, group, email): 
+    print(FormatText.warning(f'Creating new spreadsheet for section {sec:02d}...'))
+    spreadsheet = copy_spreadsheet(TemplateLinks.MARKS_SHEET,
+                                   MarksSprdsht.TITLE.format(
+                                       course_code=state.info[InfoField.COURSE_CODE],
+                                       sections=','.join(f'{s:02d}' for s in group),
+                                       semester=state.info[InfoField.SEMESTER]),
+                                   state.info[InfoField.MARKS_FOLDER_ID])
+    share_with_faculty_as_editor(spreadsheet, email)
+    update_cells_from_fields(spreadsheet, 
+                             {MarksSprdsht.Meta.TITLE: MarksSprdsht.Meta.CELL_TO_FILED_DICT})
+    return spreadsheet
+    
     
 
 # create a worksheet for the section marks in spreadsheet
-def create_marks_sheet(spreadsheet, sec):
+def create_marks_worksheet(spreadsheet, sec):
     try: # success -> sec worksheet already exists
         sec_sheet = get_sheet_by_name(spreadsheet, MarksSprdsht.SecXX.TITLE.format(sec))
     except WorksheetNotFound: 

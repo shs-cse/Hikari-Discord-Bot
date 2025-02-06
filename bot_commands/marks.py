@@ -23,6 +23,7 @@ async def marks_enable(ctx: crescent.Context) -> None:
         check_marks_groups_and_sheets()
         msg = "Marks feature has been enabled."
         msg += " All previously published marks has to be republished by faculties."
+        ... # TODO: load marks to df
     await ctx.respond(msg)
 
 
