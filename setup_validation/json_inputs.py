@@ -4,7 +4,7 @@ from bot_variables.config import FileName, RegexPattern, InfoField
 from wrappers.jsonc import read_json, update_json, update_info_field
 from wrappers.utils import FormatText
 from setup_validation.google_sheets import check_google_credentials, check_spreadsheet_from_id
-from setup_validation.google_sheets import check_enrolment_sheet, check_marks_groups, check_marks_sheet
+from setup_validation.google_sheets import check_enrolment_sheet, check_marks_groups_and_sheets
 
 # match state.info with the valid json file to skip checking all the fields
 def has_info_passed_before():
@@ -32,13 +32,8 @@ def check_and_load_info():
                        state.info[InfoField.MISSING_SECTIONS])
         check_marks_enabled()
         check_spreadsheet_from_id(state.info[InfoField.ROUTINE_SHEET_ID])
-        enrolment_sheet = check_enrolment_sheet()
-        if state.info[InfoField.MARKS_ENABLED]:
-            check_marks_groups(enrolment_sheet)
-            for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
-                for section in marks_group:
-                    check_marks_sheet(section, email, marks_group, 
-                                    state.info[InfoField.MARKS_SHEET_IDS].copy())
+        check_enrolment_sheet()
+        check_marks_groups_and_sheets()
         # create valid json file
         update_json(state.info, FileName.VALID_JSON)
         
@@ -97,7 +92,9 @@ def check_sections(num_sec, missing_secs):
             msg = "Section 1 is used as template, can't be a missing section."
             raise ValueError(FormatText.error(msg))
         if not set(missing_secs).issubset(range(1, num_sec)): 
-            msg = "Missing sections that don't exist"
+            msg = "Missing sections that don't exist."
+            msg += " Keep in mind, the last section cannot be missing."
+            msg += " Reduce number of sections instead."
             raise ValueError(FormatText.error(msg))
     # passed all checks
     msg = "Number of sections and missing sections seems ok."

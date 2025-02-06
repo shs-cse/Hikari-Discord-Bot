@@ -5,7 +5,7 @@ from wrappers import jsonc
 from wrappers.pygs import FileName, AuthenticationError, WorksheetNotFound
 from wrappers.pygs import update_cells_from_fields, get_google_client
 from wrappers.pygs import get_spreadsheet, get_sheet_by_name, copy_spreadsheet
-from wrappers.pygs import allow_access, share_with_anyone, transfer_ownership
+from wrappers.pygs import allow_access, share_with_anyone, share_with_faculty_as_editor
 from wrappers.utils import FormatText
 
 
@@ -20,7 +20,7 @@ def check_google_credentials():
         print(FormatText.success("Google authorization was successful."))
     except Exception as error:
         msg = FormatText.error("Google authorization failed!"
-                               " Did you forget to provide the credentials.json file?")
+                               " Did you forget to provide the correct credentials.json file?")
         raise AuthenticationError(msg) from error
 
 
@@ -84,7 +84,7 @@ def check_marks_sheet(sec, email, group, marks_ids):
                                            sections=','.join(f'{s:02d}' for s in group),
                                            semester=state.info[InfoField.SEMESTER]),
                                        state.info[InfoField.MARKS_FOLDER_ID])
-        transfer_ownership(spreadsheet, email)
+        share_with_faculty_as_editor(spreadsheet, email)
         update_cells_from_fields(spreadsheet, 
                                  {MarksSprdsht.Meta.TITLE : 
                                      MarksSprdsht.Meta.CELL_TO_FILED_DICT})
@@ -96,6 +96,18 @@ def check_marks_sheet(sec, email, group, marks_ids):
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
     create_marks_sheet(spreadsheet, sec)
+    
+    
+def check_marks_groups_and_sheets():
+    if not state.info[InfoField.MARKS_ENABLED]:
+        msg = "Marks feature is not enabled."
+        print(FormatText.status(msg))
+    else:
+        check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
+        for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
+            for section in marks_group:
+                check_marks_sheet(section, email, marks_group, 
+                                  state.info[InfoField.MARKS_SHEET_IDS].copy())
     
 
 # create a worksheet for the section marks in spreadsheet

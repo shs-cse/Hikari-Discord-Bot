@@ -89,11 +89,12 @@ def share_with_anyone(spreadsheet: pygsheets.Spreadsheet):
     spreadsheet.share('', role='reader', type='anyone')
     
 
-def transfer_ownership(spreadsheet: pygsheets.Spreadsheet, faculty_email: str):
+def share_with_faculty_as_editor(spreadsheet: pygsheets.Spreadsheet, faculty_email: str):
     print(FormatText.wait(f'Sharing spreadsheet with {FormatText.bold(faculty_email)}...'))
     print(FormatText.status(f'Url: {FormatText.bold(spreadsheet.url)}'))
     if re.search(RegexPattern.EMAIL_ADDRESS, faculty_email):
-        spreadsheet.share(faculty_email, role='owner', transferOwnership=True)
+        # spreadsheet.share(faculty_email, role='owner', transferOwnership=True)
+        spreadsheet.share(faculty_email, role='writer', type='user')
         print(FormatText.success(f'Spreadsheet shared with email: {FormatText.bold(faculty_email)}'))
     else:
         print(FormatText.error(f'Email {FormatText.bold(faculty_email)} is not in proper format.'))
