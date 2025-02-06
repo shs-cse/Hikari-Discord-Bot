@@ -1,15 +1,15 @@
 {
     // General information about the course
-    "course_code": "<course code>",
-    "course_name": "<course name>",
-    "semester": "<semester> <yyyy>",
+    "course_code": "",
+    "course_name": "",
+    "semester": "",
     "n_sections": 0,
     "missing_sections": [],
     
     // Tokens and IDs
     "routine_sheet_id": "",
     "enrolment_and_marks_folder_id": "",
-    "guild_id": "0",
+    "guild_id": "",
     "bot_token": "",
     
     
