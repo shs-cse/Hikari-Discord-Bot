@@ -3,11 +3,12 @@ from bot_variables import state
 from bot_variables.config import RolePermissions, InfoField
 from setup_validation.google_sheets import check_marks_groups_and_sheets
 from wrappers.jsonc import update_info_field
+from sync_with_servers.marks import MarksError, pull_section_marks
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
 bot_admin_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.BOT_ADMIN) 
-# faculty_post_group = crescent.Group("publish", default_member_permissions=RolePermissions.FACULTY)
+# faculty_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.FACULTY)
 
 
 # @admin enable marks -> check and be ready to load marks.
@@ -40,9 +41,9 @@ async def marks_disable(ctx: crescent.Context) -> None:
         ...  # TODO: delete variables to save memory
         msg = "Marks feature has been disabled."
     await ctx.respond(msg)
-    
-    
-# TODO: @faculty publish marks -> print and post error if marks not enabled, else post marks button
+
+# TODO: @faculty post marks -> print and post error if marks not enabled, else post marks button
+# TODO: @faculty fetch marks -> same as student pressing marks button
 
 
 

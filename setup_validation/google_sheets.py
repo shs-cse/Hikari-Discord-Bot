@@ -77,7 +77,7 @@ def check_marks_sheet(sec, email, group, marks_ids):
         spreadsheet = get_spreadsheet(marks_ids[str(sec)])
     # no spreadsheet in info for the followings
     elif sec == group[0]: # sec is the first member of the group 
-        spreadsheet = create_marks_spreadsheet(sec,group,email)
+        spreadsheet = create_marks_spreadsheet(sec, group, email)
     else: # first group member has spreadsheet
         spreadsheet = get_spreadsheet(marks_ids[str(group[0])])
     marks_ids[str(sec)] = spreadsheet.id
@@ -85,6 +85,8 @@ def check_marks_sheet(sec, email, group, marks_ids):
     msg = f'Section {sec:02d} > Marks spreadsheet: "{spreadsheet.title}"'
     print(FormatText.success(msg))
     create_marks_worksheet(spreadsheet, sec)
+    # TODO: pull data from worksheet, update df_marks_section (and update df_marks costly?)
+    # TODO: ^ nope. that's not the job of check. do it in sync>marks
     
     
 def check_marks_groups_and_sheets():
@@ -125,6 +127,7 @@ def create_marks_worksheet(spreadsheet, sec):
         sec_sheet.hidden = False
         sec_sheet.title = MarksSprdsht.SecXX.TITLE.format(sec)
         # TODO: populate with student ids and names
+    return sec_sheet
 
     
 # # TODO: check marks sheets

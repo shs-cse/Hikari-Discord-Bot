@@ -27,7 +27,7 @@ async def get_enrolment_link(ctx: crescent.Context) -> None:
 @plugin.include
 @faculty_link_group.child
 @crescent.command(name='marks')
-class MarskSheetLink:
+class MarksSheetLink:
     section = crescent.option(int)
 
     async def callback(self, ctx: crescent.Context) -> None:

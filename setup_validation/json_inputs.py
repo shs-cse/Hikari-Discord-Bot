@@ -17,7 +17,7 @@ def has_info_passed_before():
             return True
         else:
             # mismatch -> needs checking each field
-            print(FormatText.warning("Needs checking each json input field..."))
+            print(FormatText.warning("Needs checking every json input field..."))
             os.remove(FileName.VALID_JSON)
             return False
         
@@ -36,6 +36,7 @@ def check_and_load_info():
         check_marks_groups_and_sheets()
         # create valid json file
         update_json(state.info, FileName.VALID_JSON)
+    # TODO: pull data from sec marksheets, update df_marks_section (and update df_marks costly?)
         
 
 # check if info file contains all the fields
