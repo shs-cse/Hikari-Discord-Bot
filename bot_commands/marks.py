@@ -3,12 +3,16 @@ from bot_variables import state
 from bot_variables.config import RolePermissions, InfoField
 from setup_validation.google_sheets import check_marks_groups_and_sheets
 from wrappers.jsonc import update_info_field
-from sync_with_servers.marks import MarksError, pull_section_marks
+from sync_with_servers.marks import MarksError, fetch_member_marks
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
-bot_admin_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.BOT_ADMIN) 
-# faculty_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.FACULTY)
+bot_admin_marks_group = crescent.Group(
+    "marks", default_member_permissions=RolePermissions.BOT_ADMIN
+)
+faculty_marks_group = crescent.Group(
+    "marks", default_member_permissions=RolePermissions.FACULTY
+)
 
 
 # @admin enable marks -> check and be ready to load marks.
@@ -24,7 +28,7 @@ async def marks_enable(ctx: crescent.Context) -> None:
         check_marks_groups_and_sheets()
         msg = "Marks feature has been enabled."
         msg += " All previously published marks has to be republished by faculties."
-        ... # TODO: load marks to df
+        ...  # TODO: load marks to df
     await ctx.respond(msg)
 
 
@@ -42,12 +46,30 @@ async def marks_disable(ctx: crescent.Context) -> None:
         msg = "Marks feature has been disabled."
     await ctx.respond(msg)
 
-# TODO: @faculty post marks -> print and post error if marks not enabled, else post marks button
+
 # TODO: @faculty fetch marks -> same as student pressing marks button
+@plugin.include
+@faculty_marks_group.child
+@crescent.command(name="fetch")
+class FetchMarks:
+    student: hikari.Member = crescent.option(
+        hikari.User, name="student", description="Must have student role."
+    )
+    column = crescent.option(
+        int
+    )  # TODO: better way than column, autocomplete? dropdown?
+
+    async def callback(self, ctx: crescent.Context) -> None:
+        await ctx.defer(ephemeral=True)
+        msg = "TODO: fetch marks"
+        try:
+            msg = fetch_member_marks(self.student, self.column)
+        except MarksError:
+            msg = f"Sorry, can't fetch mark for {self.student.mention}."
+        await ctx.respond(msg)
 
 
-
-
+# TODO: @faculty post marks -> print and post error if marks not enabled, else post marks button
 
 
 # @plugin.include
@@ -60,12 +82,12 @@ async def marks_disable(ctx: crescent.Context) -> None:
 #         check_marks_groups(state.info[InfoField.ENROLMENT_SHEET_ID])
 #         for email, marks_group in state.info[InfoField.MARKS_GROUPS].items():
 #             for section in marks_group:
-#                 check_marks_sheet(section, email, marks_group, 
+#                 check_marks_sheet(section, email, marks_group,
 #                                 state.info[InfoField.MARKS_SHEET_IDS].copy())
 #         ...
 #         await ctx.respond("Marks spreadsheets are enabled for all sections.")
-        
-        
+
+
 # @plugin.include
 # @bot_admin_marks_group.child
 # @crescent.command(name='disable')
@@ -74,8 +96,7 @@ async def marks_disable(ctx: crescent.Context) -> None:
 #         jsonc.update_info_field(InfoField.MARKS_ENABLED, False)
 #         ... # TODO: init/delete marks things
 #         await ctx.respond("Marks spreadsheets are disabled for all sections.")
-        
-        
+
 
 # @plugin.include
 # @faculty_post_group.child

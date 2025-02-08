@@ -166,6 +166,14 @@ class MarksSprdsht:
 
     class SecXX:
         TITLE = "Sec {:02d}"
+        GRADE_HEADER = "Grade"
+        COL_FOR_STUDENT_IDS = 2
+        ROW_FOR_HEADER = 3
+        HEADER_START = (ROW_FOR_HEADER, COL_FOR_STUDENT_IDS)
+        ROW_FOR_PUBLISH_STATUS = 24-(1+ROW_FOR_HEADER)
+        ROW_FOR_THIS_COL = 14-(1+ROW_FOR_HEADER)
+        ROW_FOR_ALL_CHILDREN = 17-(1+ROW_FOR_HEADER)
+        ROW_DATA_START = 100-(1+ROW_FOR_HEADER)
 
 
 # TODO: make it into class?
@@ -181,7 +189,10 @@ info_row_dict = {
 }
 
 
-class MarksField(str):
-    TOTAL = "total"
-    CHILDREN = "children"
+class MarksField:
     SCORED = "scored"
+    COLUMN_INFO = "col_info"
+    class ColInfoIndex:
+        HEADER = "header"
+        TOTAL = "total"
+        CHILDREN = "children"

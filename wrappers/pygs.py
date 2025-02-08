@@ -1,5 +1,5 @@
-import pygsheets.client
 import requests, pygsheets, re
+from pygsheets.client import Client
 import pandas as pd
 from pygsheets.exceptions import *
 from bot_variables.config import RegexPattern
@@ -29,7 +29,7 @@ def get_drive_id_from_link(link: str) -> str:
     return re.search(RegexPattern.GOOGLE_DRIVE_LINK_ID, link).group()
 
 # authorization
-def get_google_client() -> pygsheets.client.Client:
+def get_google_client() -> Client:
     return pygsheets.authorize(client_secret = FileName.GOOGLE_CREDENTIALS)
 
 

@@ -32,7 +32,6 @@ df_routine: pd.DataFrame = None
 
 df_marks_sec_lookup: pd.DataFrame = None
 all_marks: dict[MarksField, dict[int, pd.DataFrame]] = {
-    MarksField.TOTAL: {},
-    MarksField.CHILDREN: {},
+    MarksField.COLUMN_INFO: {},
     MarksField.SCORED: {},
 }
