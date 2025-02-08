@@ -65,7 +65,7 @@ class FetchMarks:
         try:
             msg = fetch_member_marks(self.student, self.column)
         except MarksError:
-            msg = f"Sorry, can't fetch mark for {self.student.mention}."
+            msg = f"Sorry, can't fetch mark for {self.student.mention} from column {self.column}."
         await ctx.respond(msg)
 
 

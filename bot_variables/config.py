@@ -8,6 +8,7 @@ class EEEGuild:
 
 class SpecialChars:
     ZERO_WIDTH_SPACE = "\u200b"
+    ONE_CHAR_WIDTH_SPACE = "\u3000"
 
 
 class ClassType:
@@ -166,33 +167,28 @@ class MarksSprdsht:
 
     class SecXX:
         TITLE = "Sec {:02d}"
-        GRADE_HEADER = "Grade"
         COL_FOR_STUDENT_IDS = 2
         ROW_FOR_HEADER = 3
         HEADER_START = (ROW_FOR_HEADER, COL_FOR_STUDENT_IDS)
-        ROW_FOR_PUBLISH_STATUS = 24-(1+ROW_FOR_HEADER)
-        ROW_FOR_THIS_COL = 14-(1+ROW_FOR_HEADER)
-        ROW_FOR_ALL_CHILDREN = 17-(1+ROW_FOR_HEADER)
-        ROW_DATA_START = 100-(1+ROW_FOR_HEADER)
-
-
-# TODO: make it into class?
-info_row_dict = {
-    "Helper Text": 4,
-    "Parent Column": 9,
-    "Self Column": 14,
-    "Depth": 23,
-    "Total Marks": 5,
-    "Publish?": 1,
-    "Actual Marks?": 22,
-    "Children Columns": 17,
-}
+        ROW_FOR_PUBLISH_STATUS = 24 - (1 + ROW_FOR_HEADER)
+        ROW_FOR_THIS_COL = 14 - (1 + ROW_FOR_HEADER)
+        ROW_FOR_ALL_CHILDREN = 17 - (1 + ROW_FOR_HEADER)
+        ROW_DATA_START = 100 - (1 + ROW_FOR_HEADER)
 
 
 class MarksField:
     SCORED = "scored"
     COLUMN_INFO = "col_info"
+
     class ColInfoIndex:
         HEADER = "header"
         TOTAL = "total"
         CHILDREN = "children"
+
+
+class MarksResponse:
+    TITLE = f"**Marks for {{}}**:"
+    MAIN = f"\n# {{}}"
+    CHILD = f"\n> - {{}}"
+    SCORE = f"{{}}:{SpecialChars.ONE_CHAR_WIDTH_SPACE}**{{}}**"
+    OUT_OF = f"{SpecialChars.ONE_CHAR_WIDTH_SPACE}*(out of {{}})*"
