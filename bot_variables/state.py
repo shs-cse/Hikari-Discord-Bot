@@ -35,3 +35,4 @@ all_marks: dict[MarksField, dict[int, pd.DataFrame]] = {
     MarksField.COLUMN_INFO: {},
     MarksField.SCORED: {},
 }
+cached_marks: dict[tuple[int, int]] = {} # (sec,marks_col) -> (msg, scores)

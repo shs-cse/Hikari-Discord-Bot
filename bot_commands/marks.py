@@ -48,16 +48,13 @@ async def marks_disable(ctx: crescent.Context) -> None:
 @faculty_marks_group.child
 @crescent.command(name="fetch")
 class FetchMarks:
-    student: hikari.Member = crescent.option(
-        hikari.User, name="student", description="Must have student role."
-    )
-    column = crescent.option(
-        int
-    )  # TODO: better way than column, autocomplete? dropdown?
+    student: hikari.Member = crescent.option(hikari.User, 
+                                             name="student", 
+                                             description="Must have student role.")
+    column = crescent.option(int)  # TODO: better way than column, autocomplete? dropdown?
 
     async def callback(self, ctx: crescent.Context) -> None:
         await ctx.defer(ephemeral=True)
-        msg = "TODO: fetch marks"
         try:
             msg = fetch_member_marks(self.student, self.column)
         except MarksError:
