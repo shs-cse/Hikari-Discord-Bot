@@ -7,12 +7,8 @@ from sync_with_servers.marks import MarksError, fetch_member_marks
 
 plugin = crescent.Plugin[hikari.GatewayBot, None]()
 
-bot_admin_marks_group = crescent.Group(
-    "marks", default_member_permissions=RolePermissions.BOT_ADMIN
-)
-faculty_marks_group = crescent.Group(
-    "marks", default_member_permissions=RolePermissions.FACULTY
-)
+bot_admin_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.BOT_ADMIN)
+faculty_marks_group = crescent.Group("marks", default_member_permissions=RolePermissions.FACULTY)
 
 
 # @admin enable marks -> check and be ready to load marks.

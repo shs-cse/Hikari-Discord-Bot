@@ -188,7 +188,7 @@ class MarksField:
 
 class MarksResponse:
     TITLE = f"**Marks for {{}}**:"
-    MAIN = f"\n# {{}}"
-    CHILD = f"\n> - {{}}"
+    MAIN_SCORE = f"\n# {{}}"
+    CHILD_SCORE = f"\n> - {{}}"
     SCORE = f"{{}}:{SpecialChars.ONE_CHAR_WIDTH_SPACE}**{{}}**"
     OUT_OF = f"{SpecialChars.ONE_CHAR_WIDTH_SPACE}*(out of {{}})*"
